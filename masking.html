@@ -19,6 +19,8 @@ header p.lead{position:relative;margin:0 auto;max-width:680px;color:#dbe6f2}
 main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
+.card h3{margin:24px 0 8px;font-size:19px}
+.card hr{border:none;border-top:1px solid var(--line);margin:24px 0 0}
 .card h2 span{color:var(--teal)}
 .worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
@@ -33,6 +35,13 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
+
+.research{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
+.research>h2{margin:0 0 14px;font-size:26px}
+.research-items{margin-top:8px}
+.research-item{border-top:1px solid var(--line);padding:18px 0 4px 16px;margin-top:18px}
+.research-item h3{margin:0 0 8px;font-size:19px}
+.research-item p{margin:0 0 14px}
 </style>
 </head>
 <body>
@@ -47,16 +56,35 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 <section class="card"><h2>仕組み</h2><p>静かな部屋では、小さな音でも目立ちます。そこへ、ずっと一定の音を小さく流しておくと、気になる音がその音に紛れて、あまり気にならなくなります。これがマスキングの仕組みです。音そのものが消えるわけではありません。</p></section>
 <section class="card"><h2>コツは二つ</h2><p><span class="pill">音量は控えめに</span><span class="pill">近い帯域の音を選ぶ</span></p><p>大きすぎると、今度はその音自体が気になってしまいます。足音のような低い音には低い音中心の音、人の声にはもう少し広い帯域の音が合います。合う音は人によって違います。いろいろ聴き比べて、自分に合う音を見つけてみてください。</p></section>
 <section class="card"><h2>悩み別のHzの目安</h2><p>あくまで目安です。住環境や人によって、中心となる帯域は変わります。</p><p><span class="pill">上階の足音：40～1000Hz程度</span><span class="pill">男性の話し声：低め～中音域</span><span class="pill">女性の話し声：中～高めの音域</span><span class="pill">赤ちゃんの声：高めの音域、急な音</span><span class="pill">いびき：低めの音域</span><span class="pill">室外機・機械音：低めの唸り音</span></p><p>詳しくは、各悩みのページをご覧ください。</p></section>
-<section class="card"><h2>研究データで分かっていること</h2>
+<section class="research"><h2>研究データで分かっていること</h2>
 <p>マスキング音の研究は、まだ発展途上です。ここでは、よく引用される研究の結果を、過大な期待にならないようにまとめます。</p>
-<p><strong>ノイズの色の違い</strong>：ホワイトノイズは、すべての周波数で同じ強さの音です。ピンクノイズは、周波数が上がるごとに3dBずつ弱くなり、雨のような音に聞こえます。ブラウンノイズは、6dBずつ弱くなり、低い音が中心の、深い音に聞こえます。周波数の範囲だけを見れば、ホワイト ＞ ピンク ＞ ブラウンの順に広い、と言えます。ただし、これだけでは、実際のマスキングの効き目は決まりません。</p>
-<p><strong>人間の耳は対数的に聞こえる</strong>：人間の耳は、周波数を対数的に感じます。つまり、100Hzから200Hzの幅と、1000Hzから2000Hzの幅が、同じくらいの音程の幅に感じられます。そのため、ホワイトノイズは、高い音のほうが耳に強く感じられ、シャーという耳障りな音に聞こえやすくなります。快適に聴ける音量にすると、低い音のマスキングが弱くなってしまう場合があります。</p>
-<p><strong>日常の騒音では、ピンクやブラウンが優れる場合がある</strong>：日常で気になる音の多くは、足音や工事音、交通音など、低い音から中くらいの音が中心です。そうした環境では、ピンクノイズやブラウンノイズのほうが、快適な音量のまま、気になる音の帯域に合わせやすく、実用的に優れる場合があります。一概に「ホワイトが一番マスキングが広いから一番効く」とは言えません。</p>
-<p><strong>ブラウンノイズの正確な言い方</strong>：ブラウンノイズは、「高い音を隠すのが苦手」というより、「高音成分のエネルギー自体が極めて少ないため、金属音のような高音の突発音をかき消すマスキング力は低いが、足音や工事音のような低音の騒音を隠すのは非常に得意」というのが正確です。</p>
-<p><strong>集中力について（2024年のメタアナリシス）</strong>：13件の研究、335人をまとめた分析では、ホワイトノイズとピンクノイズは、注意の困難がある人では、注意課題で小さな改善が見られました。一方、注意の困難がない人では、やや成績が下がる傾向も見られました。効果は人によって違います。ブラウンノイズは、この分析には含まれていませんでした。つまり、ブラウンノイズで集中力が上がる、という科学的な証明は、まだ十分ではありません。</p>
-<p><strong>音量について</strong>：音量が大きすぎると、かえってストレスになる、という報告もあります。ある研究では、静かなホワイトノイズ（45dB程度）では集中やストレスが改善したのに対し、65dB程度ではストレスが上がりました。カフェのような70dB程度の環境音が、創造的な課題で良い結果になった、という研究もあります。つまり、「大きいほどいい」ではなく、控えめな音量が基本です。</p>
-<p><strong>睡眠について</strong>：連続した背景音が、寝つきまでの時間を短くする、という報告もあります。ピンクノイズが深い睡眠と関係する、という研究もありますが、実験室での特殊な条件のものも多く、日常の再生で同じ効果が出るとは限りません。確実に言えるのは、急な音の変化を減らすことで、目覚めにくくなる、というマスキングの仕組みです。</p>
-<p><strong>分かっていないこと</strong>：ブラウンノイズそのものの、睡眠や集中力への直接の証拠は、まだ少ないです。SNSで広がっている「ブラウンノイズで集中力が上がる」「眠れるようになる」という話は、研究で証明されたものではありません。このサイトでは、そうした言い方はしません。</p><p class="note">参考：2024年のメタアナリシス（Niggら、13件・335人）、Sleep Medicine Reviews の睡眠に関するレビュー、Mehtaら（2012年）の環境音と創造性の研究、ほか。研究の条件は実験室での課題が中心で、日常の生活音への効果を直接示すものではありません。</p>
+<div class="research-items">
+<div class="research-item"><h3>ノイズの色の違い</h3>
+<p>ホワイトノイズは、すべての周波数で同じ強さの音です。ピンクノイズは、周波数が上がるごとに3dBずつ弱くなり、雨のような音に聞こえます。ブラウンノイズは、6dBずつ弱くなり、低い音が中心の、深い音に聞こえます。周波数の範囲だけを見れば、ホワイト ＞ ピンク ＞ ブラウンの順に広い、と言えます。ただし、これだけでは、実際のマスキングの効き目は決まりません。</p></div>
+<div class="research-item"><h3>人間の耳は対数的に聞こえる</h3>
+<p>人間の耳は、周波数を対数的に感じます。つまり、100Hzから200Hzの幅と、1000Hzから2000Hzの幅が、同じくらいの音程の幅に感じられます。そのため、ホワイトノイズは、高い音のほうが耳に強く感じられ、シャーという耳障りな音に聞こえやすくなります。快適に聴ける音量にすると、低い音のマスキングが弱くなってしまう場合があります。</p></div>
+<div class="research-item"><h3>日常の騒音では、ピンクやブラウンが優れる場合がある</h3>
+<p>日常で気になる音の多くは、足音や工事音、交通音など、低い音から中くらいの音が中心です。そうした環境では、ピンクノイズやブラウンノイズのほうが、快適な音量のまま、気になる音の帯域に合わせやすく、実用的に優れる場合があります。一概に「ホワイトが一番マスキングが広いから一番効く」とは言えません。</p></div>
+<div class="research-item"><h3>ブラウンノイズの正確な言い方</h3>
+<p>ブラウンノイズは、「高い音を隠すのが苦手」というより、「高音成分のエネルギー自体が極めて少ないため、金属音のような高音の突発音をかき消すマスキング力は低いが、足音や工事音のような低音の騒音を隠すのは非常に得意」というのが正確です。</p></div>
+<div class="research-item"><h3>集中力について（2024年のメタアナリシス）</h3>
+<p>13件の研究、335人をまとめた分析では、ホワイトノイズとピンクノイズは、注意の困難がある人では、注意課題で小さな改善が見られました。一方、注意の困難がない人では、やや成績が下がる傾向も見られました。効果は人によって違います。ブラウンノイズは、この分析には含まれていませんでした。つまり、ブラウンノイズで集中力が上がる、という科学的な証明は、まだ十分ではありません。</p></div>
+<div class="research-item"><h3>音量について</h3>
+<p>音量が大きすぎると、かえってストレスになる、という報告もあります。ある研究では、静かなホワイトノイズ（45dB程度）では集中やストレスが改善したのに対し、65dB程度ではストレスが上がりました。カフェのような70dB程度の環境音が、創造的な課題で良い結果になった、という研究もあります。つまり、「大きいほどいい」ではなく、控えめな音量が基本です。</p></div>
+<div class="research-item"><h3>睡眠について</h3>
+<p>連続した背景音が、寝つきまでの時間を短くする、という報告もあります。ピンクノイズが深い睡眠と関係する、という研究もありますが、実験室での特殊な条件のものも多く、日常の再生で同じ効果が出るとは限りません。確実に言えるのは、急な音の変化を減らすことで、目覚めにくくなる、というマスキングの仕組みです。</p></div>
+<div class="research-item"><h3>分かっていないこと</h3>
+<p>ブラウンノイズそのものの、睡眠や集中力への直接の証拠は、まだ少ないです。SNSで広がっている「ブラウンノイズで集中力が上がる」「眠れるようになる」という話は、研究で証明されたものではありません。このサイトでは、そうした言い方はしません。</p></div>
+<div class="research-item"><h3>参考にした研究</h3>
+<p class="note">リンク先は英語のサイトです。研究の条件は実験室での課題が中心で、日常の生活音への効果を直接示すものではありません。</p>
+<ul>
+<li><a href="https://doi.org/10.1016/j.jaac.2023.12.014" target="_blank" rel="noopener noreferrer">Niggら（2024年）ホワイトノイズ・ピンクノイズと注意課題のメタアナリシス（13件・335人）</a> ― Journal of the American Academy of Child and Adolescent Psychiatry</li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/33007706/" target="_blank" rel="noopener noreferrer">Riedyら（2021年）「Noise as a sleep aid: A systematic review」</a> ― Sleep Medicine Reviews（38件のレビュー、証拠の質は very low と評価）</li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/34049045/" target="_blank" rel="noopener noreferrer">Ebbenら（2021年）高騒音環境でのホワイトノイズと睡眠</a> ― Sleep Medicine</li>
+<li><a href="https://doi.org/10.1086/665048" target="_blank" rel="noopener noreferrer">Mehtaら（2012年）環境音と創造性（70dBが創造課題で良い結果）</a> ― Journal of Consumer Research</li>
+</ul>
+</div>
+</div>
 </section>
 <section class="card"><h2>どう使えばいいか</h2>
 <p>まずは、気になる音に近い帯域の音を、控えめな音量で、数日試してみてください。合わないと感じたら、別の色のノイズや、雨の音など、別の一定の音を試してみてください。合う音は人によって違います。いろいろ聴き比べて、自分に合う音を見つけるのが、一番確実です。</p>
