@@ -348,25 +348,90 @@
       .band-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
       .band-title { font-size: 13px; font-weight: 700; letter-spacing: .03em; }
       .band-note { font-size: 11px; color: var(--ink-faint); }
-      .band-rows { margin-top: 10px; display: grid; gap: 7px; }
-      .band-row { display: grid; grid-template-columns: 52px 88px 1fr 34px; align-items: center; gap: 8px; }
-      .band-name { font-size: 13px; font-weight: 700; color: var(--ink-dim); white-space: nowrap; }
-      .band-row.strongest .band-name { color: var(--ink); }
-      .band-range { font-size: 11px; color: var(--ink-faint); font-family: "Roboto Mono", monospace; white-space: nowrap; }
-      .band-track { height: 12px; border-radius: 6px; background: var(--bg-deep); border: 1px solid var(--line); overflow: hidden; }
-      .band-row.strongest .band-track { border-color: rgba(255,255,255,.4); }
-      .band-fill { height: 100%; width: 0%; border-radius: 6px; transition: width .12s linear; }
-      .band-fill.b0 { background: #38bdf8; }
-      .band-fill.b1 { background: #4ade80; }
-      .band-fill.b2 { background: #facc15; }
-      .band-fill.b3 { background: #fb923c; }
-      .band-val { font-family: "Roboto Mono", monospace; font-size: 12.5px; font-weight: 700; color: var(--ink-dim); text-align: right; font-variant-numeric: tabular-nums; }
-      .band-row.strongest .band-val { color: var(--ink); }
+      .band-strip {
+        margin-top: 12px;
+        display: flex;
+        gap: 3px;
+        height: 40px;
+      }
+      .band-seg {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 0;
+        border-radius: 5px;
+        background: var(--bg-deep);
+        border: 1px solid var(--line);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .band-seg:first-child { border-radius: 10px 5px 5px 10px; }
+      .band-seg:last-child { border-radius: 5px 10px 10px 5px; }
+      .band-seg.s0 { background: rgba(56,189,248,.09); }
+      .band-seg.s1 { background: rgba(74,222,128,.09); }
+      .band-seg.s2 { background: rgba(250,204,21,.09); }
+      .band-seg.s3 { background: rgba(251,146,60,.09); }
+      .band-fill {
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 0%;
+        opacity: .3;
+        transition: height .12s linear, opacity .12s linear;
+      }
+      .band-fill.b0 { background: linear-gradient(180deg, #7dd3fc, #38bdf8); }
+      .band-fill.b1 { background: linear-gradient(180deg, #86efac, #4ade80); }
+      .band-fill.b2 { background: linear-gradient(180deg, #fde047, #facc15); }
+      .band-fill.b3 { background: linear-gradient(180deg, #fdba74, #fb923c); }
+      .band-seg.strongest {
+        border-color: rgba(255,255,255,.9);
+        box-shadow: 0 0 0 1px rgba(255,255,255,.55), 0 0 16px rgba(255,255,255,.22);
+      }
+      .band-val {
+        position: relative;
+        z-index: 1;
+        font-family: "Roboto Mono", monospace;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+        text-shadow: 0 1px 4px rgba(0,0,0,.65);
+      }
+      .band-labels {
+        margin-top: 7px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+      }
+      .band-label {
+        position: relative;
+        min-width: 0;
+        text-align: center;
+        padding-top: 6px;
+      }
+      .band-label::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 22%; right: 22%;
+        height: 3px;
+        border-radius: 99px;
+        opacity: .35;
+      }
+      .band-label.l0::before { background: #38bdf8; }
+      .band-label.l1::before { background: #4ade80; }
+      .band-label.l2::before { background: #facc15; }
+      .band-label.l3::before { background: #fb923c; }
+      .band-label.strongest::before { opacity: 1; left: 8%; right: 8%; }
+      .band-name { display: block; font-size: 13px; font-weight: 700; color: var(--ink-dim); white-space: nowrap; line-height: 1.35; }
+      .band-label.strongest .band-name { color: var(--ink); }
+      .band-range { display: block; font-size: 10.5px; color: var(--ink-faint); font-family: "Roboto Mono", monospace; white-space: nowrap; line-height: 1.4; }
+      .band-label.strongest .band-range { color: var(--ink-dim); }
       .band-hint { margin: 10px 0 2px; font-size: 12.5px; color: var(--ink-dim); line-height: 1.55; }
       .band-hint b { color: var(--amber); font-weight: 700; }
       @media (max-width: 380px) {
-        .band-row { grid-template-columns: 44px 76px 1fr 30px; gap: 6px; }
-        .band-range { font-size: 10px; }
+        .band-name { font-size: 12px; }
+        .band-range { font-size: 9.5px; }
+        .band-val { font-size: 12px; }
       }
 
       /* ---------- controls ---------- */
@@ -801,7 +866,7 @@
       }
     </style>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
-</head>
+  </head>
   <body>
     <div class="wrap">
       <div id="mainView">
@@ -832,30 +897,28 @@
             <span class="band-title">帯域の目安（4帯域）</span>
             <span class="band-note">端末のマイクでは低い音が弱めに出る目安表示です</span>
           </div>
-          <div class="band-rows">
-            <div class="band-row" id="bandRow0">
+          <div class="band-strip" role="img" aria-label="4つの帯域の強さを一本の帯で表示します">
+            <div class="band-seg s0" id="bandSeg0"><div class="band-fill b0" id="bandFill0"></div><span class="band-val" id="bandVal0">--</span></div>
+            <div class="band-seg s1" id="bandSeg1"><div class="band-fill b1" id="bandFill1"></div><span class="band-val" id="bandVal1">--</span></div>
+            <div class="band-seg s2" id="bandSeg2"><div class="band-fill b2" id="bandFill2"></div><span class="band-val" id="bandVal2">--</span></div>
+            <div class="band-seg s3" id="bandSeg3"><div class="band-fill b3" id="bandFill3"></div><span class="band-val" id="bandVal3">--</span></div>
+          </div>
+          <div class="band-labels">
+            <div class="band-label l0" id="bandLabel0">
               <span class="band-name">低音</span>
               <span class="band-range">〜250Hz</span>
-              <div class="band-track"><div class="band-fill b0" id="bandFill0"></div></div>
-              <span class="band-val" id="bandVal0">--</span>
             </div>
-            <div class="band-row" id="bandRow1">
+            <div class="band-label l1" id="bandLabel1">
               <span class="band-name">中低音</span>
               <span class="band-range">250〜1000Hz</span>
-              <div class="band-track"><div class="band-fill b1" id="bandFill1"></div></div>
-              <span class="band-val" id="bandVal1">--</span>
             </div>
-            <div class="band-row" id="bandRow2">
+            <div class="band-label l2" id="bandLabel2">
               <span class="band-name">中音</span>
               <span class="band-range">1000〜4000Hz</span>
-              <div class="band-track"><div class="band-fill b2" id="bandFill2"></div></div>
-              <span class="band-val" id="bandVal2">--</span>
             </div>
-            <div class="band-row" id="bandRow3">
+            <div class="band-label l3" id="bandLabel3">
               <span class="band-name">高音</span>
               <span class="band-range">4000Hz〜</span>
-              <div class="band-track"><div class="band-fill b3" id="bandFill3"></div></div>
-              <span class="band-val" id="bandVal3">--</span>
             </div>
           </div>
           <p class="band-hint" id="bandHint">測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。</p>
@@ -1109,7 +1172,8 @@
         var bandHint = $("bandHint"),
             bandFills = [$("bandFill0"), $("bandFill1"), $("bandFill2"), $("bandFill3")],
             bandVals = [$("bandVal0"), $("bandVal1"), $("bandVal2"), $("bandVal3")],
-            bandRows = [$("bandRow0"), $("bandRow1"), $("bandRow2"), $("bandRow3")];
+            bandSegs = [$("bandSeg0"), $("bandSeg1"), $("bandSeg2"), $("bandSeg3")],
+            bandLabels = [$("bandLabel0"), $("bandLabel1"), $("bandLabel2"), $("bandLabel3")];
         var bulkBar = $("bulkBar"), bulkCount = $("bulkCount"),
             selectAllBtn = $("selectAllBtn"), clearSelBtn = $("clearSelBtn"), bulkDlBtn = $("bulkDlBtn"),
             bulkShareBtn = $("bulkShareBtn"),
@@ -1723,13 +1787,22 @@
         function updateBandUI() {
           var strongest = -1, strongestDb = -Infinity;
           for (var i = 0; i < 4; i++) {
-            bandFills[i].style.width = Math.min(100, Math.max(0, (bandDisp[i] - DB_MIN) / (DB_MAX - DB_MIN) * 100)) + "%";
-            bandVals[i].textContent = Math.round(bandDisp[i]);
             if (bandDisp[i] > strongestDb) { strongestDb = bandDisp[i]; strongest = i; }
           }
           // 音が小さすぎるときは帯域を判定しない（ノイズフロアの偏りを「主な帯域」にしない）
           var hasSignal = monitoring && dispDb > DB_MIN + 2 && strongestDb >= 34;
-          for (var j = 0; j < 4; j++) bandRows[j].classList.toggle("strongest", hasSignal && j === strongest);
+          var span = Math.max(1, strongestDb - DB_MIN);
+          for (var j = 0; j < 4; j++) {
+            // 一本帯の各区間：下からの充填の高さで絶対レベルを、明るさ（不透明度）で
+            // いちばん強い帯域に対する相対的な強さを表す
+            var pct = Math.min(100, Math.max(0, (bandDisp[j] - DB_MIN) / (DB_MAX - DB_MIN) * 100));
+            var rel = Math.min(1, Math.max(0, (bandDisp[j] - DB_MIN) / span));
+            bandFills[j].style.height = pct + "%";
+            bandFills[j].style.opacity = (0.25 + 0.75 * rel).toFixed(2);
+            bandVals[j].textContent = Math.round(bandDisp[j]);
+            bandSegs[j].classList.toggle("strongest", hasSignal && j === strongest);
+            bandLabels[j].classList.toggle("strongest", hasSignal && j === strongest);
+          }
           if (!monitoring) {
             bandHint.textContent = "測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。";
           } else if (!hasSignal) {
@@ -1746,9 +1819,11 @@
         function resetBandUI() {
           bandDisp = [DB_MIN, DB_MIN, DB_MIN, DB_MIN];
           for (var i = 0; i < 4; i++) {
-            bandFills[i].style.width = "0%";
+            bandFills[i].style.height = "0%";
+            bandFills[i].style.opacity = "0.3";
             bandVals[i].textContent = "--";
-            bandRows[i].classList.remove("strongest");
+            bandSegs[i].classList.remove("strongest");
+            bandLabels[i].classList.remove("strongest");
           }
           bandHint.textContent = "測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。";
         }
