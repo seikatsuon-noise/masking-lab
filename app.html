@@ -1,0 +1,2685 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>騒音測定器（自動録音）Web版</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0b1526;
+        --bg-deep: #070f1d;
+        --panel: #122036;
+        --panel-2: #16273f;
+        --line: #24344f;
+        --ink: #eef3fa;
+        --ink-dim: #9db1c9;
+        --ink-faint: #6b8099;
+        --amber: #ffb347;
+        --amber-deep: #f59e0b;
+        --red: #ff5252;
+        --green: #4ade80;
+        --yellow: #facc15;
+        --radius: 14px;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 16px 14px 48px;
+      }
+
+      /* ---------- meter ---------- */
+      .meter-card {
+        background: linear-gradient(180deg, var(--panel-2), var(--panel));
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 20px 18px 16px;
+      }
+      .meter-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .state-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .04em;
+        padding: 5px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,.04);
+        color: var(--ink-dim);
+        white-space: nowrap;
+      }
+      .state-pill .dot {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #5b718c;
+        flex: none;
+      }
+      .state-pill.on { color: var(--ink); border-color: #33507a; }
+      .state-pill.on .dot { background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,.8); }
+      .state-pill.rec { color: #ffd9d9; border-color: #7a2e35; background: rgba(255,82,82,.10); }
+      .state-pill.rec .dot { background: var(--red); box-shadow: 0 0 10px rgba(255,82,82,.9); animation: blink 1s steps(2,start) infinite; }
+      @keyframes blink { 50% { opacity: .25; } }
+      @media (prefers-reduced-motion: reduce) {
+        .state-pill.rec .dot { animation: none; }
+      }
+      /* ---------- 録音中バナー（離れて見ても一目で分かる強さ） ---------- */
+      .meter-card.recording-active {
+        border: 3px solid var(--red);
+        box-shadow: 0 0 0 4px rgba(255,82,82,.22), 0 0 34px rgba(255,82,82,.38), inset 0 0 0 1px rgba(255,82,82,.35);
+        background: linear-gradient(180deg, #2a1a26, var(--panel));
+      }
+      .meter-card.recording-active canvas#wave {
+        border: 2px solid var(--red);
+        box-shadow: 0 0 0 3px rgba(255,82,82,.20), 0 0 18px rgba(255,82,82,.28);
+      }
+      .rec-banner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+        padding: 12px 14px;
+        background: #3d0f16;
+        background: linear-gradient(180deg, rgba(255,45,45,.28), rgba(180,20,30,.22));
+        border: 2px solid #ff2d2d;
+        border-radius: 14px;
+        box-shadow: 0 0 20px rgba(255,45,45,.35);
+      }
+      .rec-banner[hidden] { display: none !important; }
+      .rec-banner-dot {
+        flex: none;
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        background: #ff2d2d;
+        border: 3px solid #ffd9d9;
+        box-shadow: 0 0 16px rgba(255,45,45,.95), 0 0 0 4px rgba(255,45,45,.25);
+        animation: recPulse 1s ease-in-out infinite;
+      }
+      @keyframes recPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: .45; transform: scale(.82); }
+      }
+      .rec-banner-text {
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        line-height: 1;
+        color: #fff;
+        text-shadow: 0 1px 6px rgba(0,0,0,.5);
+      }
+      .rec-banner-time {
+        font-family: "Roboto Mono", monospace;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 1;
+        color: #ffe1e1;
+        font-variant-numeric: tabular-nums;
+      }
+      .rec-banner-time small {
+        font-family: "Noto Sans JP", sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        color: #ffb3b3;
+        margin-left: 2px;
+      }
+      .rec-banner-kind {
+        margin-left: auto;
+        font-size: 12px;
+        font-weight: 700;
+        color: #ffd9d9;
+        border: 1px solid rgba(255,180,180,.55);
+        background: rgba(0,0,0,.28);
+        padding: 4px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      @media (max-width: 380px) {
+        .rec-banner-text { font-size: 24px; }
+        .rec-banner-time { font-size: 22px; }
+        .rec-banner-kind { margin-left: 0; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rec-banner-dot { animation: none; }
+        .meter-card.recording-active { box-shadow: 0 0 0 4px rgba(255,82,82,.22); }
+      }
+      .mic-note { font-size: 12px; color: var(--ink-faint); }
+
+      .level-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 8px;
+        margin: 10px 0 2px;
+      }
+      .level-num {
+        font-family: "Roboto Mono", monospace;
+        font-size: 62px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        min-width: 2.2ch;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .level-num.hot { color: var(--amber); }
+      .level-unit { font-size: 20px; font-weight: 700; color: var(--ink-dim); }
+      .level-unit small { display: block; font-size: 11px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
+      .level-scale-label {
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-dim);
+        min-height: 1.6em;
+      }
+      .level-scale-label.hot { color: var(--amber); }
+
+      .graph-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .graph-header .g-title { font-size: 13px; font-weight: 700; letter-spacing: .03em; }
+      .graph-header .g-window { font-size: 11px; color: var(--ink-faint); white-space: nowrap; }
+      canvas#wave {
+        display: block;
+        width: 100%;
+        height: 300px;
+        margin-top: 6px;
+        background: var(--bg-deep);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      .graph-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        align-items: center;
+        margin-top: 8px;
+        font-size: 11.5px;
+        color: var(--ink-dim);
+      }
+      .graph-legend .item { display: inline-flex; align-items: center; gap: 6px; }
+      .graph-legend .sw {
+        display: inline-block; width: 18px; height: 8px; border-radius: 99px; flex: none;
+      }
+      .graph-legend .sw.below { background: #4ade80; }
+      .graph-legend .sw.above { background: var(--red); }
+      .graph-legend .sw.th-line {
+        height: 0; width: 18px; border-radius: 0;
+        border-top: 2px dashed var(--amber); background: none;
+      }
+      .graph-legend .axis-note { margin-left: auto; color: var(--ink-faint); font-size: 11px; }
+      @media (max-width: 480px) {
+        .graph-legend .axis-note { margin-left: 0; width: 100%; }
+      }
+      /* ---------- グラフ表示範囲・大きさ・スライド ---------- */
+      .graph-controls {
+        display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center;
+        margin-top: 10px;
+      }
+      .range-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+      .graph-range-row { margin-top: 10px; }
+      .range-label-row {
+        display: flex; align-items: baseline; justify-content: space-between;
+        gap: 8px 12px; flex-wrap: wrap; margin-bottom: 6px;
+      }
+      .range-label {
+        font-size: 13px; font-weight: 700; letter-spacing: .03em; color: var(--ink);
+      }
+      .range-current {
+        font-size: 12.5px; color: var(--ink-dim); line-height: 1.4;
+      }
+      .range-current b {
+        color: var(--amber); font-weight: 700;
+        font-family: "Roboto Mono", monospace; font-size: 13px;
+      }
+      .range-btn {
+        font-family: inherit; font-size: 12.5px; font-weight: 700;
+        color: var(--ink-dim); background: rgba(255,255,255,.04);
+        border: 1px solid var(--line); border-radius: 999px;
+        padding: 6px 11px; cursor: pointer; white-space: nowrap;
+      }
+      .range-btn.active {
+        color: #1a1206; background: var(--amber); border-color: var(--amber);
+      }
+      .range-btn:focus-visible { outline: 2px solid rgba(255,179,71,.7); outline-offset: 2px; }
+      .graph-size-ctrl {
+        display: flex; align-items: center; gap: 8px; margin-left: auto;
+        font-size: 12px; font-weight: 700; color: var(--ink-dim); white-space: nowrap;
+      }
+      .graph-size-ctrl input[type="range"] { width: 110px; accent-color: var(--amber); cursor: pointer; }
+      .graph-size-ctrl .hval { font-family: "Roboto Mono", monospace; font-size: 11.5px; color: var(--ink-faint); min-width: 44px; }
+      @media (max-width: 480px) { .graph-size-ctrl { margin-left: 0; } .graph-size-ctrl input[type="range"] { flex: 1; width: auto; } }
+      .graph-nav {
+        display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;
+        margin-top: 8px; font-size: 12px; color: var(--ink-dim);
+      }
+      .graph-nav .pos-label { font-weight: 700; color: var(--ink); }
+      .graph-nav .pos-label.past { color: var(--amber); }
+      .graph-nav .nav-hint { color: var(--ink-faint); font-size: 11.5px; }
+      .now-btn {
+        font-family: inherit; font-size: 12.5px; font-weight: 900;
+        color: #1a1206; background: var(--amber);
+        border: 1px solid var(--amber); border-radius: 999px;
+        padding: 6px 13px; cursor: pointer; white-space: nowrap;
+      }
+      .now-btn:focus-visible { outline: 2px solid rgba(255,179,71,.7); outline-offset: 2px; }
+      .threshold-ctrl {
+        display: flex; align-items: center; gap: 10px;
+        margin-top: 8px; padding: 10px 12px;
+        background: rgba(255,255,255,.03);
+        border: 1px solid var(--line); border-radius: 10px;
+      }
+      .threshold-ctrl label { font-size: 13px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+      .threshold-ctrl input[type="range"] { flex: 1; min-width: 0; accent-color: var(--amber); cursor: pointer; }
+      .threshold-ctrl input[type="range"]:focus-visible { outline: 2px solid rgba(255,179,71,.7); outline-offset: 2px; }
+      .threshold-ctrl .tval { font-size: 12px; font-weight: 700; color: var(--ink-dim); white-space: nowrap; }
+      .threshold-ctrl .tval b { font-family: "Roboto Mono", monospace; font-size: 17px; font-weight: 700; color: var(--amber); }
+      .threshold-ctrl .trange { font-family: "Roboto Mono", monospace; font-size: 10.5px; color: var(--ink-faint); white-space: nowrap; }
+      @media (max-width: 380px) { .threshold-ctrl .trange { display: none; } }
+      canvas#wave.panning { cursor: grabbing !important; }
+      canvas#wave.can-pan { cursor: grab; }
+      .bar-wrap { margin-top: 24px; }
+      .bar-track {
+        position: relative;
+        height: 24px;
+        border-radius: 12px;
+        background: var(--bg-deep);
+        border: 1px solid var(--line);
+        overflow: hidden;
+      }
+      .bar-fill {
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 0%;
+        border-radius: 12px;
+        background: linear-gradient(90deg, var(--green) 0%, var(--green) 45%, var(--yellow) 68%, var(--amber-deep) 85%, var(--red) 100%);
+        background-size: 560px 100%;
+        transition: width .08s linear;
+      }
+      .bar-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: var(--ink-faint);
+        margin-top: 5px;
+        font-family: "Roboto Mono", monospace;
+      }
+      .peak-row {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 10px;
+        font-size: 12.5px;
+        color: var(--ink-dim);
+      }
+      .peak-row b { color: var(--ink); font-family: "Roboto Mono", monospace; font-weight: 700; }
+
+      /* ---------- controls ---------- */
+      .controls { margin-top: 16px; }
+      .graph-legend .th-readout b {
+        font-family: "Roboto Mono", monospace;
+        font-size: 15px;
+        color: var(--amber);
+      }
+      .graph-legend .th-alt { color: var(--ink-faint); font-size: 11px; }
+      .drag-hint {
+        font-size: 12px;
+        color: var(--ink-dim);
+        margin: 8px 0 0;
+      }
+      .drag-hint strong { color: var(--amber); font-weight: 700; }
+      canvas#wave { touch-action: none; cursor: ns-resize; }
+      canvas#wave:focus-visible { outline: 2px solid rgba(255,179,71,.7); outline-offset: 2px; }
+      canvas#wave.dragging { cursor: grabbing; }
+      .threshold-hint {
+        font-size: 12px;
+        color: var(--ink-dim);
+        background: rgba(255,255,255,.03);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 10px 14px;
+        margin: 12px 0 0;
+      }
+
+      .big-btn {
+        display: block;
+        width: 100%;
+        margin-top: 14px;
+        padding: 18px 16px;
+        font-size: 19px;
+        font-weight: 900;
+        letter-spacing: .06em;
+        color: #1a1206;
+        background: linear-gradient(180deg, #ffc46b, var(--amber-deep));
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(245,158,11,.28);
+      }
+      .big-btn:active { transform: translateY(1px); }
+      .big-btn.stop {
+        background: var(--panel-2);
+        color: var(--ink);
+        border: 1px solid #3b587e;
+        box-shadow: none;
+      }
+      .big-btn:disabled { opacity: .55; cursor: wait; }
+      .btn-sub {
+        text-align: center;
+        font-size: 12px;
+        color: var(--ink-faint);
+        margin-top: 8px;
+      }
+      .session-stats {
+        display: none;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .session-stats.show { display: flex; }
+      .stat-box {
+        flex: 1;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 10px 8px;
+        text-align: center;
+      }
+      .stat-box .v { font-family: "Roboto Mono", monospace; font-size: 20px; font-weight: 700; }
+      .stat-box .k { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+
+      .alert {
+        display: none;
+        margin-top: 14px;
+        background: rgba(255,82,82,.10);
+        border: 1px solid #7a2e35;
+        border-radius: var(--radius);
+        padding: 13px 15px;
+        font-size: 13.5px;
+      }
+      .alert.show { display: block; }
+      .alert b { color: #ffb3b3; }
+      .alert p { margin: 6px 0 0; color: var(--ink); }
+
+      .notes {
+        margin-top: 16px;
+        font-size: 12.5px;
+        color: var(--ink-dim);
+        background: rgba(255,255,255,.03);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 12px 15px;
+      }
+      .notes p { margin: 4px 0; }
+      .notes b { color: var(--ink); }
+
+      /* ---------- records ---------- */
+      .records-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 30px 2px 12px;
+      }
+      .records-head h2 {
+        font-size: 18px;
+        font-weight: 900;
+        margin: 0;
+        letter-spacing: .03em;
+      }
+      .records-head h2 .count {
+        font-family: "Roboto Mono", monospace;
+        color: var(--amber);
+        font-size: 16px;
+        margin-left: 4px;
+      }
+      .csv-btn {
+        flex: none;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--amber);
+        background: rgba(255,179,71,.08);
+        border: 1px solid rgba(255,179,71,.45);
+        border-radius: 10px;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+      .csv-btn:disabled { opacity: .4; cursor: default; }
+
+      .empty {
+        border: 1px dashed #2c405f;
+        border-radius: var(--radius);
+        padding: 26px 18px;
+        text-align: center;
+        color: var(--ink-dim);
+        font-size: 13.5px;
+      }
+      .empty .big { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+
+      .rec-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px 15px;
+        margin-bottom: 12px;
+      }
+      .rec-card.fresh { border-color: rgba(255,179,71,.6); }
+      .rec-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .rec-when { font-weight: 700; font-size: 15px; }
+      .rec-when .date { color: var(--ink-dim); font-size: 13px; font-weight: 500; margin-right: 8px; }
+      .del-btn {
+        flex: none;
+        background: none;
+        border: 1px solid var(--line);
+        color: var(--ink-dim);
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      .rec-nums {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 14px;
+        margin-top: 6px;
+        font-size: 12.5px;
+        color: var(--ink-dim);
+      }
+      .rec-nums b { color: var(--ink); font-family: "Roboto Mono", monospace; }
+      .rec-nums .peak b { color: var(--amber); }
+      .rec-sub .kind {
+        font-weight: 700;
+        font-size: 11.5px;
+        padding: 1px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        align-self: center;
+      }
+      .rec-sub .kind.impulse { color: #ffb3b3; border-color: #7a2e35; background: rgba(255,82,82,.12); }
+      .rec-sub .kind.clip { color: #a7e8bd; border-color: #2c5c40; background: rgba(74,222,128,.10); }
+      .rec-sub .kind.manual { color: #a9c8f5; border-color: #33507a; background: rgba(90,150,255,.10); }
+      .rec-audio { margin-top: 10px; }
+      .rec-audio audio { width: 100%; height: 40px; }
+      .rec-audio .no-audio { font-size: 12px; color: var(--ink-faint); }
+      .dl-btn {
+        margin-top: 8px;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--amber);
+        background: rgba(255,179,71,.08);
+        border: 1px solid rgba(255,179,71,.45);
+        border-radius: 10px;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+      .dl-btn:active { transform: translateY(1px); }
+      .rec-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+      .rec-actions .dl-btn { margin-top: 0; }
+      .share-btn {
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink-dim);
+        background: rgba(255,255,255,.04);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+      .share-btn:active { transform: translateY(1px); }
+      .head-btns { display: flex; gap: 8px; flex: none; flex-wrap: wrap; justify-content: flex-end; }
+      .rec-top-right { display: flex; align-items: center; gap: 12px; flex: none; }
+      .rec-check {
+        display: inline-flex; align-items: center; gap: 6px;
+        font-size: 12.5px; font-weight: 700; color: var(--ink-dim);
+        cursor: pointer; white-space: nowrap;
+      }
+      .rec-check input { width: 20px; height: 20px; margin: 0; accent-color: var(--amber); cursor: pointer; }
+      .rec-card.selected { border-color: rgba(255,179,71,.65); }
+      .bulk-bar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+        margin: 0 2px 12px;
+      }
+      .bulk-count { font-size: 13px; font-weight: 700; color: var(--ink); margin-right: auto; }
+      .bulk-btn {
+        font-family: inherit; font-size: 12.5px; font-weight: 700;
+        color: var(--ink-dim); background: rgba(255,255,255,.04);
+        border: 1px solid var(--line); border-radius: 999px;
+        padding: 7px 13px; cursor: pointer; white-space: nowrap;
+      }
+      .bulk-btn.primary { color: #1a1206; background: var(--amber); border-color: var(--amber); }
+      .bulk-btn:disabled { opacity: .4; cursor: default; }
+      .rec-edit {
+        display: grid;
+        grid-template-columns: 118px 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .rec-edit select,
+      .rec-edit input {
+        width: 100%;
+        background: var(--bg-deep);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: var(--ink);
+        font-size: 14px;
+        padding: 9px 10px;
+        font-family: inherit;
+      }
+      .rec-edit select:focus, .rec-edit input:focus { outline: 2px solid rgba(255,179,71,.55); outline-offset: 0; }
+      @media (max-width: 380px) {
+        .rec-edit { grid-template-columns: 1fr; }
+        .level-num { font-size: 52px; }
+        canvas#wave { height: 260px; }
+      }
+      .settings-btn {
+        flex: none;
+        font-size: 12.5px; font-weight: 700;
+        color: var(--ink-dim);
+        background: rgba(255,255,255,.04);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 13px;
+        cursor: pointer;
+      }
+      .settings-head { display: flex; align-items: center; gap: 12px; margin: 2px 0 14px; }
+      .settings-head h2 { font-size: 19px; font-weight: 900; margin: 0; letter-spacing: .03em; }
+      .back-btn {
+        font-size: 13.5px; font-weight: 700;
+        color: var(--amber);
+        background: rgba(255,179,71,.08);
+        border: 1px solid rgba(255,179,71,.45);
+        border-radius: 10px;
+        padding: 7px 13px;
+        cursor: pointer;
+      }
+      [hidden] { display: none !important; }
+
+      /* ---------- settings ---------- */
+      .settings-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px 16px;
+        margin-top: 14px;
+      }
+      .settings-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+      .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; }
+      .switch-row .sw-label { font-size: 14.5px; font-weight: 700; }
+      .switch-row .sw-label small { display: block; font-size: 11.5px; font-weight: 500; color: var(--ink-dim); }
+      .switch { flex: none; display: inline-flex; }
+      .switch input {
+        -webkit-appearance: none; appearance: none;
+        position: relative; flex: none;
+        width: 52px; height: 30px; margin: 0;
+        border-radius: 999px; cursor: pointer;
+        background: #2a3c59; border: 1px solid var(--line);
+        transition: background .15s, border-color .15s;
+      }
+      .switch input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #8fa5bf; transition: transform .15s, background .15s; }
+      .switch input:checked { background: rgba(245,158,11,.35); border-color: rgba(255,179,71,.6); }
+      .switch input:checked::after { transform: translateX(22px); background: var(--amber); }
+      .switch input:focus-visible { outline: 2px solid rgba(255,179,71,.7); outline-offset: 2px; }
+      .settings-body { margin-top: 12px; }
+      .settings-body.disabled { opacity: .4; pointer-events: none; }
+      .mode-opt { display: flex; gap: 10px; align-items: flex-start; background: var(--bg-deep); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; }
+      .mode-opt input { margin-top: 4px; accent-color: var(--amber); flex: none; width: 17px; height: 17px; }
+      .mode-opt b { font-size: 14px; display: block; }
+      .mode-opt small { font-size: 12px; color: var(--ink-dim); display: block; margin-top: 1px; }
+      .mode-opt:has(input:checked) { border-color: rgba(255,179,71,.6); background: rgba(255,179,71,.06); }
+      .sec-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+      .sec-row label { font-size: 13.5px; font-weight: 700; }
+      .sec-row select { background: var(--bg-deep); border: 1px solid var(--line); border-radius: 9px; color: var(--ink); font-size: 14px; padding: 8px 10px; font-family: inherit; }
+      .format-row { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+      .format-note { font-size: 11.5px; color: var(--ink-faint); margin: 6px 0 0; }
+      .manual-toggle-card {
+        margin-top: 12px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+      .manual-toggle-card.recording { border-color: var(--red); background: rgba(255,82,82,.08); }
+      .manual-toggle-card .rec-dot { color: var(--red); margin-right: 6px; font-size: 12px; }
+      .manual-toggle-card.recording .rec-dot { animation: blink 1s steps(2,start) infinite; }
+      @media (prefers-reduced-motion: reduce) {
+        .manual-toggle-card.recording .rec-dot { animation: none; }
+      }
+      .rec-main {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .rec-stat {
+        background: var(--bg-deep);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 8px 10px;
+      }
+      .rec-stat .k { font-size: 11px; color: var(--ink-dim); letter-spacing: .04em; }
+      .rec-stat .v { font-family: "Roboto Mono", monospace; font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.35; font-variant-numeric: tabular-nums; }
+      .rec-stat .v small { font-size: 11px; color: var(--ink-dim); font-family: "Noto Sans JP", sans-serif; font-weight: 500; }
+      .rec-stat.level .v { color: var(--amber); font-size: 24px; }
+      .rec-sub {
+        display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;
+        margin-top: 8px; font-size: 12px; color: var(--ink-dim);
+      }
+      .rec-sub b { color: var(--ink); font-family: "Roboto Mono", monospace; }
+      footer {
+        margin-top: 34px;
+        font-size: 11.5px;
+        color: var(--ink-faint);
+        text-align: center;
+      }
+
+      /* ---------- 記録シート ---------- */
+      .sheet-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 14px; align-items: center; }
+      .sheet-print-hint { font-size: 12px; color: var(--ink-dim); flex-basis: 100%; }
+      .sheet-paper {
+        background: #ffffff;
+        color: #1a1a1a;
+        border-radius: 6px;
+        padding: 26px 24px 22px;
+        box-shadow: 0 4px 24px rgba(0,0,0,.35);
+      }
+      .sheet-paper h1 {
+        font-size: 20px; font-weight: 900; margin: 0;
+        letter-spacing: .06em; text-align: center;
+        border-bottom: 2px solid #1a1a1a; padding-bottom: 10px;
+      }
+      .sheet-meta {
+        display: flex; flex-wrap: wrap; gap: 4px 22px;
+        font-size: 12.5px; color: #222;
+        margin: 12px 0 14px;
+      }
+      .sheet-meta b { font-weight: 700; }
+      .sheet-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      .sheet-table th, .sheet-table td {
+        border: 1px solid #8a8a8a;
+        padding: 6px 7px;
+        text-align: left;
+        vertical-align: top;
+        line-height: 1.45;
+      }
+      .sheet-table th { background: #ececec; font-weight: 700; white-space: nowrap; }
+      .sheet-table td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .sheet-table td.keep { white-space: nowrap; }
+      .sheet-note { font-size: 11px; color: #444; margin: 12px 0 0; line-height: 1.6; }
+      @media (max-width: 480px) {
+        .sheet-paper { padding: 20px 14px 16px; }
+        .sheet-table { font-size: 11px; }
+        .sheet-table th, .sheet-table td { padding: 5px 5px; }
+      }
+      @media print {
+        body { background: #ffffff; }
+        .wrap { max-width: none; padding: 0; }
+        #mainView, #settingsView, footer, .sheet-actions { display: none !important; }
+        .sheet-paper { box-shadow: none; border-radius: 0; padding: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div id="mainView">
+
+      <!-- ===== メーター ===== -->
+      <section class="meter-card" id="meterCard" aria-label="現在の音の大きさ">
+        <div class="meter-top">
+          <span class="state-pill" id="statePill"><span class="dot"></span><span id="stateText">停止中</span></span>
+          <span class="mic-note" id="micNote">マイク未接続</span>
+          <button class="settings-btn" id="settingsBtn" type="button">設定</button>
+        </div>
+
+        <div class="rec-banner" id="recBanner" hidden role="status" aria-live="polite" aria-label="録音中">
+          <span class="rec-banner-dot" aria-hidden="true"></span>
+          <span class="rec-banner-text">録音中</span>
+          <span class="rec-banner-time" id="recElapsed">0:00<small>経過</small></span>
+          <span class="rec-banner-kind" id="recKind">自動録音</span>
+        </div>
+
+        <div class="level-row">
+          <div class="level-num" id="levelNum">--</div>
+          <div class="level-unit">dB<small>目安</small></div>
+        </div>
+        <div class="level-scale-label" id="scaleLabel">測定を開始すると、音の大きさが表示されます</div>
+
+        <button class="big-btn" id="toggleBtn" type="button">測定を開始する</button>
+        <div class="btn-sub" id="btnSub">タップするとマイクの使用許可を求めます</div>
+
+        <div class="alert" id="permAlert" role="alert">
+          <b>マイクを使用できませんでした</b>
+          <p id="permMsg"></p>
+        </div>
+
+        <div class="graph-header"><span class="g-title">音量の推移グラフ</span><span class="g-window" id="graphWindowLabel">表示範囲 60秒 · 最大15時間分を保持</span></div>
+        <div class="graph-controls">
+          <div class="graph-size-ctrl">
+            <label for="graphHeightRange">大きさ</label>
+            <input type="range" id="graphHeightRange" min="200" max="520" step="20" value="300" aria-label="グラフの高さ" />
+            <span class="hval" id="graphHeightVal">300px</span>
+          </div>
+        </div>
+        <canvas id="wave" width="640" height="600" tabindex="0" role="slider" aria-label="しきい値の調整と履歴の移動。しきい値ラインを上下にドラッグするとしきい値が変わります。グラフを左右にドラッグすると過去の履歴へ移動できます。矢印キー上下でしきい値、左右で表示位置を移動できます" aria-valuemin="35" aria-valuemax="80" aria-valuenow="55" aria-valuetext="しきい値 55 dB（目安）"></canvas>
+        <div class="graph-range-row">
+          <div class="range-label-row">
+            <span class="range-label" id="rangeLabel">表示範囲</span>
+            <span class="range-current" id="rangeCurrentText" aria-live="polite">表示範囲：<b>60秒</b> を表示中</span>
+          </div>
+          <div class="range-btns" id="rangeBtns" role="group" aria-label="表示範囲" aria-labelledby="rangeLabel">
+            <button type="button" class="range-btn" data-range="10000">10秒</button>
+            <button type="button" class="range-btn active" data-range="60000">60秒</button>
+            <button type="button" class="range-btn" data-range="600000">10分</button>
+            <button type="button" class="range-btn" data-range="3600000">60分</button>
+            <button type="button" class="range-btn" data-range="10800000">3時間</button>
+            <button type="button" class="range-btn" data-range="54000000">15時間</button>
+          </div>
+        </div>
+        <div class="graph-nav">
+          <span class="pos-label" id="graphPosLabel">現在に追従中</span>
+          <button type="button" class="now-btn" id="backToNowBtn" hidden>現在に戻る</button>
+          <span class="nav-hint">グラフを左右にドラッグすると過去を見られます（保持は音量レベルのみ・最大15時間）</span>
+        </div>
+        <div class="threshold-ctrl">
+          <label for="thresholdRange">しきい値</label>
+          <span class="trange">35</span>
+          <input type="range" id="thresholdRange" min="35" max="80" step="1" value="55" aria-label="しきい値の調整" aria-valuetext="しきい値 55 dB（目安）" />
+          <span class="trange">80</span>
+          <span class="tval"><b id="thresholdSliderVal">55</b> dB</span>
+        </div>
+        <div class="graph-legend">
+          <span class="item"><span class="sw below"></span>しきい値未満</span>
+          <span class="item"><span class="sw above"></span>しきい値以上</span>
+          <span class="item th-readout"><span class="sw th-line"></span>しきい値&nbsp;<b id="thresholdVal">55</b>&nbsp;dB<span id="graphThVal" hidden>55</span></span>
+          <span class="axis-note">横軸：時間（右が現在） ／ 縦軸：音の大きさ</span>
+        </div>
+        <p class="drag-hint">グラフ下の<strong>しきい値スライダー</strong>で調整できます。オレンジ色の<strong>しきい値ラインは上下にドラッグ</strong>しても調整できます。グラフの<strong>その他の場所は左右にドラッグ</strong>すると表示位置がずれ、過去の履歴を見られます。</p>
+
+        <div class="bar-wrap">
+          <div class="bar-track" id="barTrack">
+            <div class="bar-fill" id="barFill"></div>
+          </div>
+          <div class="bar-scale"><span>25</span><span>45</span><span>65</span><span>85</span><span>105</span></div>
+        </div>
+
+        <div class="peak-row">
+          <span>今回の最大 <b id="sessionPeak">--</b></span>
+          <span>検出イベント <b id="sessionEvents">0</b> 件</span>
+        </div>
+      </section>
+
+      <!-- ===== しきい値の説明（調整はグラフ上のラインをドラッグ） ===== -->
+      <p class="threshold-hint" id="thresholdHint">この値を超える音を検出すると、最初の検出の5秒前から最後の検出の5秒後までを、通しで1件の記録として切り出します。検出が繰り返されると区間はその分だけ延びます。</p>
+
+      <!-- ===== 操作 ===== -->
+      <section class="controls" aria-label="測定の操作">
+        <div class="manual-toggle-card" id="manualCard">
+          <label class="switch-row" for="manualToggle">
+            <span class="sw-label"><span class="rec-dot" id="manualDot">●</span>測定中録音する<small>ONにしている間、測定中の音声を録音し続けます。OFFにしたとき（または測定を停止したとき）に、1件の記録として保存されます</small></span>
+            <span class="switch"><input type="checkbox" id="manualToggle" /></span>
+          </label>
+        </div>
+        <div class="btn-sub" id="manualSub">測定を開始すると、ONにした時点から録音します</div>
+
+        <div class="session-stats" id="sessionStats">
+          <div class="stat-box"><div class="v" id="statElapsed">0:00</div><div class="k">測定時間</div></div>
+          <div class="stat-box"><div class="v" id="statToday">0</div><div class="k">今日の検出</div></div>
+          <div class="stat-box"><div class="v" id="statRec">待機中</div><div class="k">録音の状態</div></div>
+        </div>
+
+        <div class="notes">
+          <p><b>Web版では画面を閉じると測定が止まります。</b>測定中は、対応ブラウザでは画面が自動で消えないように保持しますが、画面を閉じる・アプリを切り替える・ブラウザを終了すると測定と録音は止まります。本番アプリでは画面を閉じても測定・録音が続きます。<span id="wakeStatus"></span></p>
+          <p><b>数値は目安です。</b>スマートフォンのマイクは校正されていないため、表示される dB は実際の騒音値とは異なります。記録・相談の参考としてお使いください。</p>
+          <p><b>一時的な音声はメモリ上だけに保持し、ファイルにはしません。</b>測定中は直近の音声だけをメモリにためて、古い分から捨てていきます。測定を停止するとそのバッファは破棄され、残るのは「記録」として確定した音声だけです。外部に送信されることもありません。</p>
+          <p><b>記録はこの端末の中に保存されます。</b>確定した記録（音声つき）は端末内の保存領域に残るため、ダウンロードで再生画面に移ったり、ページを再読み込みしたりしても消えません（測定中の一時的な音声は従来どおりメモリ上のみ）。「ダウンロード」ボタンはファイルをそのまま保存するボタンで、「共有で保存」ボタンは保存先を選ぶ画面（共有シート）を開くボタンです。アプリ内ブラウザでは「ダウンロード」が保存ではなく再生画面になる場合がありますが、記録自体は消えません。</p>
+          <p>就寝時に使う場合は、充電しながらの使用をおすすめします。</p>
+        </div>
+      </section>
+
+      <!-- ===== 記録リスト ===== -->
+      <section aria-label="記録リスト">
+        <div class="records-head">
+          <h2>騒音記録のログ<span class="count" id="recCount">0件</span></h2>
+          <span class="head-btns">
+            <button class="csv-btn" id="csvBtn" type="button" disabled>CSVで書き出す</button>
+            <button class="csv-btn" id="csvShareBtn" type="button" disabled>CSVを共有で保存</button>
+          </span>
+        </div>
+        <div class="bulk-bar" id="bulkBar" hidden>
+          <span class="bulk-count" id="bulkCount">0件選択中</span>
+          <button class="bulk-btn" id="selectAllBtn" type="button">全選択</button>
+          <button class="bulk-btn" id="clearSelBtn" type="button" disabled>選択解除</button>
+          <button class="bulk-btn primary" id="bulkDlBtn" type="button" disabled>選択した音声をダウンロード</button>
+          <button class="bulk-btn" id="bulkShareBtn" type="button" disabled>共有で保存</button>
+          <button class="bulk-btn primary" id="sheetBtn" type="button" disabled>記録シートを作成</button>
+        </div>
+        <div id="recList">
+          <div class="empty" id="emptyState">
+            <div class="big">まだ記録がありません</div>
+            測定中に自動で検出した音や、「測定中録音する」で録音した音が、ここに記録されます。
+          </div>
+        </div>
+      </section>
+
+      </div><!-- /mainView -->
+
+      <div id="settingsView" hidden>
+        <div class="settings-head">
+          <button class="back-btn" id="backBtn" type="button">← 戻る</button>
+          <h2>設定</h2>
+        </div>
+        <div class="settings-card" style="margin-top:0">
+          <div class="settings-title">録音の設定</div>
+          <label class="switch-row">
+            <span class="sw-label">自動録音<small>オフにすると測定だけを行い、録音も記録もしません</small></span>
+            <span class="switch"><input type="checkbox" id="autoRecToggle" checked /></span>
+          </label>
+          <div class="settings-body" id="autoSettings">
+            <p style="font-size:12.5px;color:var(--ink-dim);margin:0 0 10px">しきい値を超える音を検出すると、最初の検出の前から、最後の検出の後までを通しで1件にまとめます。音が繰り返し検出されると、その分だけ区間が延びます。ドン！のような単発音・繰り返す物音にも、続く生活音にも対応します。</p>
+            <div class="sec-row" id="clipSecRow">
+              <label for="clipSec">前後の秒数（開始の前倒し・終了の延長）</label>
+              <select id="clipSec">
+                <option value="3">3秒</option>
+                <option value="5" selected>5秒</option>
+                <option value="10">10秒</option>
+                <option value="15">15秒</option>
+                <option value="20">20秒</option>
+              </select>
+            </div>
+          </div>
+          <div class="sec-row format-row">
+            <label for="recFormat">録音形式</label>
+            <select id="recFormat" disabled>
+              <option value="wav" selected>WAV</option>
+            </select>
+          </div>
+          <p class="format-note" id="formatNote"></p>
+        </div>
+      </div><!-- /settingsView -->
+
+      <div id="sheetView" hidden>
+        <div class="sheet-actions">
+          <button class="back-btn" id="sheetBackBtn" type="button">← 記録リストに戻る</button>
+          <button class="csv-btn" id="sheetCsvBtn" type="button">CSVで書き出す</button>
+          <button class="csv-btn" id="sheetShareBtn" type="button">CSVを共有で保存</button>
+          <span class="sheet-print-hint">印刷／PDF保存は、ブラウザの印刷機能（メニュー → 印刷）から行えます。このシートは印刷用レイアウトで表示されます。</span>
+        </div>
+        <div class="sheet-paper" id="sheetPaper">
+          <h1>騒音の記録シート</h1>
+          <div class="sheet-meta" id="sheetMeta"></div>
+          <table class="sheet-table">
+            <thead>
+              <tr>
+                <th>No.</th><th>日付</th><th>発生時刻</th><th>継続時間</th>
+                <th>音の大きさ（最大）</th><th>平均</th><th>音の種類</th><th>メモ</th>
+              </tr>
+            </thead>
+            <tbody id="sheetTbody"></tbody>
+          </table>
+          <p class="sheet-note">※ 音の大きさはスマートフォンのマイクで測定した目安値です（校正された騒音計の値ではありません）。録音方式：しきい値を超えた音を自動検出して前後を切り出したもの、または測定中の手動録音。</p>
+        </div>
+      </div><!-- /sheetView -->
+
+      <footer>騒音測定器（自動録音）Web版― 音が出たときだけ録音し、記録シート形式で残すための試作ページです</footer>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ---------- 設定 ----------
+        var PRE_BUFFER_MS = 5000;     // 検出直前の音を保持する長さ（前倒し秒数を確保する）
+        var CLIP_AFTER_MS = 5000;     // 前後秒数の初期値（実際は設定画面の clipPadMs() を使う）
+        var IMPULSE_MARGIN_DB = 12;   // 衝撃音とみなす、瞬間ピークが しきい値を上回る量（ドン！等）
+        var CHUNK_MS = 500;           // 録音チャンク間隔
+        var DB_MIN = 25, DB_MAX = 105; // バー表示レンジ
+        var DB_OFFSET = 94;           // RMS(dBFS) → 目安dB への換算オフセット
+        var GRAPH_WINDOW_MS = 60000;  // グラフ表示幅の初期値（60秒）
+        var GRAPH_SAMPLE_MS = 120;    // グラフへのサンプリング間隔（ゆっくり流すため間引く）
+        var MAX_HISTORY_MS = 15 * 60 * 60 * 1000; // レベル履歴の最大保持（15時間・数値のみ）
+        var FINE_HISTORY_MS = 12 * 60 * 1000;     // 細かい履歴（120ms間隔）を手元に残す長さ
+        var graphWindowMs = GRAPH_WINDOW_MS;      // 現在の表示範囲（切替ボタンで変更）
+        var followingNow = true;                  // 右端＝現在に追従中か
+        var panEndPerf = 0;                       // 追従を外したときの表示右端（performance.now基準）
+        var perfWallOffset = Date.now() - performance.now(); // performance.now → 実時刻への換算
+        var graphHeightPx = 300;                  // グラフ表示高さ（px）
+
+        // ---------- DOM ----------
+        var $ = function (id) { return document.getElementById(id); };
+        var meterCard = $("meterCard"),
+            recBanner = $("recBanner"), recElapsed = $("recElapsed"), recKind = $("recKind");
+        var levelNum = $("levelNum"), scaleLabel = $("scaleLabel"),
+            statePill = $("statePill"), stateText = $("stateText"), micNote = $("micNote"),
+            barFill = $("barFill"),
+            sessionPeakEl = $("sessionPeak"), sessionEventsEl = $("sessionEvents"),
+            thresholdVal = $("thresholdVal"),
+            toggleBtn = $("toggleBtn"), btnSub = $("btnSub"),
+            sessionStats = $("sessionStats"), statElapsed = $("statElapsed"),
+            statToday = $("statToday"), statRec = $("statRec"),
+            permAlert = $("permAlert"), permMsg = $("permMsg"),
+            recList = $("recList"), recCount = $("recCount"), csvBtn = $("csvBtn"), csvShareBtn = $("csvShareBtn"),
+            wave = $("wave"), wctx = wave.getContext("2d");
+        var thresholdHint = $("thresholdHint"),
+            autoRecToggle = $("autoRecToggle"), autoSettingsEl = $("autoSettings"),
+            clipSecRow = $("clipSecRow"), clipSecSel = $("clipSec"),
+            manualToggle = $("manualToggle"), manualCard = $("manualCard"), manualSub = $("manualSub"),
+            recFormatSel = $("recFormat"), formatNote = $("formatNote"),
+            mainView = $("mainView"), settingsView = $("settingsView"),
+            settingsBtn = $("settingsBtn"), backBtn = $("backBtn"),
+            graphThVal = $("graphThVal"),
+            graphWindowLabel = $("graphWindowLabel"), graphPosLabel = $("graphPosLabel"),
+            backToNowBtn = $("backToNowBtn"), rangeBtns = $("rangeBtns"), rangeCurrentText = $("rangeCurrentText"),
+            graphHeightRange = $("graphHeightRange"), graphHeightVal = $("graphHeightVal"),
+            thresholdRange = $("thresholdRange"), thresholdSliderVal = $("thresholdSliderVal"),
+            wakeStatus = $("wakeStatus");
+        var bulkBar = $("bulkBar"), bulkCount = $("bulkCount"),
+            selectAllBtn = $("selectAllBtn"), clearSelBtn = $("clearSelBtn"), bulkDlBtn = $("bulkDlBtn"),
+            bulkShareBtn = $("bulkShareBtn"),
+            sheetBtn = $("sheetBtn");
+        var sheetView = $("sheetView"), sheetMeta = $("sheetMeta"), sheetTbody = $("sheetTbody"),
+            sheetBackBtn = $("sheetBackBtn"), sheetCsvBtn = $("sheetCsvBtn"), sheetShareBtn = $("sheetShareBtn");
+
+        // ---------- 状態 ----------
+        var stream = null, audioCtx = null, analyser = null, sourceNode = null,
+            procNode = null, procGain = null;
+        var monitoring = false, rafId = null, startedAt = 0, elapsedTimer = null;
+        // 録音は MediaRecorder のチャンク連結ではなく、音声をPCMのままメモリに保持し、
+        // 保存時にWAVとして書き出す。MediaRecorderのチャンクは先頭にしかヘッダが無く、
+        // 途中から切り出したファイルは再生できない（記録だけ残って音が無い）ため。
+        var chunks = [];              // {t0, t, samples:Int16Array} PCMブロック（t0=開始時刻, t=終了時刻）
+        var ev = null;                // 進行中イベント {start, wallStart, peak, peakInst, sum, n, belowSince, lastAbove, aboveMs}
+        var lastDetectAt = 0;         // 前フレームの検出時刻（超過時間の累計用）
+        var autoRec = true;           // 自動録音ON/OFF
+        var capturing = false;        // PCM取り込み中か（停止後に遅れて届くブロックを受け取らないための旗）
+        var capRate = 16000;          // 保存用サンプルレート（入力レート／間引き係数で決まる実レート）
+        var capFactor = 3;            // 間引き係数（48kHz→約16kHz）
+        var recFormat = "wav";        // 保存形式はWAV（切り出しが常に成立し、どの端末でも再生できる）
+        var manual = null;            // 手動録音中 {start, wallStart, peak, peakInst, sum, n}
+        var manualArmed = false;      // 測定開始前に「測定中録音する」をON予約している状態
+        var manualChunks = [];        // 手動録音専用のPCMブロック
+        var dispDb = 0;               // 表示用に平滑化したレベル
+        var sessionPeak = 0, sessionEvents = 0;
+        var records = [];             // 記録リスト（新しい順）
+        var selectedIds = {};         // チェックで選択中の記録 id
+        var recSeq = 0;
+        var history = [];             // 細かいレベル履歴 {t, db}（直近約12分・120ms間隔）
+        var histCoarse = [];          // 粗いレベル履歴 {t, db}（1秒ごとの最大値・最大15時間分、数値のみ）
+        var coarseCur = null;         // 集計中の1秒バケツ {t0, db}
+        var lastGraphSampleAt = 0;    // 最後にグラフへ記録した時刻
+        var frozenAt = 0;             // 停止時にグラフを止める時刻
+        var frozenWall = 0;           // 停止時の実時刻
+        var wakeLock = null;          // Screen Wake Lock の sentinel
+        var wakeLockWanted = false;   // 測定中は保持したい状態か
+        var waveData = new Float32Array(2048);
+
+        var TH_MIN = 35, TH_MAX = 80;   // しきい値の調整範囲（従来のスライダーと同じ）
+        var thresholdDb = 55;           // 現在のしきい値（グラフ上のラインをドラッグして変更）
+        var draggingTh = false;         // しきい値ラインをドラッグ中か
+        var hoverTh = false;            // ポインタがしきい値ライン付近にあるか
+        function threshold() { return thresholdDb; }
+        function clipPadSec() { return parseInt(clipSecSel.value, 10); }
+        function clipPadMs() { return clipPadSec() * 1000; }
+        function kindText(k, padSec) {
+          if (k === "impulse") return "衝撃音";
+          if (k === "manual") return "測定中録音";
+          return "前後" + (padSec || 5) + "秒";
+        }
+
+        // 一時バッファの破棄：メモリ上のチャンクをすべて捨て、世代を進める。
+        // 世代を進めると、停止済みレコーダーから遅れて届くチャンクも受け取らなくなる。
+        // 記録として確定した音声（records 側の Blob）はここでは触らない。
+        function discardTempBuffer() {
+          chunks = [];
+          manualChunks = [];
+        }
+
+        // ---------- PCM切り出し → WAV書き出し ----------
+        // [from, to]（performance.now()基準）と重なる部分をブロックからサンプル単位で切り出す
+        function collectSamples(list, from, to) {
+          var segs = [], total = 0;
+          for (var i = 0; i < list.length; i++) {
+            var b = list[i];
+            if (b.t <= from || b.t0 >= to) continue;
+            var dur = b.t - b.t0;
+            if (dur <= 0) continue;
+            var s0 = Math.max(0, Math.floor((from - b.t0) / dur * b.samples.length));
+            var s1 = Math.min(b.samples.length, Math.ceil((to - b.t0) / dur * b.samples.length));
+            if (s1 > s0) { segs.push(b.samples.subarray(s0, s1)); total += s1 - s0; }
+          }
+          if (!total) return null;
+          var all = new Int16Array(total), off = 0;
+          for (var j = 0; j < segs.length; j++) { all.set(segs[j], off); off += segs[j].length; }
+          return all;
+        }
+        function encodeWav(samples, rate) {
+          var buf = new ArrayBuffer(44 + samples.length * 2);
+          var v = new DataView(buf);
+          function str(off, s) { for (var i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); }
+          str(0, "RIFF"); v.setUint32(4, 36 + samples.length * 2, true);
+          str(8, "WAVE"); str(12, "fmt ");
+          v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+          v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true);
+          v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+          str(36, "data"); v.setUint32(40, samples.length * 2, true);
+          for (var i = 0; i < samples.length; i++) v.setInt16(44 + i * 2, samples[i], true);
+          return new Blob([buf], { type: "audio/wav" });
+        }
+        function samplesToBlob(samples) {
+          return samples && samples.length ? encodeWav(samples, capRate) : null;
+        }
+
+        function fmtDate(d) {
+          function p(n) { return (n < 10 ? "0" : "") + n; }
+          return d.getFullYear() + "/" + p(d.getMonth() + 1) + "/" + p(d.getDate());
+        }
+        function fmtTime(d) {
+          function p(n) { return (n < 10 ? "0" : "") + n; }
+          return p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+        }
+        function fmtDur(sec) {
+          if (sec < 1) return (Math.round(sec * 10) / 10) + "秒";
+          sec = Math.round(sec);
+          if (sec < 60) return sec + "秒";
+          return Math.floor(sec / 60) + "分" + (sec % 60 ? (sec % 60) + "秒" : "");
+        }
+        function scaleText(db) {
+          if (db < 35) return "静かな室内くらい";
+          if (db < 45) return "静かな住宅地くらい";
+          if (db < 55) return "日常の生活音くらい";
+          if (db < 65) return "普通の会話くらい";
+          if (db < 75) return "にぎやかな場所くらい";
+          if (db < 85) return "大きな声・物音くらい";
+          return "かなり大きな音です";
+        }
+        function levelColor(db, th) {
+          if (db >= th) return "#ff5252";
+          if (db >= th - 10) return "#ffb347";
+          if (db >= 50) return "#facc15";
+          return "#4ade80";
+        }
+
+        // ---------- しきい値UI（グラフ上のドラッグで調整） ----------
+        function setThreshold(v, redraw) {
+          var nv = Math.round(Math.min(TH_MAX, Math.max(TH_MIN, v)));
+          if (nv === thresholdDb && redraw === false) return;
+          thresholdDb = nv;
+          syncThresholdUI();
+        }
+        function syncThresholdUI() {
+          var th = threshold();
+          if (thresholdVal) thresholdVal.textContent = th;
+          if (graphThVal) graphThVal.textContent = th;
+          if (thresholdSliderVal) thresholdSliderVal.textContent = th;
+          if (thresholdRange) {
+            if (thresholdRange.value !== String(th)) thresholdRange.value = String(th);
+            thresholdRange.setAttribute("aria-valuetext", "しきい値 " + th + " dB（目安）");
+          }
+          wave.setAttribute("aria-valuenow", String(th));
+          wave.setAttribute("aria-valuetext", "しきい値 " + th + " dB（目安）");
+          // 停止中でもしきい値ラインが追従するよう、止まったグラフを再描画する
+          if (!monitoring && typeof drawGraph === "function") drawGraph();
+        }
+
+        // ---------- レベル履歴グラフ（直近60秒・ゆっくりスクロール） ----------
+        // 描画ジオメトリはドラッグ判定と共通で使う
+        var PLOT = { left: 40, right: 14, top: 34, bottom: 30 };
+        function plotW() { return wave.width - PLOT.left - PLOT.right; }
+        function plotH() { return wave.height - PLOT.top - PLOT.bottom; }
+        function dbToY(db) {
+          var c = Math.min(DB_MAX, Math.max(DB_MIN, db));
+          return PLOT.top + (1 - (c - DB_MIN) / (DB_MAX - DB_MIN)) * plotH();
+        }
+        function yToDb(y) {
+          return DB_MIN + (1 - (y - PLOT.top) / plotH()) * (DB_MAX - DB_MIN);
+        }
+        function timeToX(t, viewEnd) {
+          return PLOT.left + (1 - (viewEnd - t) / graphWindowMs) * plotW();
+        }
+        function latestPerf(nowRef) { return nowRef; }
+        function earliestPerf() {
+          if (histCoarse.length) return histCoarse[0].t;
+          if (coarseCur) return coarseCur.t0;
+          if (history.length) return history[0].t;
+          return null;
+        }
+        function viewEndPerf(nowRef) {
+          if (followingNow) return nowRef;
+          var e = earliestPerf();
+          var minEnd = e != null ? e + graphWindowMs : nowRef;
+          if (panEndPerf > nowRef) panEndPerf = nowRef;
+          if (panEndPerf < minEnd) panEndPerf = Math.min(nowRef, minEnd);
+          return panEndPerf;
+        }
+        function perfToWall(t) { return t + perfWallOffset; }
+        function fmtClock(wallMs, withSec) {
+          var d = new Date(wallMs);
+          function p(n) { return (n < 10 ? "0" : "") + n; }
+          return withSec ? (p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds()))
+                         : (p(d.getHours()) + ":" + p(d.getMinutes()));
+        }
+        function fmtRange(ms) {
+          if (ms === 10000) return "10秒";
+          if (ms === 60000) return "60秒";
+          if (ms === 600000) return "10分";
+          if (ms === 3600000) return "60分";
+          if (ms === 10800000) return "3時間";
+          if (ms === 54000000) return "15時間";
+          return Math.round(ms / 1000) + "秒";
+        }
+        function fmtSpan(t0, t1) {
+          var withSec = graphWindowMs <= 300000;
+          return fmtClock(perfToWall(t0), withSec) + "〜" + fmtClock(perfToWall(t1), withSec);
+        }
+        function updateGraphNav() {
+          if (graphWindowLabel) graphWindowLabel.textContent = "表示範囲 " + fmtRange(graphWindowMs) + " · 最大15時間分を保持";
+          if (rangeCurrentText) rangeCurrentText.innerHTML = "表示範囲：<b>" + fmtRange(graphWindowMs) + "</b> を表示中";
+          if (rangeBtns) {
+            var btns = rangeBtns.querySelectorAll(".range-btn");
+            for (var i = 0; i < btns.length; i++) {
+              btns[i].classList.toggle("active", parseInt(btns[i].getAttribute("data-range"), 10) === graphWindowMs);
+            }
+          }
+          if (!graphPosLabel || !backToNowBtn) return;
+          if (followingNow) {
+            graphPosLabel.textContent = "現在に追従中";
+            graphPosLabel.classList.remove("past");
+            backToNowBtn.hidden = true;
+          } else {
+            var nowRef = monitoring ? performance.now() : (frozenAt || performance.now());
+            var ve = viewEndPerf(nowRef);
+            graphPosLabel.textContent = "過去を表示中 " + fmtSpan(ve - graphWindowMs, ve);
+            graphPosLabel.classList.add("past");
+            backToNowBtn.hidden = false;
+          }
+        }
+        function goToNow() {
+          followingNow = true;
+          panEndPerf = 0;
+          updateGraphNav();
+          drawGraph();
+        }
+        // ポインタ座標（client）→ canvas内部座標
+        function pointerPos(e) {
+          var r = wave.getBoundingClientRect();
+          return {
+            x: (e.clientX - r.left) * (wave.width / r.width),
+            y: (e.clientY - r.top) * (wave.height / r.height)
+          };
+        }
+
+        function drawGraph() {
+          var W = wave.width, H = wave.height;
+          var th = threshold();
+          var nowRef = monitoring ? performance.now() : (frozenAt || performance.now());
+          var viewEnd = viewEndPerf(nowRef);
+          var viewStart = viewEnd - graphWindowMs;
+          wctx.clearRect(0, 0, W, H);
+
+          // --- 横グリッド＋縦軸ラベル（dB） ---
+          var gridDbs = [25, 45, 65, 85, 105];
+          wctx.font = "20px 'Roboto Mono', monospace";
+          for (var g = 0; g < gridDbs.length; g++) {
+            var gy = dbToY(gridDbs[g]);
+            wctx.strokeStyle = "rgba(120,150,190,.13)";
+            wctx.lineWidth = 1;
+            wctx.beginPath();
+            wctx.moveTo(PLOT.left, gy); wctx.lineTo(W - PLOT.right, gy);
+            wctx.stroke();
+            wctx.fillStyle = "rgba(157,177,201,.75)";
+            wctx.textAlign = "right";
+            wctx.textBaseline = "middle";
+            wctx.fillText(String(gridDbs[g]), PLOT.left - 7, gy);
+          }
+          // 縦軸タイトル（目盛り「105」と重ならないよう、プロット上部の余白に置く）
+          wctx.fillStyle = "rgba(157,177,201,.6)";
+          wctx.font = "16px 'Noto Sans JP', sans-serif";
+          wctx.textAlign = "left"; wctx.textBaseline = "alphabetic";
+          wctx.fillText("dB（目安）", 2, 20);
+
+          // --- 横軸ラベル（時間） ---
+          wctx.font = "18px 'Noto Sans JP', sans-serif";
+          wctx.fillStyle = "rgba(157,177,201,.75)";
+          wctx.textBaseline = "top";
+          for (var ti = 0; ti <= 4; ti++) {
+            var frac = ti / 4;
+            var tickT = viewStart + frac * graphWindowMs;
+            var tx = PLOT.left + frac * plotW();
+            wctx.strokeStyle = "rgba(120,150,190,.10)";
+            wctx.beginPath();
+            wctx.moveTo(tx, PLOT.top); wctx.lineTo(tx, H - PLOT.bottom);
+            wctx.stroke();
+            var label;
+            if (followingNow && ti === 4) label = "現在";
+            else if (followingNow && (graphWindowMs === 60000 || graphWindowMs === 10000)) label = Math.round((viewEnd - tickT) / 1000) + "秒前";
+            else label = fmtClock(perfToWall(tickT), graphWindowMs <= 300000);
+            wctx.textAlign = ti === 0 ? "left" : (ti === 4 ? "right" : "center");
+            wctx.fillText(label, tx, H - PLOT.bottom + 7);
+          }
+          // 枠
+          wctx.strokeStyle = "rgba(120,150,190,.22)";
+          wctx.lineWidth = 1;
+          wctx.strokeRect(PLOT.left, PLOT.top, plotW(), plotH());
+
+          // --- レベル履歴（しきい値で色分け、交点で補間） ---
+          // 細かい履歴で表示範囲をカバーできる場合はそちら、無理な範囲・過去は1秒最大値の粗い履歴を使う
+          var useFine = graphWindowMs <= FINE_HISTORY_MS && history.length && history[0].t <= viewStart + 2000;
+          var src = useFine ? history : histCoarse;
+          var rawPts = [];
+          for (var i = 0; i < src.length; i++) {
+            if (src[i].t >= viewStart && src[i].t <= viewEnd) rawPts.push(src[i]);
+          }
+          if (!useFine && coarseCur && coarseCur.t0 >= viewStart && coarseCur.t0 <= viewEnd) rawPts.push({ t: coarseCur.t0, db: coarseCur.db });
+          // 画面幅より点が多い場合はピクセルごとに最大値を残して間引く（大きな音を取りこぼさない）
+          var pts = [];
+          if (rawPts.length > plotW() * 2) {
+            var byX = {};
+            for (var bi = 0; bi < rawPts.length; bi++) {
+              var bx = Math.round(timeToX(rawPts[bi].t, viewEnd));
+              if (!byX[bx] || rawPts[bi].db > byX[bx].db) byX[bx] = rawPts[bi];
+            }
+            var xs = Object.keys(byX).map(Number).sort(function (a, b) { return a - b; });
+            for (var xi = 0; xi < xs.length; xi++) {
+              var rp = byX[xs[xi]];
+              pts.push({ x: timeToX(rp.t, viewEnd), y: dbToY(rp.db), db: rp.db });
+            }
+          } else {
+            for (var pi = 0; pi < rawPts.length; pi++) {
+              pts.push({ x: timeToX(rawPts[pi].t, viewEnd), y: dbToY(rawPts[pi].db), db: rawPts[pi].db });
+            }
+          }
+          var hasAnyHistory = history.length || histCoarse.length;
+          if (pts.length >= 2) {
+            var baseY = dbToY(DB_MIN);
+            // 塗り＋線を区間ごとに描く（しきい値を跨ぐ区間は交点で分割）
+            for (var s = 0; s < pts.length - 1; s++) {
+              var a = pts[s], b = pts[s + 1];
+              var segs = [[a, b]];
+              if ((a.db - th) * (b.db - th) < 0) {
+                var ratio = (th - a.db) / (b.db - a.db);
+                var mid = { x: a.x + (b.x - a.x) * ratio, y: dbToY(th), db: th };
+                segs = [[a, mid], [mid, b]];
+              }
+              for (var k = 0; k < segs.length; k++) {
+                var p = segs[k][0], q = segs[k][1];
+                var above = (p.db + q.db) / 2 >= th;
+                // 塗り
+                wctx.beginPath();
+                wctx.moveTo(p.x, p.y); wctx.lineTo(q.x, q.y);
+                wctx.lineTo(q.x, baseY); wctx.lineTo(p.x, baseY);
+                wctx.closePath();
+                wctx.fillStyle = above ? "rgba(255,82,82,.28)" : (draggingTh || hoverTh ? "rgba(74,222,128,.12)" : "rgba(74,222,128,.16)");
+                wctx.fill();
+                // 線
+                wctx.beginPath();
+                wctx.moveTo(p.x, p.y); wctx.lineTo(q.x, q.y);
+                wctx.strokeStyle = above ? "#ff5252" : "#4ade80";
+                wctx.lineWidth = 3;
+                wctx.lineJoin = "round"; wctx.lineCap = "round";
+                wctx.stroke();
+              }
+            }
+            // 最新点
+            var last = pts[pts.length - 1];
+            wctx.beginPath();
+            wctx.arc(last.x, last.y, 5, 0, Math.PI * 2);
+            wctx.fillStyle = last.db >= th ? "#ff5252" : "#4ade80";
+            wctx.fill();
+            wctx.strokeStyle = "rgba(7,15,29,.9)"; wctx.lineWidth = 2; wctx.stroke();
+          } else {
+            wctx.fillStyle = "rgba(157,177,201,.6)";
+            wctx.font = "21px 'Noto Sans JP', sans-serif";
+            wctx.textAlign = "center"; wctx.textBaseline = "middle";
+            var emptyMsg = !hasAnyHistory ? "測定を開始すると、ここに音量の推移が表示されます"
+              : (!followingNow ? "この時間範囲には、まだ履歴がありません" : "この範囲の履歴はまだありません");
+            wctx.fillText(emptyMsg, PLOT.left + plotW() / 2, PLOT.top + plotH() / 2);
+          }
+
+          // --- しきい値ライン（ドラッグ可能） ---
+          var thY = dbToY(th);
+          wctx.save();
+          if (draggingTh || hoverTh) {
+            wctx.shadowColor = "rgba(255,179,71,.85)";
+            wctx.shadowBlur = 12;
+          }
+          wctx.strokeStyle = "#ffb347";
+          wctx.lineWidth = draggingTh ? 4.5 : 3;
+          wctx.setLineDash([9, 6]);
+          wctx.beginPath();
+          wctx.moveTo(PLOT.left, thY); wctx.lineTo(W - PLOT.right, thY);
+          wctx.stroke();
+          wctx.restore();
+          wctx.setLineDash([]);
+          // ハンドル（右端のつまみ＋数値）
+          var label = "しきい値 " + th + " dB";
+          wctx.font = "700 19px 'Noto Sans JP', sans-serif";
+          var tw = wctx.measureText(label).width;
+          var hx = W - PLOT.right - tw - 22, hy = thY - 17;
+          if (hy < PLOT.top + 2) hy = thY + 6;
+          wctx.beginPath();
+          if (wctx.roundRect) wctx.roundRect(hx, hy, tw + 16, 30, 8); else wctx.rect(hx, hy, tw + 16, 30);
+          wctx.fillStyle = draggingTh ? "rgba(245,158,11,.95)" : "rgba(11,21,38,.92)";
+          wctx.fill();
+          wctx.strokeStyle = "#ffb347"; wctx.lineWidth = 1.6; wctx.stroke();
+          wctx.fillStyle = draggingTh ? "#1a1206" : "#ffb347";
+          wctx.textAlign = "left"; wctx.textBaseline = "middle";
+          wctx.fillText(label, hx + 8, hy + 16);
+          // つまみのドラッグ目印（左端）
+          wctx.beginPath();
+          wctx.arc(PLOT.left + 15, thY, draggingTh ? 14 : 12, 0, Math.PI * 2);
+          wctx.fillStyle = "#ffb347"; wctx.fill();
+          wctx.strokeStyle = "rgba(7,15,29,.85)"; wctx.lineWidth = 2; wctx.stroke();
+          wctx.fillStyle = "#1a1206";
+          wctx.font = "700 16px 'Noto Sans JP', sans-serif";
+          wctx.textAlign = "center";
+          wctx.fillText("↕", PLOT.left + 15, thY + 1);
+        }
+
+        // ---------- しきい値ラインのドラッグ ----------
+        var TH_HIT_PX = 52; // canvas内部px（表示で約26px）以内のタッチ／クリックで掴む
+        function nearThreshold(e) {
+          var p = pointerPos(e);
+          return Math.abs(p.y - dbToY(threshold())) <= TH_HIT_PX && p.x >= PLOT.left - 6 && p.x <= wave.width - PLOT.right + 6;
+        }
+        function applyDrag(e) {
+          var p = pointerPos(e);
+          setThreshold(yToDb(p.y));
+          if (!monitoring) drawGraph(); else drawGraph();
+        }
+        // ---------- グラフの左右スライド（過去へ移動） ----------
+        var panning = false, panStartClientX = 0, panStartEnd = 0;
+        function clampPanEnd(candidate, nowRef) {
+          var e0 = earliestPerf();
+          var minEnd = e0 != null ? e0 + graphWindowMs : nowRef;
+          if (candidate > nowRef) candidate = nowRef;
+          if (candidate < minEnd) candidate = Math.min(nowRef, minEnd);
+          return candidate;
+        }
+        wave.addEventListener("pointerdown", function (e) {
+          if (nearThreshold(e)) {
+            draggingTh = true;
+            try { wave.focus({ preventScroll: true }); } catch (err) {}
+            wave.classList.add("dragging");
+            try { wave.setPointerCapture(e.pointerId); } catch (err) {}
+            e.preventDefault();
+            applyDrag(e);
+            return;
+          }
+          // しきい値ライン以外は左右スライドとして扱う（履歴があるときだけ）
+          if (!history.length && !histCoarse.length) return;
+          panning = true;
+          panStartClientX = e.clientX;
+          var nowRef0 = monitoring ? performance.now() : (frozenAt || performance.now());
+          panStartEnd = followingNow ? nowRef0 : panEndPerf;
+          wave.classList.add("panning");
+          try { wave.setPointerCapture(e.pointerId); } catch (err) {}
+          e.preventDefault();
+        });
+        wave.addEventListener("pointermove", function (e) {
+          if (draggingTh) { applyDrag(e); return; }
+          if (panning) {
+            var r = wave.getBoundingClientRect();
+            var dxInternal = r.width ? (e.clientX - panStartClientX) * (wave.width / r.width) : 0;
+            var shiftMs = dxInternal / Math.max(1, plotW()) * graphWindowMs;
+            var nowRef = monitoring ? performance.now() : (frozenAt || performance.now());
+            var candidate = clampPanEnd(panStartEnd - shiftMs, nowRef);
+            // 右端まで戻したら追従を再開する
+            if (candidate >= nowRef - Math.min(1500, graphWindowMs * 0.03)) {
+              if (!followingNow) { followingNow = true; panEndPerf = 0; updateGraphNav(); }
+            } else {
+              followingNow = false;
+              panEndPerf = candidate;
+              updateGraphNav();
+            }
+            drawGraph();
+            return;
+          }
+          var was = hoverTh;
+          hoverTh = nearThreshold(e);
+          if (hoverTh !== was && !monitoring) drawGraph();
+        });
+        function endDrag(e) {
+          if (panning) {
+            panning = false;
+            wave.classList.remove("panning");
+            updateGraphNav();
+            if (!monitoring) drawGraph();
+          }
+          if (!draggingTh) return;
+          draggingTh = false;
+          wave.classList.remove("dragging");
+          if (!monitoring) drawGraph();
+        }
+        wave.addEventListener("pointerup", endDrag);
+        wave.addEventListener("pointercancel", endDrag);
+        wave.addEventListener("pointerleave", function () {
+          if (hoverTh && !draggingTh) { hoverTh = false; if (!monitoring) drawGraph(); }
+        });
+        wave.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+            var nowRefK = monitoring ? performance.now() : (frozenAt || performance.now());
+            var curEnd = followingNow ? nowRefK : panEndPerf;
+            var delta = graphWindowMs * 0.15 * (e.key === "ArrowLeft" ? -1 : 1);
+            var cand = clampPanEnd(curEnd + delta, nowRefK);
+            e.preventDefault();
+            if (cand >= nowRefK - Math.min(1500, graphWindowMs * 0.03)) goToNow();
+            else { followingNow = false; panEndPerf = cand; updateGraphNav(); drawGraph(); }
+            return;
+          }
+          var step = 0;
+          if (e.key === "ArrowUp") step = 1;
+          else if (e.key === "ArrowDown") step = -1;
+          else if (e.key === "PageUp") step = 5;
+          else if (e.key === "PageDown") step = -5;
+          else if (e.key === "Home") { setThreshold(TH_MIN); e.preventDefault(); return; }
+          else if (e.key === "End") { setThreshold(TH_MAX); e.preventDefault(); return; }
+          else return;
+          e.preventDefault();
+          setThreshold(threshold() + step);
+        });
+
+        // ---------- 表示範囲・現在に戻る・グラフの大きさ ----------
+        if (rangeBtns) {
+          rangeBtns.addEventListener("click", function (e) {
+            var btn = e.target && e.target.closest ? e.target.closest(".range-btn") : null;
+            if (!btn) return;
+            graphWindowMs = parseInt(btn.getAttribute("data-range"), 10) || 60000;
+            if (!followingNow) {
+              var nowRefR = monitoring ? performance.now() : (frozenAt || performance.now());
+              panEndPerf = clampPanEnd(panEndPerf, nowRefR);
+            }
+            updateGraphNav();
+            drawGraph();
+          });
+        }
+        if (backToNowBtn) backToNowBtn.addEventListener("click", goToNow);
+        function setGraphHeight(px, fromSlider) {
+          graphHeightPx = Math.max(200, Math.min(520, Math.round(px)));
+          wave.style.height = graphHeightPx + "px";
+          wave.height = graphHeightPx * 2;
+          if (graphHeightVal) graphHeightVal.textContent = graphHeightPx + "px";
+          if (graphHeightRange && !fromSlider) graphHeightRange.value = String(graphHeightPx);
+          drawGraph();
+        }
+        if (graphHeightRange) {
+          graphHeightRange.addEventListener("input", function () { setGraphHeight(parseInt(graphHeightRange.value, 10) || 300, true); });
+        }
+        // グラフ直下のしきい値スライダー：setThreshold 経由でグラフ上のライン・
+        // 各数値表示と双方向に同期する（逆方向は syncThresholdUI が担う）
+        if (thresholdRange) {
+          thresholdRange.addEventListener("input", function () {
+            var v = parseInt(thresholdRange.value, 10);
+            if (!isNaN(v)) setThreshold(v);
+          });
+        }
+
+        // ---------- レベル計測ループ ----------
+        function computeDb() {
+          if (!analyser) return 0;
+          analyser.getFloatTimeDomainData(waveData);
+          var sum = 0;
+          for (var i = 0; i < waveData.length; i++) sum += waveData[i] * waveData[i];
+          var rms = Math.sqrt(sum / waveData.length);
+          if (rms <= 0.00001) return DB_MIN;
+          var db = 20 * Math.log(rms) / Math.LN10 + DB_OFFSET;
+          if (db < DB_MIN) db = DB_MIN;
+          if (db > 115) db = 115;
+          return db;
+        }
+
+        // 瞬間ピーク（単発の衝撃音はRMS平均では埋もれるため別に測る）
+        function computePeakDb() {
+          if (!analyser) return 0;
+          analyser.getFloatTimeDomainData(waveData);
+          var peak = 0;
+          for (var i = 0; i < waveData.length; i++) {
+            var a = Math.abs(waveData[i]);
+            if (a > peak) peak = a;
+          }
+          if (peak <= 0.00001) return DB_MIN;
+          var db = 20 * Math.log(peak) / Math.LN10 + DB_OFFSET;
+          if (db < DB_MIN) db = DB_MIN;
+          if (db > 120) db = 120;
+          return db;
+        }
+
+        function loop() {
+          if (!monitoring) return;
+          var db = computeDb();
+          // 表示は立ち上がり速く・下がり緩やかに
+          if (db > dispDb) dispDb = db; else dispDb += (db - dispDb) * 0.12;
+          var th = threshold();
+          var shown = Math.round(dispDb);
+          levelNum.textContent = shown;
+          levelNum.classList.toggle("hot", dispDb >= th);
+          scaleLabel.textContent = scaleText(dispDb) + (dispDb >= th ? "（しきい値超過）" : "");
+          scaleLabel.classList.toggle("hot", dispDb >= th);
+          barFill.style.width = Math.min(100, Math.max(0, (dispDb - DB_MIN) / (DB_MAX - DB_MIN) * 100)) + "%";
+          // グラフ用サンプリング：細かい履歴は直近約12分、粗い履歴（1秒最大値）は最大15時間保持する。
+          // 保持するのは音量レベルの数値だけで、音声ではない。
+          var gNow = performance.now();
+          if (gNow - lastGraphSampleAt >= GRAPH_SAMPLE_MS) {
+            lastGraphSampleAt = gNow;
+            history.push({ t: gNow, db: dispDb });
+            var gCut = gNow - FINE_HISTORY_MS;
+            while (history.length && history[0].t < gCut) history.shift();
+            if (!coarseCur) {
+              coarseCur = { t0: gNow, db: dispDb };
+            } else if (gNow - coarseCur.t0 >= 1000) {
+              histCoarse.push({ t: coarseCur.t0, db: coarseCur.db });
+              coarseCur = { t0: gNow, db: dispDb };
+              var cCut = gNow - MAX_HISTORY_MS;
+              while (histCoarse.length && histCoarse[0].t < cCut) histCoarse.shift();
+            } else if (dispDb > coarseCur.db) {
+              coarseCur.db = dispDb;
+            }
+            if (!followingNow) updateGraphNav();
+          }
+          drawGraph();
+          if (dispDb > sessionPeak) {
+            sessionPeak = dispDb;
+            sessionPeakEl.textContent = Math.round(sessionPeak);
+          }
+          var peakDb = computePeakDb();
+          detect(db, peakDb);
+          if (manual) {
+            if (db > manual.peak) manual.peak = db;
+            if (peakDb > manual.peakInst) manual.peakInst = peakDb;
+            manual.sum += db; manual.n++;
+          }
+          rafId = requestAnimationFrame(loop);
+        }
+
+        // ---------- イベント検出 ----------
+        function detect(db, peakDb) {
+          var now = performance.now();
+          var th = threshold();
+          var dt = lastDetectAt ? Math.min(100, now - lastDetectAt) : 0;
+          lastDetectAt = now;
+          if (autoRec) {
+            detectClip(db, peakDb, now, th);
+          }
+          // イベントが無い間は古いチャンクを捨てる（プリバッファ分だけ残す。
+          // 前倒し秒数が大きい場合は、その分も保持する）
+          if (!ev) {
+            var keepMs = Math.max(PRE_BUFFER_MS, clipPadMs());
+            var cutoff = now - keepMs - CHUNK_MS * 2;
+            while (chunks.length && chunks[0].t < cutoff) chunks.shift();
+          }
+        }
+
+        // 前後N秒（最初の検出のN秒前〜最後の検出のN秒後を、通しで1件にまとめる）
+        // N は設定画面で変更可能（clipPadMs）。開始の前倒しと終了の延長の両方に同じ秒数を使う
+        function detectClip(db, peakDb, now, th) {
+          var hit = db >= th || peakDb >= th + IMPULSE_MARGIN_DB;
+          if (!ev) {
+            if (hit) {
+              var pad = clipPadMs();
+              ev = {
+                clip: true,
+                start: now, wallStart: new Date(),
+                peak: db, peakInst: peakDb,
+                sum: db, n: 1,
+                padMs: pad,
+                lastHit: now,
+                endAt: now + pad
+              };
+              refreshRecState();
+            }
+          } else {
+            if (db > ev.peak) ev.peak = db;
+            if (peakDb > ev.peakInst) ev.peakInst = peakDb;
+            if (db >= th) { ev.sum += db; ev.n++; }
+            // 新しい検出があるたびに終了予定を「その検出＋N秒」へ後ろ倒しし、区間を延長する
+            if (hit) { ev.lastHit = now; ev.endAt = now + ev.padMs; }
+            if (now >= ev.endAt) finishClipEvent();
+          }
+        }
+
+        function finishClipEvent() {
+          var e = ev; ev = null;
+          refreshRecState();
+          var th = threshold();
+          var isImpulse = e.peakInst >= th + IMPULSE_MARGIN_DB;
+          var padMs = e.padMs || CLIP_AFTER_MS;
+          var from = e.start - padMs;
+          var to = e.endAt;
+          var samples = collectSamples(chunks, from, to);
+          var blob = samplesToBlob(samples);
+          // 保存秒数は実際に出力した音声の長さ（検出が続くほど長くなる）
+          var durSec = samples ? samples.length / capRate
+                               : (e.endAt - e.start + padMs) / 1000;
+          addRecord({
+            when: e.wallStart,
+            durSec: durSec,
+            peak: Math.round(isImpulse ? Math.max(e.peak, e.peakInst) : e.peak),
+            avg: Math.round(e.sum / Math.max(1, e.n)),
+            kind: "clip",
+            padSec: Math.round(padMs / 1000),
+            blob: blob
+          });
+          sessionEvents++;
+          sessionEventsEl.textContent = sessionEvents;
+          updateToday();
+        }
+
+        function currentRecordingInfo() {
+          if (manual) return { start: manual.start, kind: "手動録音" };
+          if (ev) return { start: ev.start, kind: "自動録音" };
+          return null;
+        }
+        function fmtRecElapsed(ms) {
+          var sec = Math.max(0, Math.floor(ms / 1000));
+          var m = Math.floor(sec / 60), s = sec % 60;
+          var clock = m + ":" + ("0" + s).slice(-2);
+          return { clock: clock, sec: sec };
+        }
+        function updateRecBanner() {
+          var info = currentRecordingInfo();
+          if (!info) {
+            if (recBanner) recBanner.hidden = true;
+            if (meterCard) meterCard.classList.remove("recording-active");
+            return;
+          }
+          if (recBanner) recBanner.hidden = false;
+          if (meterCard) meterCard.classList.add("recording-active");
+          if (recKind) recKind.textContent = info.kind;
+          var f = fmtRecElapsed(performance.now() - info.start);
+          if (recElapsed) recElapsed.innerHTML = f.clock + "<small>" + f.sec + "秒 経過</small>";
+        }
+        function refreshRecState() {
+          var recording = !!manual || !!ev;
+          updateRecBanner();
+          if (recording) {
+            statePill.className = "state-pill rec";
+            stateText.textContent = "録音中";
+            statRec.textContent = "録音中";
+            statRec.style.color = "#ff8080";
+          } else if (monitoring) {
+            statePill.className = "state-pill on";
+            stateText.textContent = "測定中";
+            statRec.textContent = autoRec ? "待機中" : "手動のみ";
+            statRec.style.color = "";
+          }
+        }
+
+        // ---------- PCM取り込み（自動・手動で共用） ----------
+        // マイク入力を間引いて16bit PCMブロックとしてメモリに保持する。
+        // 保存時は collectSamples + encodeWav で切り出すため、どの区間でも必ず再生できる。
+        function onAudioProcess(e) {
+          if (!capturing || !audioCtx) return;
+          var inBuf = e.inputBuffer;
+          var ch0 = inBuf.getChannelData(0);
+          var ch1 = inBuf.numberOfChannels > 1 ? inBuf.getChannelData(1) : null;
+          var n = ch0.length;
+          var outLen = Math.floor(n / capFactor);
+          if (outLen <= 0) return;
+          var out = new Int16Array(outLen);
+          for (var i = 0; i < outLen; i++) {
+            var acc = 0;
+            for (var k = 0; k < capFactor; k++) {
+              var idx = i * capFactor + k;
+              var v = ch0[idx];
+              if (ch1) v = (v + ch1[idx]) * 0.5;
+              acc += v;
+            }
+            var s = acc / capFactor;
+            if (s > 1) s = 1; else if (s < -1) s = -1;
+            out[i] = s < 0 ? Math.round(s * 0x8000) : Math.round(s * 0x7FFF);
+          }
+          var t1 = performance.now();
+          var block = { t0: t1 - n / audioCtx.sampleRate * 1000, t: t1, samples: out };
+          chunks.push(block);
+          if (manual) manualChunks.push(block);
+        }
+
+        function startCapture() {
+          if (!audioCtx || !sourceNode || procNode) return;
+          capFactor = Math.max(1, Math.round(audioCtx.sampleRate / 16000));
+          capRate = Math.round(audioCtx.sampleRate / capFactor);
+          procNode = audioCtx.createScriptProcessor(4096, 2, 1);
+          procNode.onaudioprocess = onAudioProcess;
+          procGain = audioCtx.createGain();
+          procGain.gain.value = 0; // 音は出さない（取り込み専用）
+          sourceNode.connect(procNode);
+          procNode.connect(procGain);
+          procGain.connect(audioCtx.destination);
+          capturing = true;
+        }
+
+        function stopCapture() {
+          capturing = false; // 先に受け取りを打ち切り、停止後に届くブロックを残さない
+          if (procNode) {
+            procNode.onaudioprocess = null;
+            try { procNode.disconnect(); } catch (e) {}
+            procNode = null;
+          }
+          if (procGain) {
+            try { procGain.disconnect(); } catch (e) {}
+            procGain = null;
+          }
+        }
+
+        // ---------- 手動録音 ----------
+        function syncManualBtn() {
+          // 測定前でもONにしておける（予約）。測定が始まったら、その時点から録音する。
+          // 以前は測定中以外トグル自体を無効化していたため、「押しても反応しない」状態だった。
+          manualToggle.checked = !!manual || manualArmed;
+          manualToggle.disabled = false;
+          manualCard.classList.toggle("recording", !!manual);
+          if (manual) {
+            manualSub.textContent = "録音中です。OFFにすると停止して、記録リストに1件追加します";
+          } else if (monitoring) {
+            manualSub.textContent = "ONにすると、その時点から測定中の音声を録音し続けます（自動録音の設定とは別に使えます）";
+          } else if (manualArmed) {
+            manualSub.textContent = "ONになっています。測定を開始すると、最初から録音します";
+          } else {
+            manualSub.textContent = "測定を開始すると使えます。先にONにしておくと、測定開始と同時に録音を始めます";
+          }
+        }
+
+        function startManual() {
+          if (!capturing) {
+            micNote.textContent = "この端末では録音を開始できませんでした";
+            return;
+          }
+          manual = { start: performance.now(), wallStart: new Date(), peak: 0, peakInst: 0, sum: 0, n: 0 };
+          manualChunks = [];
+          syncManualBtn();
+          refreshRecState();
+        }
+
+        function stopManual() {
+          if (!manual) return;
+          var m = manual; manual = null;
+          var endT = performance.now();
+          var samples = collectSamples(manualChunks, m.start, endT);
+          var blob = samplesToBlob(samples);
+          manualChunks = [];
+          addRecord({
+            when: m.wallStart,
+            durSec: samples ? samples.length / capRate : Math.max(0.1, (endT - m.start) / 1000),
+            peak: Math.round(Math.max(m.peak, m.peakInst)),
+            avg: Math.round(m.sum / Math.max(1, m.n)),
+            kind: "manual",
+            blob: blob
+          });
+          syncManualBtn();
+          refreshRecState();
+        }
+
+        // ---------- Screen Wake Lock（測定中だけ画面スリープを防ぐ） ----------
+        function updateWakeNote() {
+          if (!wakeStatus) return;
+          if (!monitoring) { wakeStatus.textContent = ""; return; }
+          if (wakeLock) wakeStatus.textContent = " 現在は画面スリープ防止が有効です。";
+          else if ("wakeLock" in navigator) wakeStatus.textContent = " 現在は画面スリープ防止を取得できていません。";
+          else wakeStatus.textContent = " このブラウザは画面スリープ防止に未対応です。";
+        }
+        function requestWakeLock() {
+          if (!("wakeLock" in navigator) || !navigator.wakeLock) { updateWakeNote(); return; }
+          try {
+            navigator.wakeLock.request("screen").then(function (lock) {
+              if (!wakeLockWanted || !monitoring) {
+                try { lock.release(); } catch (e) {}
+                return;
+              }
+              wakeLock = lock;
+              lock.addEventListener("release", function () {
+                if (wakeLock === lock) wakeLock = null;
+                updateWakeNote();
+              });
+              updateWakeNote();
+            }).catch(function () { updateWakeNote(); });
+          } catch (e) { updateWakeNote(); }
+        }
+        function releaseWakeLock() {
+          wakeLockWanted = false;
+          if (wakeLock) {
+            try { wakeLock.release(); } catch (e) {}
+            wakeLock = null;
+          }
+          updateWakeNote();
+        }
+        document.addEventListener("visibilitychange", function () {
+          // タブに戻ってきたら、測定中ならスリープ防止を取り直す（ブラウザが自動解放するため）
+          if (document.visibilityState === "visible" && monitoring && wakeLockWanted && !wakeLock) requestWakeLock();
+        });
+
+        // ---------- 開始 / 停止 ----------
+
+        function startMonitoring() {
+          permAlert.classList.remove("show");
+          toggleBtn.disabled = true;
+          toggleBtn.textContent = "マイクを準備中…";
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            showPermError("この表示方法ではマイク機能（getUserMedia）が使えません。ページが別の画面の中に埋め込まれて表示されている場合、埋め込み側でマイクが許可されていないと測定できません。Chrome / Safari でこのページを直接開いてお試しください。");
+            resetBtn();
+            return;
+          }
+          // マイクの応答がいつまでも返らない環境（埋め込み表示で権限が止められている等）では
+          // Promise が確定せず、ボタンが「準備中」のまま固まってしまう。制限時間を設け、
+          // 時間切れなら理由の案内を出してボタンを戻す。後から応答が来ても二重に開始しない。
+          var gumSettled = false;
+          var gumTimer = setTimeout(function () {
+            if (gumSettled) return;
+            gumSettled = true;
+            resetBtn();
+            showPermError("マイクの応答がありませんでした（20秒待っても開始できませんでした）。このページが別の画面の中に埋め込まれて表示されている場合、埋め込み側でマイクが許可されていないと測定を開始できません。お使いのブラウザでこのページを直接開いてお試しください。あわせて、ブラウザのサイト設定でこのページのマイクが「ブロック」になっていないかも確認してください。");
+          }, 20000);
+          navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+          }).then(function (s) {
+            if (gumSettled) { // 時間切れ後に許可された場合は開始せず、ストリームを即座に止める
+              s.getTracks().forEach(function (t) { t.stop(); });
+              return;
+            }
+            gumSettled = true;
+            clearTimeout(gumTimer);
+            stream = s;
+            var AC = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AC();
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            sourceNode = audioCtx.createMediaStreamSource(stream);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+            sourceNode.connect(analyser);
+
+            chunks = [];
+            ev = null;
+            lastDetectAt = 0;
+            history = [];
+            histCoarse = [];
+            coarseCur = null;
+            perfWallOffset = Date.now() - performance.now();
+            followingNow = true;
+            panEndPerf = 0;
+            updateGraphNav();
+            lastGraphSampleAt = 0;
+            frozenAt = 0;
+            manual = null;
+            manualChunks = [];
+            startCapture();
+            micNote.textContent = capturing ? "マイク接続中" : "マイク接続中（録音は利用できません）";
+
+            monitoring = true;
+            dispDb = DB_MIN;
+            sessionPeak = 0; sessionEvents = 0;
+            sessionPeakEl.textContent = "--";
+            sessionEventsEl.textContent = "0";
+            startedAt = Date.now();
+            toggleBtn.disabled = false;
+            toggleBtn.textContent = "測定を停止する";
+            toggleBtn.classList.add("stop");
+            btnSub.textContent = !autoRec
+              ? "自動録音はオフです。測定だけを行います（「測定中録音する」は使えます）"
+              : "検出した音の前後を自動で録音します";
+            syncManualBtn();
+            // 「測定中録音する」がON予約されていたら、測定開始と同時に録音を始める
+            if (manualArmed && !manual) { manualArmed = false; startManual(); }
+            sessionStats.classList.add("show");
+            refreshRecState();
+            updateToday();
+            wakeLockWanted = true;
+            requestWakeLock();
+            elapsedTimer = setInterval(tickElapsed, 500);
+            tickElapsed();
+            loop();
+          }).catch(function (err) {
+            if (gumSettled) return;
+            gumSettled = true;
+            clearTimeout(gumTimer);
+            resetBtn();
+            if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
+              showPermError("マイクの使用が許可されませんでした。ブラウザのアドレスバー付近にあるサイト設定から、このページのマイクを「許可」に変えてから、もう一度「測定を開始する」を押してください。許可しない限り、計測も録音もできません。このページが別の画面の中に埋め込まれて表示されている場合は、埋め込み側の設定でマイクが使えないこともあります。その場合は、このページをブラウザで直接開いてください。");
+            } else if (err && err.name === "NotFoundError") {
+              showPermError("マイクが見つかりませんでした。マイク付きの端末で開いているか確認してください。");
+            } else {
+              showPermError("マイクの起動に失敗しました（" + (err && err.name ? err.name : "不明なエラー") + "）。ページを再読み込みして、もう一度お試しください。");
+            }
+          });
+        }
+
+        function resetBtn() {
+          toggleBtn.disabled = false;
+          toggleBtn.textContent = "測定を開始する";
+          toggleBtn.classList.remove("stop");
+          btnSub.textContent = "タップするとマイクの使用許可を求めます";
+        }
+
+        function stopMonitoring() {
+          // 進行中のイベントは、最小時間を超えていれば確定させる
+          if (manual) stopManual();
+          if (ev) finishClipEvent();
+          monitoring = false;
+          releaseWakeLock();
+          if (rafId) cancelAnimationFrame(rafId);
+          if (elapsedTimer) clearInterval(elapsedTimer);
+          // 記録として確定した分は上で切り出し済み。残りの一時バッファはここで全破棄する。
+          // 取り込みを止めてから破棄するので、停止後に届くブロックが残ることもない。
+          stopCapture();
+          if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
+          if (audioCtx) { audioCtx.close().catch(function () {}); audioCtx = null; }
+          analyser = null; sourceNode = null;
+          discardTempBuffer(); // 一時バッファ（未確定の候補を含む）を破棄する
+          ev = null;
+          lastDetectAt = 0;
+          if (recBanner) recBanner.hidden = true;
+          if (meterCard) meterCard.classList.remove("recording-active");
+          statePill.className = "state-pill";
+          stateText.textContent = "停止中";
+          micNote.textContent = "マイク未接続";
+          levelNum.textContent = "--";
+          levelNum.classList.remove("hot");
+          scaleLabel.textContent = "測定を開始すると、音の大きさが表示されます";
+          scaleLabel.classList.remove("hot");
+          barFill.style.width = "0%";
+          frozenAt = performance.now(); // グラフはその場で止める（履歴は残して眺められる）
+          frozenWall = Date.now();
+          if (coarseCur) { histCoarse.push({ t: coarseCur.t0, db: coarseCur.db }); coarseCur = null; }
+          updateGraphNav();
+          drawGraph();
+          resetBtn();
+          sessionStats.classList.remove("show");
+          manualChunks = [];
+          manualArmed = false; // 測定を止めたらON予約も解除する（次回は止まった状態から始める）
+          syncManualBtn();
+        }
+
+        toggleBtn.addEventListener("click", function () {
+          if (monitoring) stopMonitoring(); else startMonitoring();
+        });
+
+        settingsBtn.addEventListener("click", function () {
+          mainView.hidden = true;
+          settingsView.hidden = false;
+          window.scrollTo(0, 0);
+        });
+        backBtn.addEventListener("click", function () {
+          settingsView.hidden = true;
+          mainView.hidden = false;
+          window.scrollTo(0, 0);
+        });
+
+        // ---------- 自動録音の設定 ----------
+        function syncSettingsUI() {
+          autoSettingsEl.classList.toggle("disabled", !autoRec);
+          if (!autoRec) {
+            thresholdHint.textContent = "自動録音はオフです。測定（レベル表示）だけを行い、自動の録音・記録はしません。「測定中録音する」は使えます。";
+          } else {
+            thresholdHint.textContent = "この値を超える音（ドン！のような単発音も含む）を検出すると、最初の検出の" + clipPadSec() + "秒前から最後の検出の" + clipPadSec() + "秒後までを、通しで1件の記録として切り出します。検出が繰り返されると区間はその分だけ延びます。";
+          }
+          if (monitoring) refreshRecState();
+        }
+
+        autoRecToggle.addEventListener("change", function () {
+          autoRec = autoRecToggle.checked;
+          syncSettingsUI();
+          if (!monitoring) return;
+          // PCM取り込み自体は測定中ずっと行う（メモリ上の一時バッファのみ）。
+          // オフの間はイベント検出をしないので、自動の記録は作られない。
+          if (!autoRec && ev) { ev = null; refreshRecState(); }
+        });
+
+        clipSecSel.addEventListener("change", syncSettingsUI);
+
+        function syncFormatUI() {
+          formatNote.textContent = "保存形式はWAVです。切り出した区間がそのまま再生でき、Windows・Mac・スマホの標準プレーヤーで開けます";
+        }
+        syncFormatUI();
+
+        manualToggle.addEventListener("change", function () {
+          if (!monitoring) {
+            // 測定前は「予約」として受け付ける。測定開始と同時に録音が始まる。
+            manualArmed = manualToggle.checked;
+            syncManualBtn();
+            return;
+          }
+          if (manualToggle.checked) { manualArmed = false; if (!manual) startManual(); }
+          else if (manual) stopManual();
+          syncManualBtn();
+        });
+
+        syncSettingsUI();
+        syncManualBtn();
+
+        function tickElapsed() {
+          updateRecBanner();
+          var s = Math.floor((Date.now() - startedAt) / 1000);
+          var m = Math.floor(s / 60), h = Math.floor(m / 60);
+          statElapsed.textContent = h > 0 ? (h + ":" + ("0" + (m % 60)).slice(-2) + ":" + ("0" + (s % 60)).slice(-2))
+                                          : (m + ":" + ("0" + (s % 60)).slice(-2));
+          if (manual) manualSub.textContent = "録音中 … " + fmtDur((performance.now() - manual.start) / 1000) + "（OFFにすると停止して記録に追加します）";
+        }
+
+        function showPermError(msg) {
+          permMsg.textContent = msg;
+          permAlert.classList.add("show");
+          // 失敗に気づけるよう、案内が画面内に入るまでスクロールする
+          try { permAlert.scrollIntoView({ block: "center", behavior: "smooth" }); }
+          catch (e) { try { permAlert.scrollIntoView(); } catch (e2) {} }
+        }
+
+        // ---------- 記録の永続化（IndexedDB） ----------
+        // 確定した記録（メタ情報＋音声Blob）は端末内の IndexedDB に保存し、
+        // ページ読み込み時に復元する。ダウンロード操作で再生画面へ遷移したり
+        // ページが再読み込みされたりしても、記録が消えないようにするため。
+        // 測定中の一時バッファ（未確定の音声）は従来どおりメモリのみで、ここには入れない。
+        // IndexedDB が使えない環境ではメモリのみの従来動作にフォールバックする。
+        var IDB_NAME = "souonki-records";
+        var IDB_STORE = "records";
+        var idbPromise = null;
+        function openIDB() {
+          if (idbPromise) return idbPromise;
+          idbPromise = new Promise(function (resolve) {
+            var req = null;
+            try { req = indexedDB.open(IDB_NAME, 1); } catch (e) { resolve(null); return; }
+            req.onupgradeneeded = function () {
+              try { req.result.createObjectStore(IDB_STORE, { keyPath: "id" }); } catch (e) {}
+            };
+            req.onsuccess = function () { resolve(req.result); };
+            req.onerror = function () { resolve(null); };
+            req.onblocked = function () { resolve(null); };
+          });
+          return idbPromise;
+        }
+        function idbTx(mode, fn) {
+          return openIDB().then(function (db) {
+            if (!db) return;
+            return new Promise(function (resolve) {
+              var tx = null;
+              try { tx = db.transaction(IDB_STORE, mode); } catch (e) { resolve(); return; }
+              try { fn(tx.objectStore(IDB_STORE)); } catch (e) {}
+              tx.oncomplete = function () { resolve(); };
+              tx.onerror = function () { resolve(); };
+              tx.onabort = function () { resolve(); };
+            });
+          }).catch(function () {});
+        }
+        function idbSaveRecord(rec) {
+          var data = {
+            id: rec.id,
+            whenMs: rec.when.getTime(),
+            durSec: rec.durSec,
+            peak: rec.peak,
+            avg: rec.avg,
+            kind: rec.kind,
+            padSec: rec.padSec,
+            type: rec.type,
+            memo: rec.memo,
+            blob: rec.blob || null
+          };
+          idbTx("readwrite", function (store) { store.put(data); });
+        }
+        function idbDeleteRecord(id) {
+          idbTx("readwrite", function (store) { store.delete(id); });
+        }
+        function idbLoadRecords() {
+          return openIDB().then(function (db) {
+            if (!db) return [];
+            return new Promise(function (resolve) {
+              var tx = null;
+              try { tx = db.transaction(IDB_STORE, "readonly"); } catch (e) { resolve([]); return; }
+              var req = null;
+              try { req = tx.objectStore(IDB_STORE).getAll(); } catch (e) { resolve([]); return; }
+              req.onsuccess = function () { resolve(req.result || []); };
+              req.onerror = function () { resolve([]); };
+            });
+          }).catch(function () { return []; });
+        }
+        // 起動時：保存済みの記録を復元してリストに並べ直す
+        function restoreRecords() {
+          idbLoadRecords().then(function (rows) {
+            if (!rows || !rows.length) return;
+            rows.sort(function (a, b) { return a.id - b.id; }); // 古い順に積むと新しい順の表示になる
+            var empty = $("emptyState");
+            if (empty) empty.remove();
+            rows.forEach(function (row) {
+              if (row.id > recSeq) recSeq = row.id;
+              var rec = {
+                id: row.id,
+                when: new Date(row.whenMs),
+                durSec: row.durSec,
+                peak: row.peak,
+                avg: row.avg,
+                kind: row.kind || "clip",
+                padSec: row.padSec || null,
+                type: row.type || "未分類",
+                memo: row.memo || "",
+                blob: row.blob || null,
+                url: row.blob ? URL.createObjectURL(row.blob) : null
+              };
+              records.unshift(rec);
+              var card = buildCard(rec);
+              card.classList.remove("fresh");
+              recList.insertBefore(card, recList.firstChild);
+            });
+            renderCount();
+            updateToday();
+          });
+        }
+
+        // ---------- 記録リスト ----------
+        var TYPES = ["未分類", "足音", "話し声", "物音", "水の音", "機械音", "その他"];
+
+        function updateToday() {
+          var today = fmtDate(new Date());
+          var n = 0;
+          records.forEach(function (r) { if (fmtDate(r.when) === today) n++; });
+          statToday.textContent = n;
+        }
+
+        function renderCount() {
+          recCount.textContent = records.length + "件";
+          csvBtn.disabled = records.length === 0;
+          csvShareBtn.disabled = records.length === 0;
+          updateBulkUI();
+        }
+
+        function addRecord(data) {
+          recSeq++;
+          var rec = {
+            id: recSeq,
+            when: data.when,
+            durSec: data.durSec,
+            peak: data.peak,
+            avg: data.avg,
+            kind: data.kind || "clip",
+            padSec: data.padSec || null,
+            type: "未分類",
+            memo: "",
+            blob: data.blob || null,
+            url: data.blob ? URL.createObjectURL(data.blob) : null
+          };
+          records.unshift(rec);
+          idbSaveRecord(rec);
+          var empty = $("emptyState");
+          if (empty) empty.remove();
+          recList.insertBefore(buildCard(rec), recList.firstChild);
+          renderCount();
+          updateToday();
+        }
+
+        function buildCard(rec) {
+          var card = document.createElement("article");
+          card.className = "rec-card fresh";
+          setTimeout(function () { card.classList.remove("fresh"); }, 4000);
+
+          var top = document.createElement("div");
+          top.className = "rec-top";
+          var when = document.createElement("div");
+          when.className = "rec-when";
+          var dSpan = document.createElement("span");
+          dSpan.className = "date";
+          dSpan.textContent = fmtDate(rec.when);
+          when.appendChild(dSpan);
+          when.appendChild(document.createTextNode("の記録"));
+          var del = document.createElement("button");
+          del.type = "button";
+          del.className = "del-btn";
+          del.textContent = "削除";
+          del.addEventListener("click", function () {
+            if (rec.url) URL.revokeObjectURL(rec.url);
+            delete selectedIds[rec.id];
+            idbDeleteRecord(rec.id);
+            records = records.filter(function (r) { return r.id !== rec.id; });
+            card.remove();
+            renderCount();
+            updateToday();
+            if (records.length === 0) showEmpty();
+          });
+          var right = document.createElement("div");
+          right.className = "rec-top-right";
+          var checkLabel = document.createElement("label");
+          checkLabel.className = "rec-check";
+          var cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.setAttribute("aria-label", "この記録を選択");
+          cb.addEventListener("change", function () {
+            if (cb.checked) selectedIds[rec.id] = true; else delete selectedIds[rec.id];
+            card.classList.toggle("selected", cb.checked);
+            updateBulkUI();
+          });
+          rec._cb = cb;
+          rec._card = card;
+          checkLabel.appendChild(cb);
+          checkLabel.appendChild(document.createTextNode("選択"));
+          right.appendChild(checkLabel);
+          right.appendChild(del);
+          top.appendChild(when);
+          top.appendChild(right);
+          card.appendChild(top);
+
+          var main = document.createElement("div");
+          main.className = "rec-main";
+
+          var sLevel = document.createElement("div");
+          sLevel.className = "rec-stat level";
+          sLevel.innerHTML = '<div class="k">音の大きさ</div><div class="v"></div>';
+          sLevel.querySelector(".v").innerHTML = rec.peak + ' <small>dB（目安）</small>';
+
+          var sWhen = document.createElement("div");
+          sWhen.className = "rec-stat";
+          sWhen.innerHTML = '<div class="k">発生時刻</div><div class="v"></div>';
+          sWhen.querySelector(".v").textContent = fmtTime(rec.when);
+
+          var sDur = document.createElement("div");
+          sDur.className = "rec-stat";
+          sDur.innerHTML = '<div class="k">保存秒数</div><div class="v"></div>';
+          sDur.querySelector(".v").innerHTML = (Math.round(rec.durSec * 10) / 10) + ' <small>秒</small>';
+
+          main.appendChild(sLevel); main.appendChild(sWhen); main.appendChild(sDur);
+          card.appendChild(main);
+
+          var sub = document.createElement("div");
+          sub.className = "rec-sub";
+          var avg = document.createElement("span");
+          avg.innerHTML = "平均 <b></b> dB";
+          avg.querySelector("b").textContent = rec.avg;
+          var kind = document.createElement("span");
+          kind.className = "kind " + rec.kind;
+          kind.textContent = kindText(rec.kind, rec.padSec);
+          sub.appendChild(avg); sub.appendChild(kind);
+          card.appendChild(sub);
+
+          var audioWrap = document.createElement("div");
+          audioWrap.className = "rec-audio";
+          if (rec.url) {
+            var audio = document.createElement("audio");
+            audio.controls = true;
+            audio.preload = "metadata";
+            audio.src = rec.url;
+            audioWrap.appendChild(audio);
+            var actions = document.createElement("div");
+            actions.className = "rec-actions";
+            var dlBtn = document.createElement("button");
+            dlBtn.type = "button";
+            dlBtn.className = "dl-btn";
+            dlBtn.textContent = "音声をダウンロード（WAV）";
+            dlBtn.addEventListener("click", function () {
+              if (rec.blob) downloadBlob(rec.blob, audioFileName(rec));
+            });
+            actions.appendChild(dlBtn);
+            var shareBtn = document.createElement("button");
+            shareBtn.type = "button";
+            shareBtn.className = "share-btn";
+            shareBtn.textContent = "共有で保存";
+            shareBtn.addEventListener("click", function () {
+              if (rec.blob) shareBlob(rec.blob, audioFileName(rec));
+            });
+            actions.appendChild(shareBtn);
+            audioWrap.appendChild(actions);
+          } else {
+            var na = document.createElement("span");
+            na.className = "no-audio";
+            na.textContent = "（この端末では録音音声を保存できませんでした）";
+            audioWrap.appendChild(na);
+          }
+          card.appendChild(audioWrap);
+
+          var edit = document.createElement("div");
+          edit.className = "rec-edit";
+          var sel = document.createElement("select");
+          sel.setAttribute("aria-label", "音の種類");
+          TYPES.forEach(function (t) {
+            var o = document.createElement("option");
+            o.value = t; o.textContent = t;
+            sel.appendChild(o);
+          });
+          sel.value = rec.type;
+          sel.addEventListener("change", function () { rec.type = sel.value; idbSaveRecord(rec); });
+          var memo = document.createElement("input");
+          memo.type = "text";
+          memo.placeholder = "メモ（例：ドンドンという音、振動あり）";
+          memo.setAttribute("aria-label", "メモ");
+          memo.value = rec.memo || "";
+          var memoSaveTimer = null;
+          memo.addEventListener("input", function () {
+            rec.memo = memo.value;
+            if (memoSaveTimer) clearTimeout(memoSaveTimer);
+            memoSaveTimer = setTimeout(function () { idbSaveRecord(rec); }, 600);
+          });
+          edit.appendChild(sel);
+          edit.appendChild(memo);
+          card.appendChild(edit);
+
+          return card;
+        }
+
+        function showEmpty() {
+          var empty = document.createElement("div");
+          empty.className = "empty";
+          empty.id = "emptyState";
+          empty.innerHTML = '<div class="big">まだ記録がありません</div>測定中に自動で検出した音や、「測定中録音する」で録音した音が、ここに記録されます。';
+          recList.appendChild(empty);
+        }
+
+        // ---------- CSV書き出し ----------
+        function csvEscape(s) {
+          s = String(s == null ? "" : s);
+          if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+          return s;
+        }
+        function buildLogCsv() {
+          var lines = ["日付,開始時刻,継続時間（秒）,ピーク（dB目安）,平均（dB目安）,自動判定,音の種類,メモ"];
+          var rows = records.slice().reverse(); // 古い順に
+          rows.forEach(function (r) {
+            lines.push([
+              fmtDate(r.when),
+              fmtTime(r.when),
+              Math.round(r.durSec * 10) / 10,
+              r.peak,
+              r.avg,
+              kindText(r.kind, r.padSec),
+              csvEscape(r.type),
+              csvEscape(r.memo)
+            ].join(","));
+          });
+          var blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+          var now = new Date();
+          return { blob: blob, name: "騒音記録_" + fmtDate(now).replace(/\//g, "-") + ".csv" };
+        }
+        csvBtn.addEventListener("click", function () {
+          var out = buildLogCsv();
+          downloadBlob(out.blob, out.name);
+        });
+        csvShareBtn.addEventListener("click", function () {
+          var out = buildLogCsv();
+          shareBlob(out.blob, out.name);
+        });
+
+        // ---------- 音声の出力（ダウンロード） ----------
+        function pad2(n) { return (n < 10 ? "0" : "") + n; }
+        // 例：2026-10-29_2030_録音.wav（記録の発生日時から作る）
+        function audioFileName(rec) {
+          var d = rec.when;
+          return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) +
+                 "_" + pad2(d.getHours()) + pad2(d.getMinutes()) + "_録音.wav";
+        }
+        function anchorDownload(blob, name) {
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = name;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+        }
+        // 「ダウンロード」ボタン用：a要素の download 属性による、通常のファイル保存のみを行う。
+        // 共有シートは絶対に開かない（ボタン名と動作を一致させる）。
+        function downloadBlob(blob, name) {
+          anchorDownload(blob, name);
+        }
+        // 「共有で保存」ボタン用：Web Share API の共有シートを開き、
+        // ユーザーに保存先・送信先を選んでもらう。共有が使えない環境では
+        // 通常のダウンロードにフォールバックする。
+        function shareBlob(blob, name) {
+          if (navigator.share && navigator.canShare) {
+            var file = null;
+            try { file = new File([blob], name, { type: blob.type || "application/octet-stream" }); } catch (e) { file = null; }
+            var canShareFiles = false;
+            if (file) { try { canShareFiles = navigator.canShare({ files: [file] }); } catch (e) { canShareFiles = false; } }
+            if (file && canShareFiles) {
+              var p = null;
+              try { p = navigator.share({ files: [file] }); } catch (e) { p = null; }
+              if (p && p.catch) {
+                p.catch(function (err) {
+                  // ユーザーが共有シートを閉じただけなら何もしない。
+                  // それ以外の失敗時のみ通常ダウンロードに切り替える。
+                  if (!err || err.name !== "AbortError") anchorDownload(blob, name);
+                });
+                return;
+              }
+            }
+          }
+          anchorDownload(blob, name);
+        }
+
+        // ---------- 記録の選択・まとめて出力 ----------
+        function selectedRecords() {
+          return records.filter(function (r) { return !!selectedIds[r.id]; });
+        }
+        function updateBulkUI() {
+          if (!bulkBar) return;
+          var sel = selectedRecords();
+          var withAudio = sel.filter(function (r) { return !!r.blob; });
+          bulkBar.hidden = records.length === 0;
+          bulkCount.textContent = sel.length + "件選択中" +
+            (sel.length > withAudio.length ? "（うち音声なし " + (sel.length - withAudio.length) + "件）" : "");
+          bulkDlBtn.disabled = withAudio.length === 0;
+          bulkDlBtn.textContent = withAudio.length > 1
+            ? "選択した音声をZIPでダウンロード（" + withAudio.length + "件）"
+            : "選択した音声をダウンロード";
+          bulkShareBtn.disabled = withAudio.length === 0;
+          bulkShareBtn.textContent = withAudio.length > 1
+            ? "共有で保存（" + withAudio.length + "件・ZIP）"
+            : "共有で保存";
+          selectAllBtn.disabled = records.length === 0 || sel.length === records.length;
+          clearSelBtn.disabled = sel.length === 0;
+          sheetBtn.disabled = sel.length === 0;
+          sheetBtn.textContent = sel.length ? "記録シートを作成（" + sel.length + "件）" : "記録シートを作成";
+        }
+        function setAllSelected(on) {
+          records.forEach(function (r) {
+            if (on) selectedIds[r.id] = true; else delete selectedIds[r.id];
+            if (r._cb) r._cb.checked = on;
+            if (r._card) r._card.classList.toggle("selected", on);
+          });
+          updateBulkUI();
+        }
+        selectAllBtn.addEventListener("click", function () { setAllSelected(true); });
+        clearSelBtn.addEventListener("click", function () { setAllSelected(false); });
+
+        // ZIP（無圧縮・store形式）。WAVは元々ほぼ圧縮できないため、外部ライブラリなしで
+        // そのまま格納する。ファイル名はUTF-8フラグを立てて日本語名を保持する。
+        var CRC_TABLE = null;
+        function crc32(bytes) {
+          if (!CRC_TABLE) {
+            CRC_TABLE = [];
+            for (var n = 0; n < 256; n++) {
+              var c = n;
+              for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+              CRC_TABLE[n] = c >>> 0;
+            }
+          }
+          var crc = 0xFFFFFFFF;
+          for (var i = 0; i < bytes.length; i++) crc = CRC_TABLE[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+          return (crc ^ 0xFFFFFFFF) >>> 0;
+        }
+        function buildZip(entries) { // entries: [{name, data:Uint8Array, date:Date}]
+          var enc = new TextEncoder();
+          var parts = [], central = [], offset = 0;
+          function u16(v) { return [v & 0xFF, (v >>> 8) & 0xFF]; }
+          function u32(v) { return [v & 0xFF, (v >>> 8) & 0xFF, (v >>> 16) & 0xFF, (v >>> 24) & 0xFF]; }
+          function dosTime(d) { return (d.getHours() << 11) | (d.getMinutes() << 5) | Math.floor(d.getSeconds() / 2); }
+          function dosDate(d) { return (Math.max(0, d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate(); }
+          entries.forEach(function (en) {
+            var nameBytes = enc.encode(en.name);
+            var crc = crc32(en.data);
+            var dt = en.date || new Date();
+            var local = [].concat(
+              u32(0x04034b50), u16(20), u16(0x0800), u16(0), u16(dosTime(dt)), u16(dosDate(dt)),
+              u32(crc), u32(en.data.length), u32(en.data.length), u16(nameBytes.length), u16(0));
+            parts.push(new Uint8Array(local), nameBytes, en.data);
+            var cen = [].concat(
+              u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0), u16(dosTime(dt)), u16(dosDate(dt)),
+              u32(crc), u32(en.data.length), u32(en.data.length), u16(nameBytes.length),
+              u16(0), u16(0), u16(0), u16(0), u32(0), u32(offset));
+            central.push(new Uint8Array(cen), nameBytes);
+            offset += local.length + nameBytes.length + en.data.length;
+          });
+          var cenSize = 0;
+          central.forEach(function (p) { cenSize += p.length; });
+          var end = [].concat(
+            u32(0x06054b50), u16(0), u16(0), u16(entries.length), u16(entries.length),
+            u32(cenSize), u32(offset), u16(0));
+          return new Blob(parts.concat(central, [new Uint8Array(end)]), { type: "application/zip" });
+        }
+
+        // mode: "download" = 通常のファイル保存 / "share" = 共有シートを開く
+        function outputSelected(mode) {
+          var output = mode === "share" ? shareBlob : downloadBlob;
+          var sel = selectedRecords().filter(function (r) { return !!r.blob; });
+          if (!sel.length) return;
+          if (sel.length === 1) { output(sel[0].blob, audioFileName(sel[0])); return; }
+          var oldText = bulkDlBtn.textContent;
+          var oldShareText = bulkShareBtn.textContent;
+          bulkDlBtn.disabled = true;
+          bulkShareBtn.disabled = true;
+          bulkDlBtn.textContent = "ZIPを作成中…";
+          var used = {};
+          Promise.all(sel.map(function (r) {
+            return r.blob.arrayBuffer().then(function (buf) {
+              var name = audioFileName(r);
+              if (used[name]) {
+                var base = name.replace(/\.wav$/, ""), i = 2;
+                while (used[base + "_" + i + ".wav"]) i++;
+                name = base + "_" + i + ".wav";
+              }
+              used[name] = true;
+              return { name: name, data: new Uint8Array(buf), date: r.when };
+            });
+          })).then(function (entries) {
+            var now = new Date();
+            var zipName = "騒音記録音声_" + now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate()) +
+                          "_" + pad2(now.getHours()) + pad2(now.getMinutes()) + ".zip";
+            output(buildZip(entries), zipName);
+          }).catch(function () {
+            // 失敗時は1件ずつ個別ダウンロードにフォールバックする
+            sel.forEach(function (r, idx) {
+              setTimeout(function () { downloadBlob(r.blob, audioFileName(r)); }, idx * 350);
+            });
+          }).then(function () {
+            bulkDlBtn.disabled = false;
+            bulkShareBtn.disabled = false;
+            bulkDlBtn.textContent = oldText;
+            bulkShareBtn.textContent = oldShareText;
+            updateBulkUI();
+          });
+        }
+        bulkDlBtn.addEventListener("click", function () { outputSelected("download"); });
+        bulkShareBtn.addEventListener("click", function () { outputSelected("share"); });
+
+        // ---------- 騒音の記録シート ----------
+        // 選択中の記録を、古い順（時系列）に並べ替えて返す
+        function selectedChronological() {
+          return selectedRecords().slice().sort(function (a, b) { return a.when - b.when; });
+        }
+        function openSheet() {
+          var sel = selectedChronological();
+          if (!sel.length) return;
+          var now = new Date();
+          var maxPeak = 0;
+          sel.forEach(function (r) { if (r.peak > maxPeak) maxPeak = r.peak; });
+          sheetMeta.innerHTML = "";
+          [
+            ["作成日", fmtDate(now)],
+            ["対象期間", fmtDate(sel[0].when) + " 〜 " + fmtDate(sel[sel.length - 1].when)],
+            ["記録件数", sel.length + "件"],
+            ["最大の音の大きさ", maxPeak + " dB（目安）"]
+          ].forEach(function (pair) {
+            var span = document.createElement("span");
+            var b = document.createElement("b");
+            b.textContent = pair[0] + "：";
+            span.appendChild(b);
+            span.appendChild(document.createTextNode(pair[1]));
+            sheetMeta.appendChild(span);
+          });
+          sheetTbody.innerHTML = "";
+          sel.forEach(function (r, i) {
+            var tr = document.createElement("tr");
+            function td(text, cls) {
+              var c = document.createElement("td");
+              if (cls) c.className = cls;
+              c.textContent = text;
+              tr.appendChild(c);
+            }
+            td(String(i + 1), "num");
+            td(fmtDate(r.when), "keep");
+            td(fmtTime(r.when), "keep");
+            td(fmtDur(r.durSec), "keep");
+            td(r.peak + " dB", "num");
+            td(r.avg + " dB", "num");
+            td(r.type);
+            td(r.memo || "");
+            sheetTbody.appendChild(tr);
+          });
+          mainView.hidden = true;
+          settingsView.hidden = true;
+          sheetView.hidden = false;
+          window.scrollTo(0, 0);
+        }
+        sheetBtn.addEventListener("click", openSheet);
+        sheetBackBtn.addEventListener("click", function () {
+          sheetView.hidden = true;
+          mainView.hidden = false;
+          window.scrollTo(0, 0);
+        });
+        function buildSheetCsv() {
+          var sel = selectedChronological();
+          if (!sel.length) return null;
+          var lines = ["日付,開始時刻,継続時間（秒）,ピーク（dB目安）,平均（dB目安）,自動判定,音の種類,メモ"];
+          sel.forEach(function (r) {
+            lines.push([
+              fmtDate(r.when),
+              fmtTime(r.when),
+              Math.round(r.durSec * 10) / 10,
+              r.peak,
+              r.avg,
+              kindText(r.kind, r.padSec),
+              csvEscape(r.type),
+              csvEscape(r.memo)
+            ].join(","));
+          });
+          var blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+          var now = new Date();
+          return { blob: blob, name: "騒音記録シート_" + now.getFullYear() + "-" + pad2(now.getMonth() + 1) + "-" + pad2(now.getDate()) + ".csv" };
+        }
+        sheetCsvBtn.addEventListener("click", function () {
+          var out = buildSheetCsv();
+          if (out) downloadBlob(out.blob, out.name);
+        });
+        sheetShareBtn.addEventListener("click", function () {
+          var out = buildSheetCsv();
+          if (out) shareBlob(out.blob, out.name);
+        });
+
+        // ---------- 初期描画 ----------
+        syncThresholdUI();
+        if (wave) wave.classList.add("can-pan");
+        updateGraphNav();
+        drawGraph();
+        renderCount();
+        restoreRecords();
+      })();
+    </script>
+  </body>
+</html>
