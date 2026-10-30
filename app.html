@@ -660,6 +660,28 @@
       .sec-row select { background: var(--bg-deep); border: 1px solid var(--line); border-radius: 9px; color: var(--ink); font-size: 14px; padding: 8px 10px; font-family: inherit; }
       .format-row { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
       .format-note { font-size: 11.5px; color: var(--ink-faint); margin: 6px 0 0; }
+      /* ---------- マイク切り替え ---------- */
+      .mic-note { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+      .mic-field-label { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 6px; }
+      .mic-control-row { display: flex; gap: 8px; align-items: stretch; flex-wrap: wrap; }
+      .mic-control-row select {
+        flex: 1 1 190px; min-width: 0;
+        background: var(--bg-deep); border: 1px solid var(--line); border-radius: 9px;
+        color: var(--ink); font-size: 14px; padding: 9px 10px; font-family: inherit;
+      }
+      .mic-control-row select:focus { outline: 2px solid rgba(255,179,71,.55); outline-offset: 0; }
+      .mic-refresh-btn {
+        flex: none; font-family: inherit; font-size: 12.5px; font-weight: 700;
+        color: var(--amber); background: rgba(255,179,71,.08);
+        border: 1px solid rgba(255,179,71,.45); border-radius: 9px;
+        padding: 8px 12px; cursor: pointer; white-space: nowrap;
+      }
+      .mic-refresh-btn:active { transform: translateY(1px); }
+      .mic-refresh-btn:disabled, .mic-control-row select:disabled { opacity: .5; cursor: wait; }
+      .mic-settings-note { font-size: 12px; color: var(--ink-dim); margin: 8px 0 0; line-height: 1.6; }
+      .mic-settings-note.current { color: var(--ink); }
+      .mic-settings-note.current b { color: var(--amber); font-weight: 700; }
+      .mic-settings-note.error { color: #ffb3b3; }
       .manual-toggle-card {
         margin-top: 12px;
         background: var(--panel);
@@ -923,6 +945,21 @@
           </div>
           <p class="format-note" id="formatNote"></p>
         </div>
+
+        <div class="settings-card">
+          <div class="settings-title">マイクの設定</div>
+          <p style="font-size:12.5px;color:var(--ink-dim);margin:0 0 12px">使用するマイクを選べます。PCでUSBマイクとオーディオインターフェース（Studio 2など）を両方つないでいる場合や、スマホで有線・Bluetoothマイクをつないでいる場合に、ここで切り替えてください。</p>
+          <label class="mic-field-label" for="micSelect">使用するマイク</label>
+          <div class="mic-control-row">
+            <select id="micSelect" aria-label="使用するマイク">
+              <option value="">自動（ブラウザの既定）</option>
+            </select>
+            <button class="mic-refresh-btn" id="micRefreshBtn" type="button">一覧を更新</button>
+          </div>
+          <p class="mic-settings-note current" id="micCurrentNote" hidden>現在使用中：<b id="micCurrentName"></b></p>
+          <p class="mic-settings-note" id="micStatus">マイクの一覧を読み込んでいます…</p>
+          <p class="mic-settings-note">測定中に切り替えると、その場で新しいマイクに切り替わります（測定時間とグラフの履歴はそのまま続き、切り替え中の一瞬だけ音が途切れます）。測定前なら、次に「測定を開始する」を押したときから選んだマイクを使います。マイクの名前は、一度マイクの使用を許可した後に表示されます（許可前は「マイク 1」のように表示されます）。切り替えても音が入らない場合は、マイク本体の接続と、ブラウザのサイト設定でこのページのマイクが許可されているかも確認してください。</p>
+        </div>
       </div><!-- /settingsView -->
 
       <div id="sheetView" hidden>
@@ -992,6 +1029,8 @@
             clipSecRow = $("clipSecRow"), clipSecSel = $("clipSec"),
             manualToggle = $("manualToggle"), manualCard = $("manualCard"), manualSub = $("manualSub"),
             recFormatSel = $("recFormat"), formatNote = $("formatNote"),
+            micSelect = $("micSelect"), micRefreshBtn = $("micRefreshBtn"),
+            micStatus = $("micStatus"), micCurrentNote = $("micCurrentNote"), micCurrentName = $("micCurrentName"),
             mainView = $("mainView"), settingsView = $("settingsView"),
             settingsBtn = $("settingsBtn"), backBtn = $("backBtn"),
             graphThVal = $("graphThVal"),
@@ -1038,6 +1077,9 @@
         var frozenWall = 0;           // 停止時の実時刻
         var wakeLock = null;          // Screen Wake Lock の sentinel
         var wakeLockWanted = false;   // 測定中は保持したい状態か
+        var selectedDeviceId = "";    // 設定で選択中のマイクの deviceId（"" はブラウザの既定）
+        var currentMicLabel = "";     // 現在接続中のマイク名（トラックの label）
+        var switchingMic = false;     // 測定中のマイク切り替え処理中か
         var waveData = new Float32Array(2048);
 
         var TH_MIN = 35, TH_MAX = 80;   // しきい値の調整範囲（従来のスライダーと同じ）
@@ -1873,6 +1915,187 @@
           if (document.visibilityState === "visible" && monitoring && wakeLockWanted && !wakeLock) requestWakeLock();
         });
 
+        // ---------- マイクの選択・切り替え ----------
+        function buildAudioConstraints() {
+          var c = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
+          if (selectedDeviceId) c.deviceId = { exact: selectedDeviceId };
+          return c;
+        }
+        function selectedMicLabel() {
+          if (!micSelect || micSelect.selectedIndex < 0) return "";
+          var opt = micSelect.options[micSelect.selectedIndex];
+          return opt ? opt.textContent : "";
+        }
+        function updateMicDisplay() {
+          // メーター上部の表示：接続中はマイク名、停止中は選択中のマイク名を出す
+          if (monitoring) {
+            var label = currentMicLabel || selectedMicLabel();
+            micNote.textContent = capturing ? (label && selectedDeviceId ? label : "マイク接続中") : "マイク接続中（録音は利用できません）";
+            micNote.title = currentMicLabel || "";
+          } else if (selectedDeviceId) {
+            micNote.textContent = selectedMicLabel();
+            micNote.title = selectedMicLabel();
+          } else {
+            micNote.textContent = "マイク未接続";
+            micNote.title = "";
+          }
+          if (micCurrentNote && micCurrentName) {
+            if (monitoring && currentMicLabel) {
+              micCurrentName.textContent = currentMicLabel;
+              micCurrentNote.hidden = false;
+            } else {
+              micCurrentNote.hidden = true;
+            }
+          }
+        }
+        function setMicStatus(msg, isError) {
+          if (!micStatus) return;
+          micStatus.textContent = msg;
+          micStatus.classList.toggle("error", !!isError);
+        }
+        function refreshMicList() {
+          if (!micSelect) return Promise.resolve();
+          if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+            micSelect.disabled = true;
+            if (micRefreshBtn) micRefreshBtn.disabled = true;
+            setMicStatus("このブラウザではマイクの一覧を取得できません。ブラウザの既定のマイクが使われます。", true);
+            return Promise.resolve();
+          }
+          return navigator.mediaDevices.enumerateDevices().then(function (devices) {
+            var inputs = [];
+            devices.forEach(function (d) { if (d.kind === "audioinput") inputs.push(d); });
+            var prev = selectedDeviceId;
+            micSelect.innerHTML = "";
+            var def = document.createElement("option");
+            def.value = "";
+            def.textContent = "自動（ブラウザの既定）";
+            micSelect.appendChild(def);
+            var foundPrev = !prev;
+            var anyLabel = false;
+            inputs.forEach(function (d, i) {
+              var o = document.createElement("option");
+              o.value = d.deviceId;
+              o.textContent = d.label || ("マイク " + (i + 1));
+              if (d.label) anyLabel = true;
+              micSelect.appendChild(o);
+              if (d.deviceId === prev) foundPrev = true;
+            });
+            if (!foundPrev) {
+              // 選択していたマイクが外された場合は既定に戻す
+              selectedDeviceId = "";
+            }
+            micSelect.value = selectedDeviceId;
+            if (!inputs.length) {
+              setMicStatus("接続されているマイクが見つかりませんでした。マイクを接続してから「一覧を更新」を押してください。", true);
+            } else if (!anyLabel) {
+              setMicStatus("マイクは " + inputs.length + " 件見つかりました。名前を表示するには、一度「測定を開始する」を押してマイクの使用を許可してください。", false);
+            } else {
+              setMicStatus("マイクは " + inputs.length + " 件見つかりました。" + (monitoring ? "" : "選んだマイクは、次に測定を開始したときから使われます。"), false);
+            }
+            updateMicDisplay();
+          }).catch(function () {
+            setMicStatus("マイクの一覧を取得できませんでした。ブラウザの既定のマイクが使われます。", true);
+          });
+        }
+        // 測定中のマイク切り替え：測定セッション（経過時間・履歴・記録）は維持したまま、
+        // オーディオ経路だけを新しいマイクで組み直す
+        function switchMicStream() {
+          if (!monitoring || switchingMic) return;
+          switchingMic = true;
+          micSelect.disabled = true;
+          if (micRefreshBtn) micRefreshBtn.disabled = true;
+          setMicStatus("マイクを切り替えています…", false);
+          // 切り替えの瞬間をまたぐ自動録音イベントは破棄する（別マイクの音が混ざらないように）
+          if (ev) { ev = null; }
+          stopCapture();
+          if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
+          if (audioCtx) { var oldCtx = audioCtx; audioCtx = null; try { oldCtx.close().catch(function () {}); } catch (e) {} }
+          analyser = null; sourceNode = null;
+          currentMicLabel = "";
+          var settled = false;
+          var timer = setTimeout(function () {
+            if (settled) return;
+            settled = true;
+            endSwitchFailure("マイクの応答がありませんでした（15秒）。接続を確認して、もう一度切り替えてみてください。");
+          }, 15000);
+          navigator.mediaDevices.getUserMedia({ audio: buildAudioConstraints() }).then(function (s) {
+            if (settled) { s.getTracks().forEach(function (t) { t.stop(); }); return; }
+            settled = true;
+            clearTimeout(timer);
+            if (!monitoring) { s.getTracks().forEach(function (t) { t.stop(); }); endSwitchUi(); return; }
+            stream = s;
+            var AC = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AC();
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            sourceNode = audioCtx.createMediaStreamSource(stream);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 2048;
+            sourceNode.connect(analyser);
+            var track = s.getAudioTracks()[0];
+            currentMicLabel = track && track.label ? track.label : "";
+            // 間引き済みチャンクの時刻基準はそのまま使えるため、バッファは捨てずに取り込みを再開する
+            startCapture();
+            switchingMic = false;
+            micSelect.disabled = false;
+            if (micRefreshBtn) micRefreshBtn.disabled = false;
+            refreshRecState();
+            updateMicDisplay();
+            refreshMicList().then(function () {
+              setMicStatus("マイクを切り替えました：" + (currentMicLabel || selectedMicLabel() || "ブラウザの既定"), false);
+              updateMicDisplay();
+            });
+          }).catch(function (err) {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            if (err && (err.name === "OverconstrainedError" || err.name === "NotFoundError")) {
+              endSwitchFailure("選んだマイクが見つかりませんでした。接続を確認するか、別のマイクを選んでください。");
+            } else if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
+              endSwitchFailure("マイクの使用が許可されませんでした。ブラウザのサイト設定で、このページのマイクを「許可」にしてください。");
+            } else {
+              endSwitchFailure("マイクの切り替えに失敗しました（" + (err && err.name ? err.name : "不明なエラー") + "）。");
+            }
+          });
+        }
+        function endSwitchUi() {
+          switchingMic = false;
+          if (micSelect) micSelect.disabled = false;
+          if (micRefreshBtn) micRefreshBtn.disabled = false;
+        }
+        function endSwitchFailure(msg) {
+          endSwitchUi();
+          setMicStatus(msg, true);
+          updateMicDisplay();
+          // 使えないマイクのまま測定が止まってしまうのを避けるため、測定自体も止めて案内を出す
+          if (monitoring) {
+            stopMonitoring();
+            showPermError(msg + " 測定は停止しました。マイクを選び直してから、もう一度「測定を開始する」を押してください。");
+          }
+        }
+        if (micSelect) {
+          micSelect.addEventListener("change", function () {
+            selectedDeviceId = micSelect.value || "";
+            if (monitoring) {
+              switchMicStream();
+            } else {
+              setMicStatus(selectedDeviceId
+                ? "「" + selectedMicLabel() + "」を選びました。次に測定を開始したときから使われます。"
+                : "ブラウザの既定のマイクを使います。次に測定を開始したときから反映されます。", false);
+              updateMicDisplay();
+            }
+          });
+        }
+        if (micRefreshBtn) {
+          micRefreshBtn.addEventListener("click", function () { refreshMicList(); });
+        }
+        if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+          navigator.mediaDevices.addEventListener("devicechange", function () {
+            // 抜き差しに追随する。測定中に使用中のマイクが外れた場合はブラウザ側で
+            // トラックが終了するため、ここでは一覧だけ更新する
+            refreshMicList();
+          });
+        }
+
         // ---------- 開始 / 停止 ----------
 
         function startMonitoring() {
@@ -1895,7 +2118,7 @@
             showPermError("マイクの応答がありませんでした（20秒待っても開始できませんでした）。このページが別の画面の中に埋め込まれて表示されている場合、埋め込み側でマイクが許可されていないと測定を開始できません。お使いのブラウザでこのページを直接開いてお試しください。あわせて、ブラウザのサイト設定でこのページのマイクが「ブロック」になっていないかも確認してください。");
           }, 20000);
           navigator.mediaDevices.getUserMedia({
-            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+            audio: buildAudioConstraints()
           }).then(function (s) {
             if (gumSettled) { // 時間切れ後に許可された場合は開始せず、ストリームを即座に止める
               s.getTracks().forEach(function (t) { t.stop(); });
@@ -1927,7 +2150,11 @@
             manual = null;
             manualChunks = [];
             startCapture();
-            micNote.textContent = capturing ? "マイク接続中" : "マイク接続中（録音は利用できません）";
+            var startTrack = s.getAudioTracks()[0];
+            currentMicLabel = startTrack && startTrack.label ? startTrack.label : "";
+            updateMicDisplay();
+            // 許可が取れたことでマイク名が分かるようになるため、一覧を取り直す
+            refreshMicList();
 
             monitoring = true;
             dispDb = DB_MIN;
@@ -1945,6 +2172,7 @@
             // 「測定中録音する」がON予約されていたら、測定開始と同時に録音を始める
             if (manualArmed && !manual) { manualArmed = false; startManual(); }
             sessionStats.classList.add("show");
+            updateMicDisplay();
             refreshRecState();
             updateToday();
             wakeLockWanted = true;
@@ -1959,8 +2187,12 @@
             resetBtn();
             if (err && (err.name === "NotAllowedError" || err.name === "SecurityError")) {
               showPermError("マイクの使用が許可されませんでした。ブラウザのアドレスバー付近にあるサイト設定から、このページのマイクを「許可」に変えてから、もう一度「測定を開始する」を押してください。許可しない限り、計測も録音もできません。このページが別の画面の中に埋め込まれて表示されている場合は、埋め込み側の設定でマイクが使えないこともあります。その場合は、このページをブラウザで直接開いてください。");
-            } else if (err && err.name === "NotFoundError") {
-              showPermError("マイクが見つかりませんでした。マイク付きの端末で開いているか確認してください。");
+            } else if (err && (err.name === "NotFoundError" || err.name === "OverconstrainedError")) {
+              if (selectedDeviceId) {
+                showPermError("設定で選んだマイクが見つかりませんでした。マイクの接続を確認するか、設定の「マイクの設定」で別のマイク（または「自動」）を選んでから、もう一度「測定を開始する」を押してください。PCの場合は、使いたいマイクが Windows の入力デバイスとして認識されているかも確認してください。");
+              } else {
+                showPermError("マイクが見つかりませんでした。マイク付きの端末で開いているか確認してください。");
+              }
             } else {
               showPermError("マイクの起動に失敗しました（" + (err && err.name ? err.name : "不明なエラー") + "）。ページを再読み込みして、もう一度お試しください。");
             }
@@ -1995,7 +2227,8 @@
           if (meterCard) meterCard.classList.remove("recording-active");
           statePill.className = "state-pill";
           stateText.textContent = "停止中";
-          micNote.textContent = "マイク未接続";
+          currentMicLabel = "";
+          updateMicDisplay();
           levelNum.textContent = "--";
           levelNum.classList.remove("hot");
           scaleLabel.textContent = "測定を開始すると、音の大きさが表示されます";
@@ -2021,6 +2254,7 @@
           mainView.hidden = true;
           settingsView.hidden = false;
           window.scrollTo(0, 0);
+          refreshMicList();
         });
         backBtn.addEventListener("click", function () {
           settingsView.hidden = true;
@@ -2673,6 +2907,7 @@
         });
 
         // ---------- 初期描画 ----------
+        refreshMicList();
         syncThresholdUI();
         if (wave) wave.classList.add("can-pan");
         updateGraphNav();
