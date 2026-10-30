@@ -163,16 +163,29 @@
       }
       .mic-note { font-size: 12px; color: var(--ink-faint); }
 
+      /* ---------- 現在のdB表示（グラフ右上に重ねる） ---------- */
+      .graph-wrap { position: relative; }
+      .level-overlay {
+        position: absolute;
+        top: 14px;
+        right: 10px;
+        z-index: 2;
+        pointer-events: none;
+        background: rgba(7, 15, 29, .84);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 8px 12px 7px;
+        max-width: calc(100% - 20px);
+      }
       .level-row {
         display: flex;
         align-items: baseline;
-        justify-content: center;
-        gap: 8px;
-        margin: 10px 0 2px;
+        justify-content: flex-end;
+        gap: 7px;
       }
       .level-num {
         font-family: "Roboto Mono", monospace;
-        font-size: 62px;
+        font-size: 44px;
         font-weight: 700;
         line-height: 1;
         letter-spacing: -0.02em;
@@ -182,14 +195,18 @@
         font-variant-numeric: tabular-nums;
       }
       .level-num.hot { color: var(--amber); }
-      .level-unit { font-size: 20px; font-weight: 700; color: var(--ink-dim); }
-      .level-unit small { display: block; font-size: 11px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
+      .level-unit { font-size: 17px; font-weight: 700; color: var(--ink-dim); }
+      .level-unit small { display: block; font-size: 10px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
       .level-scale-label {
-        text-align: center;
-        font-size: 13px;
+        text-align: right;
+        font-size: 12px;
         font-weight: 700;
         color: var(--ink-dim);
-        min-height: 1.6em;
+        margin-top: 3px;
+        line-height: 1.4;
+      }
+      @media (max-width: 480px) {
+        .level-overlay { max-width: 68%; top: 12px; right: 8px; padding: 7px 10px 6px; }
       }
       .level-scale-label.hot { color: var(--amber); }
 
@@ -301,32 +318,6 @@
       @media (max-width: 380px) { .threshold-ctrl .trange { display: none; } }
       canvas#wave.panning { cursor: grabbing !important; }
       canvas#wave.can-pan { cursor: grab; }
-      .bar-wrap { margin-top: 24px; }
-      .bar-track {
-        position: relative;
-        height: 24px;
-        border-radius: 12px;
-        background: var(--bg-deep);
-        border: 1px solid var(--line);
-        overflow: hidden;
-      }
-      .bar-fill {
-        position: absolute;
-        left: 0; top: 0; bottom: 0;
-        width: 0%;
-        border-radius: 12px;
-        background: linear-gradient(90deg, var(--green) 0%, var(--green) 45%, var(--yellow) 68%, var(--amber-deep) 85%, var(--red) 100%);
-        background-size: 560px 100%;
-        transition: width .08s linear;
-      }
-      .bar-scale {
-        display: flex;
-        justify-content: space-between;
-        font-size: 10px;
-        color: var(--ink-faint);
-        margin-top: 5px;
-        font-family: "Roboto Mono", monospace;
-      }
       .peak-row {
         display: flex;
         gap: 16px;
@@ -694,7 +685,7 @@
       .rec-edit select:focus, .rec-edit input:focus { outline: 2px solid rgba(255,179,71,.55); outline-offset: 0; }
       @media (max-width: 380px) {
         .rec-edit { grid-template-columns: 1fr; }
-        .level-num { font-size: 52px; }
+        .level-num { font-size: 36px; }
         canvas#wave { height: 260px; }
       }
       .settings-btn {
@@ -886,44 +877,6 @@
           <span class="rec-banner-kind" id="recKind">自動録音</span>
         </div>
 
-        <div class="level-row">
-          <div class="level-num" id="levelNum">--</div>
-          <div class="level-unit">dB<small>目安</small></div>
-        </div>
-        <div class="level-scale-label" id="scaleLabel">測定を開始すると、音の大きさが表示されます</div>
-
-        <div class="band-panel" id="bandPanel" aria-label="帯域の目安">
-          <div class="band-head">
-            <span class="band-title">帯域の目安（4帯域）</span>
-            <span class="band-note">端末のマイクでは低い音が弱めに出る目安表示です</span>
-          </div>
-          <div class="band-strip" role="img" aria-label="4つの帯域の強さを一本の帯で表示します">
-            <div class="band-seg s0" id="bandSeg0"><div class="band-fill b0" id="bandFill0"></div><span class="band-val" id="bandVal0">--</span></div>
-            <div class="band-seg s1" id="bandSeg1"><div class="band-fill b1" id="bandFill1"></div><span class="band-val" id="bandVal1">--</span></div>
-            <div class="band-seg s2" id="bandSeg2"><div class="band-fill b2" id="bandFill2"></div><span class="band-val" id="bandVal2">--</span></div>
-            <div class="band-seg s3" id="bandSeg3"><div class="band-fill b3" id="bandFill3"></div><span class="band-val" id="bandVal3">--</span></div>
-          </div>
-          <div class="band-labels">
-            <div class="band-label l0" id="bandLabel0">
-              <span class="band-name">低音</span>
-              <span class="band-range">〜250Hz</span>
-            </div>
-            <div class="band-label l1" id="bandLabel1">
-              <span class="band-name">中低音</span>
-              <span class="band-range">250〜1000Hz</span>
-            </div>
-            <div class="band-label l2" id="bandLabel2">
-              <span class="band-name">中音</span>
-              <span class="band-range">1000〜4000Hz</span>
-            </div>
-            <div class="band-label l3" id="bandLabel3">
-              <span class="band-name">高音</span>
-              <span class="band-range">4000Hz〜</span>
-            </div>
-          </div>
-          <p class="band-hint" id="bandHint">測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。</p>
-        </div>
-
         <button class="big-btn" id="toggleBtn" type="button">測定を開始する</button>
         <div class="btn-sub" id="btnSub">タップするとマイクの使用許可を求めます</div>
 
@@ -940,7 +893,16 @@
             <span class="hval" id="graphHeightVal">300px</span>
           </div>
         </div>
-        <canvas id="wave" width="640" height="600" tabindex="0" role="slider" aria-label="しきい値の調整と履歴の移動。しきい値ラインを上下にドラッグするとしきい値が変わります。グラフを左右にドラッグすると過去の履歴へ移動できます。矢印キー上下でしきい値、左右で表示位置を移動できます" aria-valuemin="35" aria-valuemax="80" aria-valuenow="55" aria-valuetext="しきい値 55 dB（目安）"></canvas>
+        <div class="graph-wrap">
+          <canvas id="wave" width="640" height="600" tabindex="0" role="slider" aria-label="しきい値の調整と履歴の移動。しきい値ラインを上下にドラッグするとしきい値が変わります。グラフを左右にドラッグすると過去の履歴へ移動できます。矢印キー上下でしきい値、左右で表示位置を移動できます" aria-valuemin="35" aria-valuemax="80" aria-valuenow="55" aria-valuetext="しきい値 55 dB（目安）"></canvas>
+          <div class="level-overlay" aria-label="現在の音の大きさ">
+            <div class="level-row">
+              <div class="level-num" id="levelNum">--</div>
+              <div class="level-unit">dB<small>目安</small></div>
+            </div>
+            <div class="level-scale-label" id="scaleLabel">測定を開始すると、音の大きさが表示されます</div>
+          </div>
+        </div>
         <div class="graph-range-row">
           <div class="range-label-row">
             <span class="range-label" id="rangeLabel">表示範囲</span>
@@ -975,11 +937,36 @@
         </div>
         <p class="drag-hint">グラフ下の<strong>しきい値スライダー</strong>で調整できます。オレンジ色の<strong>しきい値ラインは上下にドラッグ</strong>しても調整できます。グラフの<strong>その他の場所は左右にドラッグ</strong>すると表示位置がずれ、過去の履歴を見られます。</p>
 
-        <div class="bar-wrap">
-          <div class="bar-track" id="barTrack">
-            <div class="bar-fill" id="barFill"></div>
+        <div class="band-panel" id="bandPanel" aria-label="帯域の目安">
+          <div class="band-head">
+            <span class="band-title">帯域の目安（4帯域）</span>
+            <span class="band-note">端末のマイクでは低い音が弱めに出る目安表示です</span>
           </div>
-          <div class="bar-scale"><span>25</span><span>45</span><span>65</span><span>85</span><span>105</span></div>
+          <div class="band-strip" role="img" aria-label="4つの帯域の強さを一本の帯で表示します">
+            <div class="band-seg s0" id="bandSeg0"><div class="band-fill b0" id="bandFill0"></div><span class="band-val" id="bandVal0">--</span></div>
+            <div class="band-seg s1" id="bandSeg1"><div class="band-fill b1" id="bandFill1"></div><span class="band-val" id="bandVal1">--</span></div>
+            <div class="band-seg s2" id="bandSeg2"><div class="band-fill b2" id="bandFill2"></div><span class="band-val" id="bandVal2">--</span></div>
+            <div class="band-seg s3" id="bandSeg3"><div class="band-fill b3" id="bandFill3"></div><span class="band-val" id="bandVal3">--</span></div>
+          </div>
+          <div class="band-labels">
+            <div class="band-label l0" id="bandLabel0">
+              <span class="band-name">低音</span>
+              <span class="band-range">〜250Hz</span>
+            </div>
+            <div class="band-label l1" id="bandLabel1">
+              <span class="band-name">中低音</span>
+              <span class="band-range">250〜1000Hz</span>
+            </div>
+            <div class="band-label l2" id="bandLabel2">
+              <span class="band-name">中音</span>
+              <span class="band-range">1000〜4000Hz</span>
+            </div>
+            <div class="band-label l3" id="bandLabel3">
+              <span class="band-name">高音</span>
+              <span class="band-range">4000Hz〜</span>
+            </div>
+          </div>
+          <p class="band-hint" id="bandHint">測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。</p>
         </div>
 
         <div class="peak-row">
@@ -1145,7 +1132,6 @@
             recBanner = $("recBanner"), recElapsed = $("recElapsed"), recKind = $("recKind");
         var levelNum = $("levelNum"), scaleLabel = $("scaleLabel"),
             statePill = $("statePill"), stateText = $("stateText"), micNote = $("micNote"),
-            barFill = $("barFill"),
             sessionPeakEl = $("sessionPeak"), sessionEventsEl = $("sessionEvents"),
             thresholdVal = $("thresholdVal"),
             toggleBtn = $("toggleBtn"), btnSub = $("btnSub"),
@@ -1851,7 +1837,6 @@
           levelNum.classList.toggle("hot", dispDb >= th);
           scaleLabel.textContent = scaleText(dispDb) + (dispDb >= th ? "（しきい値超過）" : "");
           scaleLabel.classList.toggle("hot", dispDb >= th);
-          barFill.style.width = Math.min(100, Math.max(0, (dispDb - DB_MIN) / (DB_MAX - DB_MIN) * 100)) + "%";
           // グラフ用サンプリング：細かい履歴は直近約12分、粗い履歴（1秒最大値）は最大15時間保持する。
           // 保持するのは音量レベルの数値だけで、音声ではない。
           var gNow = performance.now();
@@ -2480,7 +2465,6 @@
           scaleLabel.textContent = "測定を開始すると、音の大きさが表示されます";
           scaleLabel.classList.remove("hot");
           resetBandUI();
-          barFill.style.width = "0%";
           frozenAt = performance.now(); // グラフはその場で止める（履歴は残して眺められる）
           frozenWall = Date.now();
           if (coarseCur) { histCoarse.push({ t: coarseCur.t0, db: coarseCur.db }); coarseCur = null; }
