@@ -163,16 +163,16 @@
       }
       .mic-note { font-size: 12px; color: var(--ink-faint); }
 
-      /* ---------- 現在のdB表示（グラフ右上に重ねる） ---------- */
+      /* ---------- 現在のdB表示（グラフ左上に重ねる） ---------- */
       .graph-wrap { position: relative; }
       .level-overlay {
         position: absolute;
         top: 14px;
-        right: 10px;
+        left: 10px;
         z-index: 2;
         pointer-events: none;
-        background: rgba(7, 15, 29, .84);
-        border: 1px solid var(--line);
+        background: rgba(7, 15, 29, .38);
+        border: 1px solid rgba(36, 52, 79, .55);
         border-radius: 12px;
         padding: 8px 12px 7px;
         max-width: calc(100% - 20px);
@@ -180,7 +180,7 @@
       .level-row {
         display: flex;
         align-items: baseline;
-        justify-content: flex-end;
+        justify-content: flex-start;
         gap: 7px;
       }
       .level-num {
@@ -191,22 +191,24 @@
         letter-spacing: -0.02em;
         color: var(--ink);
         min-width: 2.2ch;
-        text-align: right;
+        text-align: left;
         font-variant-numeric: tabular-nums;
+        text-shadow: 0 1px 6px rgba(0,0,0,.95), 0 0 14px rgba(0,0,0,.85), 0 2px 3px rgba(0,0,0,.9);
       }
       .level-num.hot { color: var(--amber); }
-      .level-unit { font-size: 17px; font-weight: 700; color: var(--ink-dim); }
+      .level-unit { font-size: 17px; font-weight: 700; color: var(--ink-dim); text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 0 10px rgba(0,0,0,.8); }
       .level-unit small { display: block; font-size: 10px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
       .level-scale-label {
-        text-align: right;
+        text-align: left;
         font-size: 12px;
         font-weight: 700;
         color: var(--ink-dim);
         margin-top: 3px;
         line-height: 1.4;
+        text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 0 10px rgba(0,0,0,.85);
       }
       @media (max-width: 480px) {
-        .level-overlay { max-width: 68%; top: 12px; right: 8px; padding: 7px 10px 6px; }
+        .level-overlay { max-width: 68%; top: 12px; left: 8px; padding: 7px 10px 6px; }
       }
       .level-scale-label.hot { color: var(--amber); }
 
@@ -427,7 +429,7 @@
 
       /* ---------- メーターカード内の並び（全幅共通） ---------- */
       /* 画面幅によらず同じ並び順・構成にする。固定（fixed/sticky）はしない。
-         グラフ（右上にdB表示を重ねる）の直後に「測定を開始する」ボタンを置き、
+         グラフ（左上にdB表示を重ねる）の直後に「測定を開始する」ボタンを置き、
          帯域の目安はグラフ関連ブロックの下、ドラッグ説明文はカード最下部に置く。
          開始→停止は同じボタン要素の切り替えなので、位置は変わらない。
          録音中バナーと警告はボタンの後ろに回し、表示されてもボタンがずれないようにする。 */
