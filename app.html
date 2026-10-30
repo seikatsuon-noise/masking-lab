@@ -337,6 +337,38 @@
       }
       .peak-row b { color: var(--ink); font-family: "Roboto Mono", monospace; font-weight: 700; }
 
+      /* ---------- 帯域表示（4帯域・目安） ---------- */
+      .band-panel {
+        margin-top: 16px;
+        background: rgba(255,255,255,.03);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px 10px;
+      }
+      .band-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+      .band-title { font-size: 13px; font-weight: 700; letter-spacing: .03em; }
+      .band-note { font-size: 11px; color: var(--ink-faint); }
+      .band-rows { margin-top: 10px; display: grid; gap: 7px; }
+      .band-row { display: grid; grid-template-columns: 52px 88px 1fr 34px; align-items: center; gap: 8px; }
+      .band-name { font-size: 13px; font-weight: 700; color: var(--ink-dim); white-space: nowrap; }
+      .band-row.strongest .band-name { color: var(--ink); }
+      .band-range { font-size: 11px; color: var(--ink-faint); font-family: "Roboto Mono", monospace; white-space: nowrap; }
+      .band-track { height: 12px; border-radius: 6px; background: var(--bg-deep); border: 1px solid var(--line); overflow: hidden; }
+      .band-row.strongest .band-track { border-color: rgba(255,255,255,.4); }
+      .band-fill { height: 100%; width: 0%; border-radius: 6px; transition: width .12s linear; }
+      .band-fill.b0 { background: #38bdf8; }
+      .band-fill.b1 { background: #4ade80; }
+      .band-fill.b2 { background: #facc15; }
+      .band-fill.b3 { background: #fb923c; }
+      .band-val { font-family: "Roboto Mono", monospace; font-size: 12.5px; font-weight: 700; color: var(--ink-dim); text-align: right; font-variant-numeric: tabular-nums; }
+      .band-row.strongest .band-val { color: var(--ink); }
+      .band-hint { margin: 10px 0 2px; font-size: 12.5px; color: var(--ink-dim); line-height: 1.55; }
+      .band-hint b { color: var(--amber); font-weight: 700; }
+      @media (max-width: 380px) {
+        .band-row { grid-template-columns: 44px 76px 1fr 30px; gap: 6px; }
+        .band-range { font-size: 10px; }
+      }
+
       /* ---------- controls ---------- */
       .controls { margin-top: 16px; }
       .graph-legend .th-readout b {
@@ -768,7 +800,7 @@
         .sheet-paper { box-shadow: none; border-radius: 0; padding: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       }
     </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
   <body>
     <div class="wrap">
@@ -794,6 +826,40 @@
           <div class="level-unit">dB<small>目安</small></div>
         </div>
         <div class="level-scale-label" id="scaleLabel">測定を開始すると、音の大きさが表示されます</div>
+
+        <div class="band-panel" id="bandPanel" aria-label="帯域の目安">
+          <div class="band-head">
+            <span class="band-title">帯域の目安（4帯域）</span>
+            <span class="band-note">端末のマイクでは低い音が弱めに出る目安表示です</span>
+          </div>
+          <div class="band-rows">
+            <div class="band-row" id="bandRow0">
+              <span class="band-name">低音</span>
+              <span class="band-range">〜250Hz</span>
+              <div class="band-track"><div class="band-fill b0" id="bandFill0"></div></div>
+              <span class="band-val" id="bandVal0">--</span>
+            </div>
+            <div class="band-row" id="bandRow1">
+              <span class="band-name">中低音</span>
+              <span class="band-range">250〜1000Hz</span>
+              <div class="band-track"><div class="band-fill b1" id="bandFill1"></div></div>
+              <span class="band-val" id="bandVal1">--</span>
+            </div>
+            <div class="band-row" id="bandRow2">
+              <span class="band-name">中音</span>
+              <span class="band-range">1000〜4000Hz</span>
+              <div class="band-track"><div class="band-fill b2" id="bandFill2"></div></div>
+              <span class="band-val" id="bandVal2">--</span>
+            </div>
+            <div class="band-row" id="bandRow3">
+              <span class="band-name">高音</span>
+              <span class="band-range">4000Hz〜</span>
+              <div class="band-track"><div class="band-fill b3" id="bandFill3"></div></div>
+              <span class="band-val" id="bandVal3">--</span>
+            </div>
+          </div>
+          <p class="band-hint" id="bandHint">測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。</p>
+        </div>
 
         <button class="big-btn" id="toggleBtn" type="button">測定を開始する</button>
         <div class="btn-sub" id="btnSub">タップするとマイクの使用許可を求めます</div>
@@ -1040,6 +1106,10 @@
             graphHeightRange = $("graphHeightRange"), graphHeightVal = $("graphHeightVal"),
             thresholdRange = $("thresholdRange"), thresholdSliderVal = $("thresholdSliderVal"),
             wakeStatus = $("wakeStatus");
+        var bandHint = $("bandHint"),
+            bandFills = [$("bandFill0"), $("bandFill1"), $("bandFill2"), $("bandFill3")],
+            bandVals = [$("bandVal0"), $("bandVal1"), $("bandVal2"), $("bandVal3")],
+            bandRows = [$("bandRow0"), $("bandRow1"), $("bandRow2"), $("bandRow3")];
         var bulkBar = $("bulkBar"), bulkCount = $("bulkCount"),
             selectAllBtn = $("selectAllBtn"), clearSelBtn = $("clearSelBtn"), bulkDlBtn = $("bulkDlBtn"),
             bulkShareBtn = $("bulkShareBtn"),
@@ -1082,6 +1152,16 @@
         var currentMicLabel = "";     // 現在接続中のマイク名（トラックの label）
         var switchingMic = false;     // 測定中のマイク切り替え処理中か
         var waveData = new Float32Array(2048);
+        // 帯域解析（Android版と同じ4帯域・目安表示）
+        var BAND_DEFS = [
+          { name: "低音",   hi: 250,      hint: "ブラウン系" },
+          { name: "中低音", hi: 1000,     hint: "ブラウン〜ピンク系" },
+          { name: "中音",   hi: 4000,     hint: "ピンク系" },
+          { name: "高音",   hi: Infinity, hint: "ピンク〜ホワイト系" }
+        ];
+        var freqData = null;                 // AnalyserNode の周波数データ（dBFS）
+        var bandDisp = [DB_MIN, DB_MIN, DB_MIN, DB_MIN]; // 表示用に平滑化した帯域レベル
+        var lastBandAt = 0;                  // 最後に帯域解析した時刻
 
         var TH_MIN = 35, TH_MAX = 80;   // しきい値の調整範囲（従来のスライダーと同じ）
         var thresholdDb = 55;           // 現在のしきい値（グラフ上のラインをドラッグして変更）
@@ -1613,6 +1693,78 @@
           return db;
         }
 
+        // ---------- 帯域解析（4帯域・目安） ----------
+        // AnalyserNode の周波数データ（dBFS）を帯域ごとのエネルギー（線形パワー）に集計する
+        function computeBandPower() {
+          if (!analyser || !audioCtx) return null;
+          if (typeof analyser.getFloatFrequencyData !== "function") return null;
+          var n = analyser.frequencyBinCount;
+          if (!freqData || freqData.length !== n) freqData = new Float32Array(n);
+          analyser.getFloatFrequencyData(freqData);
+          var binHz = audioCtx.sampleRate / analyser.fftSize;
+          var sums = [0, 0, 0, 0];
+          for (var i = 1; i < n; i++) {
+            var dbfs = freqData[i];
+            if (!isFinite(dbfs) || dbfs <= -110) continue;
+            var f = i * binHz;
+            var bi = f < 250 ? 0 : (f < 1000 ? 1 : (f < 4000 ? 2 : 3));
+            sums[bi] += Math.pow(10, dbfs / 10);
+          }
+          return sums;
+        }
+        // 帯域エネルギー → 目安dB（全体レベルと同じ DB_OFFSET で換算する）
+        function bandLevelDb(power) {
+          if (!power || power <= 0) return DB_MIN;
+          var db = 10 * Math.log(power) / Math.LN10 + DB_OFFSET;
+          if (db < DB_MIN) db = DB_MIN;
+          if (db > 115) db = 115;
+          return db;
+        }
+        function updateBandUI() {
+          var strongest = -1, strongestDb = -Infinity;
+          for (var i = 0; i < 4; i++) {
+            bandFills[i].style.width = Math.min(100, Math.max(0, (bandDisp[i] - DB_MIN) / (DB_MAX - DB_MIN) * 100)) + "%";
+            bandVals[i].textContent = Math.round(bandDisp[i]);
+            if (bandDisp[i] > strongestDb) { strongestDb = bandDisp[i]; strongest = i; }
+          }
+          // 音が小さすぎるときは帯域を判定しない（ノイズフロアの偏りを「主な帯域」にしない）
+          var hasSignal = monitoring && dispDb > DB_MIN + 2 && strongestDb >= 34;
+          for (var j = 0; j < 4; j++) bandRows[j].classList.toggle("strongest", hasSignal && j === strongest);
+          if (!monitoring) {
+            bandHint.textContent = "測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。";
+          } else if (!hasSignal) {
+            bandHint.textContent = "音が小さいため、帯域の判定ができません（目安）。";
+          } else {
+            bandHint.innerHTML = "";
+            bandHint.appendChild(document.createTextNode("いちばん強い帯域は「"));
+            var bEl = document.createElement("b");
+            bEl.textContent = BAND_DEFS[strongest].name;
+            bandHint.appendChild(bEl);
+            bandHint.appendChild(document.createTextNode("」です（目安）。マスキング音は" + BAND_DEFS[strongest].hint + "の音が向いています（目安）。"));
+          }
+        }
+        function resetBandUI() {
+          bandDisp = [DB_MIN, DB_MIN, DB_MIN, DB_MIN];
+          for (var i = 0; i < 4; i++) {
+            bandFills[i].style.width = "0%";
+            bandVals[i].textContent = "--";
+            bandRows[i].classList.remove("strongest");
+          }
+          bandHint.textContent = "測定を開始すると、いちばん強い帯域と、マスキング音選びの目安が表示されます。";
+        }
+        // 録音中の帯域エネルギー集計から「主な帯域」を求める。静かすぎる場合は判定なし（null）
+        function dominantBandIndex(sum, n) {
+          if (!sum || !n) return null;
+          var best = -1, bestAvg = 0;
+          for (var i = 0; i < 4; i++) {
+            var avg = sum[i] / n;
+            if (avg > bestAvg) { bestAvg = avg; best = i; }
+          }
+          if (best < 0) return null;
+          if (bandLevelDb(bestAvg) < 34) return null;
+          return best;
+        }
+
         function loop() {
           if (!monitoring) return;
           var db = computeDb();
@@ -1657,6 +1809,21 @@
             if (peakDb > manual.peakInst) manual.peakInst = peakDb;
             manual.sum += db; manual.n++;
           }
+          // 帯域解析（約120ms間隔）：バーの表示を更新し、録音中なら主な帯域の集計にも加える
+          if (gNow - lastBandAt >= 120) {
+            lastBandAt = gNow;
+            var bp = computeBandPower();
+            if (bp) {
+              for (var bandI = 0; bandI < 4; bandI++) {
+                var bl = bandLevelDb(bp[bandI]);
+                if (bl > bandDisp[bandI]) bandDisp[bandI] = bl;
+                else bandDisp[bandI] += (bl - bandDisp[bandI]) * 0.18;
+              }
+              updateBandUI();
+              if (ev) { for (var evI = 0; evI < 4; evI++) ev.bandSum[evI] += bp[evI]; ev.bandN++; }
+              if (manual) { for (var manI = 0; manI < 4; manI++) manual.bandSum[manI] += bp[manI]; manual.bandN++; }
+            }
+          }
           rafId = requestAnimationFrame(loop);
         }
 
@@ -1692,7 +1859,8 @@
                 sum: db, n: 1,
                 padMs: pad,
                 lastHit: now,
-                endAt: now + pad
+                endAt: now + pad,
+                bandSum: [0, 0, 0, 0], bandN: 0
               };
               refreshRecState();
             }
@@ -1726,6 +1894,7 @@
             avg: Math.round(e.sum / Math.max(1, e.n)),
             kind: "clip",
             padSec: Math.round(padMs / 1000),
+            band: dominantBandIndex(e.bandSum, e.bandN),
             blob: blob
           });
           sessionEvents++;
@@ -1853,7 +2022,7 @@
             micNote.textContent = "この端末では録音を開始できませんでした";
             return;
           }
-          manual = { start: performance.now(), wallStart: new Date(), peak: 0, peakInst: 0, sum: 0, n: 0 };
+          manual = { start: performance.now(), wallStart: new Date(), peak: 0, peakInst: 0, sum: 0, n: 0, bandSum: [0, 0, 0, 0], bandN: 0 };
           manualChunks = [];
           syncManualBtn();
           refreshRecState();
@@ -1872,6 +2041,7 @@
             peak: Math.round(Math.max(m.peak, m.peakInst)),
             avg: Math.round(m.sum / Math.max(1, m.n)),
             kind: "manual",
+            band: dominantBandIndex(m.bandSum, m.bandN),
             blob: blob
           });
           syncManualBtn();
@@ -2234,6 +2404,7 @@
           levelNum.classList.remove("hot");
           scaleLabel.textContent = "測定を開始すると、音の大きさが表示されます";
           scaleLabel.classList.remove("hot");
+          resetBandUI();
           barFill.style.width = "0%";
           frozenAt = performance.now(); // グラフはその場で止める（履歴は残して眺められる）
           frozenWall = Date.now();
@@ -2367,6 +2538,7 @@
             avg: rec.avg,
             kind: rec.kind,
             padSec: rec.padSec,
+            band: typeof rec.band === "number" ? rec.band : null,
             type: rec.type,
             memo: rec.memo,
             blob: rec.blob || null
@@ -2406,6 +2578,7 @@
                 avg: row.avg,
                 kind: row.kind || "clip",
                 padSec: row.padSec || null,
+                band: typeof row.band === "number" ? row.band : null,
                 type: row.type || "未分類",
                 memo: row.memo || "",
                 blob: row.blob || null,
@@ -2448,6 +2621,7 @@
             avg: data.avg,
             kind: data.kind || "clip",
             padSec: data.padSec || null,
+            band: typeof data.band === "number" ? data.band : null,
             type: "未分類",
             memo: "",
             blob: data.blob || null,
@@ -2542,6 +2716,12 @@
           kind.className = "kind " + rec.kind;
           kind.textContent = kindText(rec.kind, rec.padSec);
           sub.appendChild(avg); sub.appendChild(kind);
+          if (typeof rec.band === "number" && BAND_DEFS[rec.band]) {
+            var bandSpan = document.createElement("span");
+            bandSpan.innerHTML = "主な帯域：<b></b>（目安）";
+            bandSpan.querySelector("b").textContent = BAND_DEFS[rec.band].name;
+            sub.appendChild(bandSpan);
+          }
           card.appendChild(sub);
 
           var audioWrap = document.createElement("div");
