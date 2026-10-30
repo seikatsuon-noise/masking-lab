@@ -163,52 +163,52 @@
       }
       .mic-note { font-size: 12px; color: var(--ink-faint); }
 
-      /* ---------- 現在のdB表示（グラフ左上に重ねる） ---------- */
+      /* ---------- 現在のdB表示（グラフ上部中央に重ねる） ---------- */
       .graph-wrap { position: relative; }
       .level-overlay {
         position: absolute;
-        top: 14px;
-        left: 10px;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 2;
         pointer-events: none;
-        background: rgba(7, 15, 29, .38);
-        border: 1px solid rgba(36, 52, 79, .55);
-        border-radius: 12px;
-        padding: 8px 12px 7px;
+        background: transparent;
+        border: none;
+        padding: 6px 10px 5px;
         max-width: calc(100% - 20px);
       }
       .level-row {
         display: flex;
         align-items: baseline;
-        justify-content: flex-start;
-        gap: 7px;
+        justify-content: center;
+        gap: 5px;
       }
       .level-num {
         font-family: "Roboto Mono", monospace;
-        font-size: 44px;
+        font-size: 34px;
         font-weight: 700;
         line-height: 1;
         letter-spacing: -0.02em;
         color: var(--ink);
         min-width: 2.2ch;
-        text-align: left;
+        text-align: center;
         font-variant-numeric: tabular-nums;
         text-shadow: 0 1px 6px rgba(0,0,0,.95), 0 0 14px rgba(0,0,0,.85), 0 2px 3px rgba(0,0,0,.9);
       }
       .level-num.hot { color: var(--amber); }
-      .level-unit { font-size: 17px; font-weight: 700; color: var(--ink-dim); text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 0 10px rgba(0,0,0,.8); }
-      .level-unit small { display: block; font-size: 10px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
+      .level-unit { font-size: 14px; font-weight: 700; color: var(--ink-dim); text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 0 10px rgba(0,0,0,.8); }
+      .level-unit small { display: block; font-size: 9px; font-weight: 500; color: var(--ink-faint); letter-spacing: .08em; }
       .level-scale-label {
-        text-align: left;
-        font-size: 12px;
+        text-align: center;
+        font-size: 11px;
         font-weight: 700;
         color: var(--ink-dim);
-        margin-top: 3px;
+        margin-top: 2px;
         line-height: 1.4;
         text-shadow: 0 1px 5px rgba(0,0,0,.95), 0 0 10px rgba(0,0,0,.85);
       }
       @media (max-width: 480px) {
-        .level-overlay { max-width: 68%; top: 12px; left: 8px; padding: 7px 10px 6px; }
+        .level-overlay { max-width: 76%; top: 8px; padding: 5px 9px 4px; }
       }
       .level-scale-label.hot { color: var(--amber); }
 
@@ -429,7 +429,7 @@
 
       /* ---------- メーターカード内の並び（全幅共通） ---------- */
       /* 画面幅によらず同じ並び順・構成にする。固定（fixed/sticky）はしない。
-         グラフ（左上にdB表示を重ねる）の直後に「測定を開始する」ボタンを置き、
+         グラフ（上部中央にdB表示を重ねる）の直後に「測定を開始する」ボタンを置き、
          帯域の目安はグラフ関連ブロックの下、ドラッグ説明文はカード最下部に置く。
          開始→停止は同じボタン要素の切り替えなので、位置は変わらない。
          録音中バナーと警告はボタンの後ろに回し、表示されてもボタンがずれないようにする。 */
@@ -710,7 +710,7 @@
       .rec-edit select:focus, .rec-edit input:focus { outline: 2px solid rgba(255,179,71,.55); outline-offset: 0; }
       @media (max-width: 380px) {
         .rec-edit { grid-template-columns: 1fr; }
-        .level-num { font-size: 36px; }
+        .level-num { font-size: 28px; }
         canvas#wave { height: 260px; }
       }
       .settings-btn {
