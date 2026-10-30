@@ -425,35 +425,28 @@
         .band-val { font-size: 12px; }
       }
 
-      /* ---------- スマホ：開始／停止ボタンをファーストビュー下寄りに ---------- */
-      /* 固定（fixed/sticky）はせず、スマホ幅では並び順と余白だけを変える。
-         グラフの直後にボタンを置き、上余白を画面の高さに連動させて、
-         一般的なスマホの最初の画面の下の方に無理なく収まるようにする。
+      /* ---------- メーターカード内の並び（全幅共通） ---------- */
+      /* 画面幅によらず同じ並び順・構成にする。固定（fixed/sticky）はしない。
+         グラフ（右上にdB表示を重ねる）の直後に「測定を開始する」ボタンを置き、
+         帯域の目安はグラフ関連ブロックの下、ドラッグ説明文はカード最下部に置く。
          開始→停止は同じボタン要素の切り替えなので、位置は変わらない。
          録音中バナーと警告はボタンの後ろに回し、表示されてもボタンがずれないようにする。 */
-      @media (max-width: 640px) {
-        .meter-card { display: flex; flex-direction: column; }
-        .meter-card > .meter-top { order: 0; }
-        .meter-card > .graph-header { order: 1; }
-        .meter-card > .graph-controls { order: 2; }
-        .meter-card > .graph-wrap { order: 3; }
-        .meter-card > .big-btn {
-          order: 4;
-          margin-top: 16px;
-          margin-top: clamp(16px, calc(100vh - 660px), 180px);
-          margin-top: clamp(16px, calc(100dvh - 660px), 180px);
-        }
-        .meter-card > .btn-sub { order: 5; }
-        .meter-card > .rec-banner { order: 6; }
-        .meter-card > .alert { order: 7; }
-        .meter-card > .graph-range-row { order: 8; }
-        .meter-card > .graph-nav { order: 9; }
-        .meter-card > .threshold-ctrl { order: 10; }
-        .meter-card > .graph-legend { order: 11; }
-        .meter-card > .band-panel { order: 12; }
-        .meter-card > .peak-row { order: 13; }
-        .meter-card > .drag-hint { order: 14; }
-      }
+      .meter-card { display: flex; flex-direction: column; }
+      .meter-card > .meter-top { order: 0; }
+      .meter-card > .graph-header { order: 1; }
+      .meter-card > .graph-controls { order: 2; }
+      .meter-card > .graph-wrap { order: 3; }
+      .meter-card > .big-btn { order: 4; margin-top: 16px; }
+      .meter-card > .btn-sub { order: 5; }
+      .meter-card > .rec-banner { order: 6; }
+      .meter-card > .alert { order: 7; }
+      .meter-card > .graph-range-row { order: 8; }
+      .meter-card > .graph-nav { order: 9; }
+      .meter-card > .threshold-ctrl { order: 10; }
+      .meter-card > .graph-legend { order: 11; }
+      .meter-card > .band-panel { order: 12; }
+      .meter-card > .peak-row { order: 13; }
+      .meter-card > .drag-hint { order: 14; }
 
       /* ---------- controls ---------- */
       .controls { margin-top: 16px; }
