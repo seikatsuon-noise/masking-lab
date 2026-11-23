@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>上の階の水の音が気になるときに｜トイレ・シャワーとマスキング</title>
-<meta name="description" content="上の階のトイレやシャワー、水道管の水の音が気になるとき。水の音は急に始まって止まるため、マスキングが難しい場合もあります。その考え方と、音量のコツをお伝えします。">
+<meta name="description" content="上の階のトイレやシャワー、配管の水の音が気になるとき。急に始まって急に止まる音がなぜ気になるのか、排水・給水・配管の振動という音の種類ごとの違い、落差を小さくするマスキングの考え方、相談すべき音の見分け方までをまとめました。">
 <style>
 :root{--navy:#0b1526;--navy2:#13243f;--card:#162c4d;--line:#2c476e;--ink:#eef2f7;--soft:#c3d0e2;--amber:#ffb347;--amber2:#ffd08a;--teal:#7fd4c1}
 *{box-sizing:border-box}
@@ -21,29 +21,38 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
 .hero{margin:24px 0 0;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
 .hero img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
 .hero figcaption{padding:10px 16px;font-size:14px;color:var(--soft);background:#0f2140}
-.hero-css{margin:24px 0 0;border-radius:18px;border:1px solid var(--line);padding:36px 20px;text-align:center;font-size:52px;background:linear-gradient(135deg,#1a3358,#13243f)}
 .summary{background:#0f2140;border:1px solid #2c476e;border-radius:18px;padding:20px 26px;margin:24px 0}
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,17 +65,53 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/water.webp" alt="夜の洗面所・水回り"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>水の音の帯域は、配管の種類や水の流れ方、建物の構造によって大きく変わります。あくまで目安として、水が流れる音は中音域から高音域まで広がることが多く、配管を伝わる振動は低音域に感じられることもあります。単一のHzの数字で決めつけることはできません。気になる音の感じ方に近い、一定の音から控えめに試してみてください。</p><div class="hzbar" role="img" aria-label="200から4000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 30%,#ffb347 58%,#2c476e 82%)"></div><p class="hzlabels"><span>20Hz</span><span>200～4000Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>上の階のトイレやシャワー、水道管の水の音が、夜になると気になるときはありませんか？</li><li>水の音は、急に始まって、しばらく続いて、急に止まることが多い音です。</li><li>水の音の帯域は、配管の種類や水の流れ方、建物の構造によって大きく変わります。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>水の音の帯域は、配管の種類や水の流れ方、建物の構造によって大きく変わります。あくまで目安として、水が流れる音は中音域から高音域まで広がることが多く、配管を伝わる振動は低音域に感じられることもあります。単一のHzの数字で決めつけることはできません。気になる音の感じ方に近い、一定の音から控えめに試してみてください。</p><p>この記事でHzをひとつに絞らないのは、水の音が「流れる音（中～高音域）」と「配管の振動（低音域）」の混ざり合いで、どちらが目立つかが家ごとに違うためです。水の音用の動画は、流れる音のほうに合わせたピンクノイズ 200～4000Hz です。振動のほうが中心に感じる場合は、機械音の記事の音（40～1000Hz）のほうが合うこともあります。</p><div class="hzbar" role="img" aria-label="200から4000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 30%,#ffb347 58%,#2c476e 82%)"></div><p class="hzlabels"><span>20Hz</span><span>200～4000Hz</span><span>5000Hz</span></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>水の音は、急に始まって、しばらく続いて、急に止まることが多い音です。その「始まり」と「終わり」の落差が、気になりやすさの中心です。</li><li>排水の「流れる音」、給水の「サーという音」、配管の「振動や衝撃音」では、響き方も対策の効き方も変わります。</li><li>マスキング音は、音の始まりの落差を小さくするためのものです。音量を上げれば解決する、というものではありません。</li><li>水の音用の8時間動画は、ピンクノイズ 200～4000Hz です。</li><li>普段と違う大きな音・振動・頻繁すぎる音は、マスキングで我慢する前に、管理会社への相談を検討する種類の音です。</li></ul><p><a class="btn" href="https://www.youtube.com/watch?v=M8ZBCSO5eYM" target="_blank" rel="noopener noreferrer">▶ 水の音用 8時間（ピンクノイズ 200～4000Hz）</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://www.youtube.com/watch?v=M8ZBCSO5eYM" target="_blank" rel="noopener noreferrer">まず、この音を流してみる（200～4000Hz）</a></li><li><a href="#howto">狙いは「始まりの落差」を縮めること</a></li><li><a href="#trouble">振動・衝撃が中心なら、相談の検討へ</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🚿 水の音の正体 ― 3種類の音</a></li><li><a href="#why">なぜ気になるのか</a></li><li><a href="#idea">🎧 マスキング音の考え方</a></li><li><a href="#types">🚿 音の種類ごとの目安</a></li><li><a href="#videos">🎧 8時間のマスキング音</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効きにくいと感じたら</a></li><li><a href="#measure">📏 自分の部屋の音を測ってみる</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>水の音は、急に始まって、しばらく続いて、急に止まることが多い音です。静かな夜には、そうした変化が耳に入りやすく、気になりやすいと言われます。配管の位置や建物の構造によって、聞こえ方は変わります。</p></section>
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>急に始まる音は、ずっと一定のマスキング音でも、完全に紛れさせることが難しい場合があります。音量を上げれば解決する、というものでもありません。まずは控えめな音量で、一定の音を流してみて、気になり方が少し和らぐかどうかを確かめてみてください。音そのものを消すものではありません。水の音用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=M8ZBCSO5eYM" target="_blank" rel="noopener noreferrer">▶ 水の音用 8時間（ピンクノイズ 200～4000Hz）</a></p></section>
-<section class="card"><h2>⚠️ 注意</h2><p>水漏れや、普段と違う大きな音、振動が疑われる場合は、早めに管理会社への相談をご検討ください。このサイトは、配管の修理や点検のアドバイスをするものではありません。</p></section>
+<section class="card" id="about"><h2>🚿 水の音の正体 ― 3種類の音</h2><p>「水の音」とひとくくりにされますが、中身は3種類に分かれます。自分の気になっている音がどれかで、効く対策が変わります。</p>
+<table class="tbl"><tr><th></th><th>排水の音</th><th>給水の音</th><th>配管の振動・衝撃音</th></tr>
+<tr><th>音の例</th><td>ジャー、ゴボゴボ</td><td>サー、シャー</td><td>ブーン、ドン</td></tr>
+<tr><th>正体</th><td>排水管を水が落ちていく音</td><td>シャワーや蛇口を流す音</td><td>配管や壁を伝わる振動、急な開閉による衝撃</td></tr>
+<tr><th>続く時間</th><td>数十秒～数分</td><td>使っている間ずっと</td><td>一瞬、または共鳴の間</td></tr>
+<tr><th>マスキング</th><td>落差を縮める方法が比較的合う</td><td>一定の音同士で合わせやすい</td><td>紛らわせにくい。設備側の可能性も</td></tr></table>
+<p>排水管は、パイプスペース（PS）と呼ばれる壁の中の縦空間を通って、各階を貫いています。だから水の音は「上の階から」というより「壁の中から」聞こえることが多く、出どころが見えない分、部屋全体に響くように感じます。</p></section>
+
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>水の音は、急に始まって、しばらく続いて、急に止まることが多い音です。静かな夜には、そうした変化が耳に入りやすく、気になりやすいと言われます。配管の位置や建物の構造によって、聞こえ方は変わります。</p><p>気になり方を強くする要素は、主に次の点です。</p><ul><li><strong>始まりが予測できないこと</strong> ― 一定に続く音には耳が慣れていきますが、「無音から急にジャー」という始まりは、そのたびに注意を引きます。止まる瞬間も同じで、終わりの落差でもう一度気になってしまいます。夜間は部屋の背景音（暗騒音）が下がっているため、この落差が昼よりずっと大きくなります</li><li><strong>壁の中から聞こえること</strong> ― 排水管はパイプスペース（PS）を通っていることが多く、音の出どころが見えない分、逃げ場がないように感じます</li><li><strong>衝撃音が混ざることがあること</strong> ― 蛇口を急に閉めたときなどに「ドン」と配管が鳴る現象（ウォーターハンマーと呼ばれます）が起きることがあります。流れる水の勢いが急に止められることで圧力が跳ね上がり、配管を叩くような音になる現象で、水の音というより衝撃音として驚かされます</li></ul></section>
+
+<section class="card" id="idea"><h2>🎧 マスキング音の考え方</h2><p>急に始まる音は、ずっと一定のマスキング音でも、完全に紛れさせることが難しい場合があります。考え方としては、マスキング音で部屋の「背景の音」を少しだけ持ち上げておくことで、水の音が始まったときの落差を小さくする、というものです。無音の部屋に急に始まるから目立つのであって、背景が少し持ち上がっていれば、同じ水の音でも「変化」として小さくなります。だから音量を上げれば解決する、というものではなく、控えめな音量で一定の音を流し、気になり方が少し和らぐかどうかを確かめるのが基本です。音そのものを消すものではありません。</p></section>
+
+<section class="card" id="types"><h2>🚿 音の種類ごとの目安</h2>
+<h3>排水の音（トイレ・お風呂の排水）</h3><p>「ジャー」「ゴボゴボ」という流れる音です。排水管を水が落ちていく音なので、真下や配管の近くで聞こえやすく、時間は数十秒から数分程度で終わることが多いです。トイレの排水は一回ごとに短く、お風呂の排水は長めに続きます。一定のマスキング音で落差を縮める方法が、比較的合います。</p>
+<h3>給水の音（シャワー・蛇口）</h3><p>「サー」という連続音です。使っている間ずっと続くため、水の音の中では長めです。音自体も一定に近いので、マスキング音との相性は悪くありません。深夜のシャワーは時間帯の問題として、管理会社への相談材料になることもあります。</p>
+<h3>配管の振動・衝撃音</h3><p>「ブーン」という共鳴や、「ドン」という衝撃音です。こちらは水の流れる音というより、配管や壁を伝わる振動の要素が強く、マスキングでは紛らわせにくい種類です。頻繁に起きる、以前より大きくなった、という場合は設備側の問題の可能性もあるため、次の「効きにくいと感じたら」にあるように、我慢より先に相談を検討してください。</p></section>
+
+<section class="card" id="videos"><h2>🎧 8時間のマスキング音</h2><p>水の音用に、ピンクノイズ 200～4000Hz の8時間動画を用意しています。就寝前に控えめな音量で流し始めて、水の音が始まる落差がどのくらい和らぐか、試してみてください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=M8ZBCSO5eYM" target="_blank" rel="noopener noreferrer">▶ 水の音用 8時間（ピンクノイズ 200～4000Hz）</a></p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><h3>「落差を縮める」が目的</h3><p>水の音の対策は、ほかの音と少し考え方が違います。音が鳴っている間を隠すのではなく、<strong>鳴り始めの瞬間の落差</strong>を小さくすることが目的です。だから、就寝前から控えめな音量で流し始めておくことが大切で、水の音が鳴ってから慌てて再生しても効果は薄くなります。</p><h3>音量の決め方</h3><p>「部屋に何か音が流れているな」と感じる最小の音量から始めてください。水の音の始まりが「少し和らいだ」と感じる程度が目安です。それ以上上げても、始まりの落差はゼロにはなりませんし、マスキング音自体で眠れなくなります。</p><h3>振動が中心なら、音を替える</h3><p>「ドン」「ブーン」という振動や衝撃が中心に感じる場合は、水の音用のピンクノイズ（200～4000Hz）では帯域が合いません。機械音用の音（40～1000Hz）も試してみてください。それでも合わない場合は、マスキングの対象ではなく設備側の問題である可能性が上がります。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効きにくいと感じたら</h2><p>水の音は、マスキングが難しい部類の音です。「効かない」と感じたら、次の順で見直してみてください。</p><ol><li><strong>正直な前提として</strong> ― 始まりと終わりの落差そのものは、一定のマスキング音では完全には消せません。「気になり方が少し和らぐか」が、この方法の現実的な目標です</li><li><strong>耳栓と併用する</strong> ― 耳栓で水の音の輪郭を少し弱めてから、マスキング音で紛れさせる組み合わせです（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>音の種類を見直す</strong> ― 「ドン」という衝撃音や「ブーン」という振動が中心なら、マスキングの対象というより、設備や使い方の問題である可能性があります</li><li><strong>管理会社に相談する</strong> ― 普段と違う大きな音、振動、水漏れの疑い、深夜に頻繁すぎる音は、マスキングで我慢を続ける種類のものではありません。いつ・どのくらいの頻度かという記録があると、相談が進みやすくなります（<a href="noise-record.html">騒音の記録シート</a>）</li></ol></section>
+
+<section class="card" id="measure"><h2>📏 自分の部屋の音を測ってみる</h2><p>水の音は短時間で終わるため、「気のせいかも」と思ってしまいがちです。ブラウザで使えるWeb版の測定器で、音がした時刻とおおよそのレベルを残しておくと、頻度のパターンが見えてきます。管理会社に相談する場合も、感覚ではなく記録があるほうが話が早くなります。</p><p><a class="btn" href="app.html" target="_blank" rel="noopener">Web版「騒音測定器（自動録音）」を開く</a></p><p class="note">スマートフォンのマイクは低い音を拾いにくいため、配管の振動のような低音は実際より小さく表示される傾向があります。数値は目安として使い、日時と頻度と合わせて残すのがおすすめです（<a href="noise-measurement.html">騒音測定アプリの使い方と限界</a>）。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>水漏れのサインを「生活音」だと思って放置する</strong> ― 普段と違う音が続く、壁や天井に染みがある、といった場合は、水の音の悩みではなく設備の異常かもしれません。早めに管理会社へ</li><li><strong>自分の家の配管音を確認せずに放置する</strong> ― 自分の蛇口の閉め方や給湯器の音が、下の階にとっての「水の音」になっていることもあります。急に閉めずにゆっくり閉めるだけでも、ウォーターハンマーは起きにくくなります（自分の音が気になる場合は<a href="own-sound.html">自分の音の対策</a>へ）</li><li><strong>深夜の水音に、天井を叩いて抗議する</strong> ― 相手には意図が伝わりません。伝える場合は管理会社を通じてが原則です</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. トイレの流れる音が、特に響くのはなぜですか？</dt><dd>A. トイレの排水は一度に大量の水が縦の排水管を落ちていくため、音が大きく、配管を通って階下に届きやすいからです。排水管が通るパイプスペースが寝室の壁の裏にあると、余計に近く感じます。</dd>
+<dt>Q. 「ドン」という音（ウォーターハンマー）は、故障ですか？</dt><dd>A. 蛇口を急に閉めたときに起きる現象で、それ自体は故障とは限りません。ただし、頻繁に起きる・以前より大きくなった・何もしていないのに鳴る、といった場合は、配管や器具の状態の問題も考えられます。マスキングで隠す対象ではないので、管理会社への相談をおすすめします。</dd>
+<dt>Q. 深夜のシャワーの音は、我慢するしかないのですか？</dt><dd>A. 生活の時間帯は人それぞれで、このサイトが「何時までなら良い」と判断することはありません。ただ、深夜に連日続いて睡眠に支障が出ているなら、それは感覚の問題ではなく生活への影響の問題です。時刻と頻度の記録を付けて、管理会社に相談する段階だと考えてください。</dd>
+<dt>Q. 測定アプリで測ると、水の音が小さく表示されます</dt><dd>A. スマートフォンのマイクは低い音を拾いにくく、配管の振動成分は実際より小さく出る傾向があります。数値の絶対値ではなく、「何時に・何回」という頻度の記録として使うのがおすすめです。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>水漏れや、普段と違う大きな音、振動が疑われる場合は、早めに管理会社への相談をご検討ください。このサイトは、配管の修理や点検のアドバイスをするものではありません。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="machine.html">室外機・エコキュートなどの機械音</a> ／ <a href="footsteps.html">上階の足音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="noise-record.html">騒音の記録シート</a></p></section>
 
 </main>
 <footer>
-<p>生活音マスキング研究所 ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
-<p class="note">このサイトでは、今後、アフィリエイトリンクを掲載する場合があります。その場合は、広告であることを明記します。</p>
+<p>生活音マスキング研究所 ｜ <a href="about.html">このサイトについて</a> ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
+<p class="note">このサイトの一部のページでは、広告であることを明記したうえで、アフィリエイトリンクを掲載しています。</p>
 </footer>
 </body>
 </html>

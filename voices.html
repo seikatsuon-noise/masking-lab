@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>隣の部屋の話し声がうるさいときに｜男性・女性・赤ちゃんの声とマスキング</title>
-<meta name="description" content="隣の部屋や上の階の話し声が気になって眠れないとき。話し声は男性か女性か、赤ちゃんかによっても、気になり方が違います。マスキングが難しい声についても、分かりやすく説明します。">
+<meta name="description" content="隣の部屋や上の階の話し声が気になって眠れないとき。声がほかの音より気になる理由、男性・女性・赤ちゃんの声の帯域の違い、「聞き取れなくする」ためのマスキング音の選び方と使い方、効かないときの次の一手までをまとめました。">
 <style>
 :root{--navy:#0b1526;--navy2:#13243f;--card:#162c4d;--line:#2c476e;--ink:#eef2f7;--soft:#c3d0e2;--amber:#ffb347;--amber2:#ffd08a;--teal:#7fd4c1}
 *{box-sizing:border-box}
@@ -21,29 +21,38 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
 .hero{margin:24px 0 0;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
 .hero img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
 .hero figcaption{padding:10px 16px;font-size:14px;color:var(--soft);background:#0f2140}
-.hero-css{margin:24px 0 0;border-radius:18px;border:1px solid var(--line);padding:36px 20px;text-align:center;font-size:52px;background:linear-gradient(135deg,#1a3358,#13243f)}
 .summary{background:#0f2140;border:1px solid #2c476e;border-radius:18px;padding:20px 26px;margin:24px 0}
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,18 +65,50 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/voices.webp" alt="雨の夜、窓から見える街並み"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>声の高さは人によって大きく違います。あくまで目安として、男性の声は女性の声より低めの帯域が中心で、女性の声はそれより高めの帯域が中心です。話し声全体としては、言葉として聞き取れる中～高音域まで広がります。赤ちゃんの泣き声は、さらに高めで、急に始まる音です。単一のHzの数字で決めつけることはできません。</p><div class="hzbar" role="img" aria-label="男性の声、80から3000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 12%,#ffb347 40%,#2c476e 62%)"></div><p class="hzlabels"><span>男性の声</span><span>80～3000Hz</span></p><div class="hzbar" role="img" aria-label="女性の声、150から5000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 24%,#ffb347 60%,#2c476e 88%)"></div><p class="hzlabels"><span>女性の声</span><span>150～5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>隣の部屋の話し声が、壁越しに聞こえてきて気になるときはありませんか？</li><li>人の声は、言葉として意味が分かってしまうため、ほかの音より気になりやすいと言われます。</li><li>男性の声は、一般的に低めの帯域が中心です。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>声の高さは人によって大きく違います。あくまで目安として、男性の声は女性の声より低めの帯域が中心で、女性の声はそれより高めの帯域が中心です。話し声全体としては、言葉として聞き取れる中～高音域まで広がります。赤ちゃんの泣き声は、さらに高めで、急に始まる音です。単一のHzの数字で決めつけることはできません。</p><p>もう少し細かく見ると、声の「高さ」を決める基本の成分は、男性でおおよそ100～150Hz、女性で200～250Hzあたりとされますが、言葉として聞き取るために大切なのは、その何倍もの高さにある倍音や、子音の成分です。「サ行」「タ行」のような子音は高い帯域に多く含まれていて、ここが聞こえるかどうかで「内容が分かる・分からない」が決まります。話し声用のマスキング音が広い帯域になっているのは、このためです。</p><div class="hzbar" role="img" aria-label="男性の声、80から3000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 12%,#ffb347 40%,#2c476e 62%)"></div><p class="hzlabels"><span>男性の声</span><span>80～3000Hz</span></p><div class="hzbar" role="img" aria-label="女性の声、150から5000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 24%,#ffb347 60%,#2c476e 88%)"></div><p class="hzlabels"><span>女性の声</span><span>150～5000Hz</span></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>人の声は、言葉として意味が分かってしまうため、ほかの音より気になりやすいと言われます。</li><li>男性の声は低め、女性の声は高めの帯域が中心です。声に近い帯域の音で試します。</li><li>「内容が聞き取れてしまう」場合は、声を消すのではなく、聞き取れないくらいに紛れさせるのが目標です。</li><li>半分だけ聞き取れる状態が、いちばん気になりやすい状態です。</li><li>赤ちゃんの泣き声は、マスキングが難しい音です。過度な期待はしないでください。</li></ul><p><a class="btn" href="https://www.youtube.com/watch?v=Mr5GesRa9UY" target="_blank" rel="noopener noreferrer">▶ 男性の声用 8時間を聴く</a>　<a class="btn" href="https://www.youtube.com/watch?v=hLv0L-AHjVg" target="_blank" rel="noopener noreferrer">▶ 女性の声用 8時間を聴く</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="#choose">男性の声用と女性の声用を、1分ずつ聴き比べる</a></li><li><a href="#howto">目標は「声が聞き取れなくなる」音量</a></li><li><a href="#trouble">効かなかったら、次の一手</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🗣 声の正体 ― 「意味のある音」</a></li><li><a href="#why">なぜ気になるのか</a></li><li><a href="#route">🏢 どこから聞こえるかで変わること</a></li><li><a href="#baby">🎧 赤ちゃんの声は、マスキングが難しい</a></li><li><a href="#choose">🎧 マスキング音の選び方</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効きにくいと感じたら</a></li><li><a href="#measure">📏 自分の部屋の音を測ってみる</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>人の声は、言葉として意味が分かってしまうため、ほかの音より気になりやすいと言われます。声の高さは人によって違います。男性の声と女性の声では、中心となる帯域も変わります。だから、「話し声用」とひとくくりにするのではなく、男性の声用、女性の声用と分けて考える必要があります。</p></section>
-<section class="card"><h2>🗣️ 男性の声・女性の声</h2><p>男性の声は、一般的に低めの帯域が中心です。女性の声は、それより高めの帯域が中心です。マスキング音を選ぶときは、その声に近い帯域の音を、控えめな音量で試してみてください。ただし、声の高さは個人差が大きく、同じ「女性の声」でも人によって違います。合う音は、聴き比べて探すのが確実です。</p></section>
-<section class="card"><h2>🎧 赤ちゃんの声は、マスキングが難しい</h2><p>赤ちゃんの泣き声は、マスキングが難しい音だと言われています。理由は、高い音で、急に始まって、途切れ途切れに続くこと、そして、人の注意を引くようにできていることです。ずっと一定のマスキング音では、泣き声を完全に紛れさせることは難しい場合があります。音量を上げれば解決する、というものでもありません。マスキング音で少し目立たなくなる場合もありますが、赤ちゃんの声については、過度な期待をしないほうがいいでしょう。</p></section>
-<section class="card"><h2>🎧 マスキング音の選び方</h2><p>声に合わせる場合は、足音用の低い音だけでは足りないことがあります。もう少し広い帯域の音を、控えめな音量で試してみてください。男性の声用と女性の声用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=Mr5GesRa9UY" target="_blank" rel="noopener noreferrer">▶ 男性の声用 8時間（ピンクノイズ 80～3000Hz）</a></p><p><a class="btn" href="https://www.youtube.com/watch?v=hLv0L-AHjVg" target="_blank" rel="noopener noreferrer">▶ 女性の声用 8時間（ピンクノイズ 150～5000Hz）</a></p><p>川の音と重ねた、話し声全般向けのミックス版もあります。自然音が混ざる分、帯域の純度はノイズだけの版より下がりますが、ノイズだけの音が苦手な方には聴きやすい場合があります。</p><p><a class="btn" href="https://www.youtube.com/watch?v=rfJN0gqoEm4" target="_blank" rel="noopener noreferrer">▶ 話し声用ミックス版 8時間（ピンクノイズ 80～3000Hz＋川の音）</a></p><p><a class="btn" href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">▶ YouTubeチャンネルを見る</a></p></section>
+<section class="card" id="about"><h2>🗣 声の正体 ― 「意味のある音」</h2><p>話し声がほかの生活音と決定的に違うのは、<strong>意味を持っている</strong>ことです。足音や機械音は「音」として聞けますが、声は「言葉」として脳に届きます。ここに、声の対策の難しさと、マスキングの目標の置き方があります。</p>
+<table class="tbl"><tr><th></th><th>男性の声</th><th>女性の声</th><th>赤ちゃんの泣き声</th></tr>
+<tr><th>中心の帯域（目安）</th><td>80～3000Hz</td><td>150～5000Hz</td><td>高めの帯域が中心</td></tr>
+<tr><th>音の特徴</th><td>低めで、壁を通ると「こもった話し声」に</td><td>高めで、子音まで届くと内容が分かりやすい</td><td>急に始まり、途切れ途切れに続く</td></tr>
+<tr><th>気になり方</th><td>内容を追ってしまう</td><td>内容を追ってしまう＋声の輪郭がはっきりする</td><td>注意を引かれること自体が強い</td></tr>
+<tr><th>マスキング</th><td>広めの帯域のピンクノイズで</td><td>さらに高めまで含むピンクノイズで</td><td>難しい部類（本文参照）</td></tr></table>
+<p>対策の目標は、声の音量をゼロにすることではありません。<strong>言葉として聞き取れなくすること</strong>です。声が「何か音がしている」レベルまで下がれば、脳は意味を追うのをやめ、気になり方は大きく変わります。マスキング音の音量調整も、この「聞き取れなくなる境目」を探す作業になります。</p></section>
+
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>人の声は、言葉として意味が分かってしまうため、ほかの音より気になりやすいと言われます。意味のない音なら流せても、言葉は脳が勝手に追いかけてしまうためです。</p><p>とくに気になりやすいのは、<strong>内容が半分だけ聞き取れる状態</strong>です。はっきり聞こえる声より、壁越しにこもって「何か言っているのは分かるけど、内容は分からない」声のほうが、耳が注意を向け続けると言われます。断片的に単語だけ拾えてしまうと、脳が前後を補おうとして、かえって手放せなくなります。</p><p>もうひとつ、人は大勢の声の中からでも、自分に関係のある言葉や自分の名前には反応してしまうことが知られています（カクテルパーティー効果と呼ばれる現象です）。隣の会話に自分の話題が出た気がして耳が立つ、という経験は、この仕組みで説明できます。</p><p>笑い声や大きな声など、感情の乗った声も目立ちやすい種類です。感情の変化は声の強弱や高さの変化として現れるため、一定の話し声より注意を引きます。そして夜間は、部屋の背景音（暗騒音）が下がるため、同じ声でも落差が大きくなり、昼よりずっと際立ちます。</p><p>声の高さは人によって違います。男性の声と女性の声では、中心となる帯域も変わります。だから、「話し声用」とひとくくりにするのではなく、男性の声用、女性の声用と分けて考える必要があります。</p></section>
+
+<section class="card" id="route"><h2>🏢 どこから聞こえるかで変わること</h2><ul><li><strong>隣の部屋から（壁越し）</strong> ― 声は空気を伝わる音なので、壁が薄い木造・軽量鉄骨の建物では通りやすい傾向があります。壁を通る過程で高い成分から弱まるため、届く声は「こもって内容が半分分かる」状態になりやすく、これは先に書いた通り、いちばん気になりやすい聞こえ方です。RC造では声は比較的遮られますが、ドアの隙間や換気口、配管まわりを通って聞こえることもあります。この場合は壁ではなく「開口部」が経路なので、声の輪郭が比較的はっきり届きます</li><li><strong>上の階から</strong> ― 声そのものより、椅子を引く音や歩く音とセットで気になることが多いです。足音が混ざる場合は、<a href="footsteps.html">上階の足音</a>の音も試してみてください</li><li><strong>夜の電話・オンライン会議の声</strong> ― 一人だけが話し続ける声は、相手の声が聞こえない分、間（ま）が不規則で際立ちます。時間帯が深夜に及ぶ場合は、マスキングでしのぐより先に、記録を付けて相談する段階かもしれません</li><li><strong>廊下・共用部から</strong> ― 玄関ドアの隙間を通って届くことが多く、短時間で終わることがほとんどです。対策というより、ドア側の隙間対策（自分の側でできる範囲）の話になります</li></ul></section>
+
+<section class="card" id="baby"><h2>🎧 赤ちゃんの声は、マスキングが難しい</h2><p>赤ちゃんの泣き声は、マスキングが難しい音だと言われています。理由は、高い音で、急に始まって、途切れ途切れに続くこと、そして、人の注意を引くようにできていることです。泣き声は「大人が気づいて世話をする」ための音なので、注意を引く性質自体が強くできています。これは進化の仕組みであって、我慢が足りないという話ではありません。</p><p>ずっと一定のマスキング音では、泣き声を完全に紛れさせることは難しい場合があります。音量を上げれば解決する、というものでもありません。マスキング音で少し目立たなくなる場合もありますが、赤ちゃんの声については、過度な期待をしないほうがいいでしょう。夜泣きの時間帯が限られている場合は、「その時間だけ耳栓を併用する」など、時間で区切る使い方のほうが現実的です。</p></section>
+
+<section class="card" id="choose"><h2>🎧 マスキング音の選び方</h2><p>声に合わせる場合は、足音用の低い音だけでは足りないことがあります。足音用のブラウンノイズは低い音に寄っているため、言葉の聞き取りに効く中～高音域が薄く、声の輪郭が残りやすいのです。話し声には、広い帯域を含むピンクノイズが基本になります。男性の声用と女性の声用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=Mr5GesRa9UY" target="_blank" rel="noopener noreferrer">▶ 男性の声用 8時間（ピンクノイズ 80～3000Hz）</a></p><p><a class="btn" href="https://www.youtube.com/watch?v=hLv0L-AHjVg" target="_blank" rel="noopener noreferrer">▶ 女性の声用 8時間（ピンクノイズ 150～5000Hz）</a></p><p>川の音と重ねた、話し声全般向けのミックス版もあります。自然音が混ざる分、帯域の純度はノイズだけの版より下がりますが、ノイズだけの音が苦手な方には聴きやすい場合があります。</p><p><a class="btn" href="https://www.youtube.com/watch?v=rfJN0gqoEm4" target="_blank" rel="noopener noreferrer">▶ 話し声用ミックス版 8時間（ピンクノイズ 80～3000Hz＋川の音）</a></p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><h3>目標は「聞き取れなくなる」音量</h3><p>声の場合は、音量の目安がはっきりしています。マスキング音を少しずつ上げていき、<strong>隣の声の内容が追えなくなる境目</strong>を探してください。それ以上上げる必要はありません。声が「言葉」から「音」に変われば、気になり方は一段下がります。</p><h3>聴き比べの手順</h3><ol><li>男性の声用と女性の声用を、1～2分ずつ交互に流してみる</li><li>声の輪郭がより薄く感じるほうを選ぶ（迷ったら、気になる声の性別ではなく「輪郭が消えるほう」で決めてよい）</li><li>その音で音量の境目を探す。合わなければミックス版も試す</li></ol><h3>置き場所と再生機器</h3><p>スピーカーは枕元など耳に近い場所が基本です。話し声の帯域はスマートフォンのスピーカーでも比較的出せる帯域なので、足音の場合ほど再生機器の制約は受けません。ただし「こもった声」の低い成分が気になる場合は、低音も出る外部スピーカーのほうが効くことがあります。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効きにくいと感じたら</h2><ol><li><strong>帯域を声に寄せ直す</strong> ― 男性の声用と女性の声用、両方を短時間ずつ聴き比べて、声の輪郭が薄くなるほうを選んでください。「どちらか分からない」ときはミックス版から</li><li><strong>目標を「聞き取れなくなるまで」にする</strong> ― 声の大きさ自体は変わらなくても、内容が追えなくなると気になり方は大きく下がります。音量はそこを目安に調整します</li><li><strong>耳栓と併用する</strong> ― 耳栓で声を少し弱め、マスキング音で紛れさせる方法です。ただしマスキング音も聞こえにくくなるので、音量のバランスには注意してください（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>深夜の長時間に及ぶとき</strong> ― 非常識な時間帯・音量が続く場合は、我慢比べにせず記録を付けて管理会社へ（<a href="noise-record.html">騒音の記録シート</a>／<a href="noise-flow.html">対処のフローチャート</a>）</li></ol></section>
+
+<section class="card" id="measure"><h2>📏 自分の部屋の音を測ってみる</h2><p>声がどのくらいのレベルで届いているかは、ブラウザで使えるWeb版の測定器で目安として把握できます。相談の際は、数値そのものより「何時ごろ、どのくらいの頻度か」の記録が役に立ちます。</p><p><a class="btn" href="app.html" target="_blank" rel="noopener">Web版「騒音測定器（自動録音）」を開く</a></p><p class="note">スマートフォンのマイクは低い音を拾いにくいなど、測定には限界があります。数値は目安としてお使いください（<a href="noise-measurement.html">騒音測定アプリの使い方と限界</a>）。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>壁を叩いて知らせる</strong> ― 相手には抗議の意図ではなく「叩かれた」という事実だけが残ります。伝える場合は管理会社を通じてが原則です</li><li><strong>テレビや音楽の音量を上げて対抗する</strong> ― 部屋の音が大きくなるだけで、声の聞き取りやすさはあまり変わらず、今度は自分の音が隣に漏れます。マスキング音は「言葉を紛らせるための音」であって、音量勝負ではありません</li><li><strong>聞こえた会話の内容を、ネットなどに書き込む</strong> ― たとえ事実でも、個人が特定できる形で公開すれば、別のトラブルになります。相談のための記録と、公開は別物です</li><li><strong>直接怒鳴り込む</strong> ― 感情的な対面は関係を壊します。順番は「記録 → 管理会社 → 外部の相談窓口」が安全です（<a href="noise-flow.html">フローチャート</a>）</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. 笑い声だけが、やけに目立つのはなぜですか？</dt><dd>A. 笑い声は短く区切れて強弱と高さの変化が大きく、感情が強く乗った声だからです。一定の話し声より注意を引きやすい音で、マスキングでも「笑いの瞬間」だけ浮いて聞こえることがあります。</dd>
+<dt>Q. テレビの音と話し声では、対策は違いますか？</dt><dd>A. 基本の考え方は同じで、広い帯域のピンクノイズが使えます。違いは、テレビの音には効果音や音楽も混ざることです。自分のテレビの音漏れが気になる場合は<a href="own-sound.html">自分の音の対策</a>をご覧ください。</dd>
+<dt>Q. オンライン会議の声（片側だけ）が特に気になります</dt><dd>A. 相手の声が聞こえず、間の取り方が不規則になるためです。内容が半分だけ分かる状態にも近く、気になりやすい条件が重なっています。深夜に及ぶ場合は、マスキングより先に記録と相談を検討する段階です。</dd>
+<dt>Q. 赤ちゃんの泣き声に効く音は、結局ないのですか？</dt><dd>A. 「完全に紛らわせる音」は、このサイトでは用意していませんし、あるとも言えません。少し目立たなくなる場合がある、というのが正直なところです。時間帯が限られるなら、その時間だけ耳栓を併用するなど、割り切った使い方をおすすめします。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>マスキング音は、話し声への対策を保証するものではありません。音そのものを消すものではなく、言葉として聞き取りにくくするための音です。近隣とのトラブルについては、法律の判断が必要な場合があります。このサイトの内容は、法律の判断ではありません。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="footsteps.html">上階の足音</a> ／ <a href="family.html">家族の物音・シェアハウス</a> ／ <a href="earplugs.html">耳栓・イヤーマフの選び方</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a></p></section>
 
 </main>
 <footer>
-<p>生活音マスキング研究所 ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
-<p class="note">このサイトでは、今後、アフィリエイトリンクを掲載する場合があります。その場合は、広告であることを明記します。</p>
+<p>生活音マスキング研究所 ｜ <a href="about.html">このサイトについて</a> ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
+<p class="note">このサイトの一部のページでは、広告であることを明記したうえで、アフィリエイトリンクを掲載しています。</p>
 </footer>
 </body>
 </html>

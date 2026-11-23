@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>室外機の音がうるさいときに｜エコキュートなどの機械音とマスキング</title>
-<meta name="description" content="エアコンの室外機や、エコキュート・給湯器の低い唸り音、運転音が気になるとき。機械音は機種や設置場所によって大きく違います。その考え方と、マスキング音の使い方をお伝えします。">
+<meta name="description" content="エアコンの室外機や、エコキュート・給湯器の低い唸り音、運転音が気になるとき。機械音が鳴る仕組み、自分の家の機械か隣の機械かで変わる対策、一定の音同士で相性の良いマスキングの使い方、異常音の見分け方までをまとめました。">
 <style>
 :root{--navy:#0b1526;--navy2:#13243f;--card:#162c4d;--line:#2c476e;--ink:#eef2f7;--soft:#c3d0e2;--amber:#ffb347;--amber2:#ffd08a;--teal:#7fd4c1}
 *{box-sizing:border-box}
@@ -21,29 +21,38 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
 .hero{margin:24px 0 0;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
 .hero img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
 .hero figcaption{padding:10px 16px;font-size:14px;color:var(--soft);background:#0f2140}
-.hero-css{margin:24px 0 0;border-radius:18px;border:1px solid var(--line);padding:36px 20px;text-align:center;font-size:52px;background:linear-gradient(135deg,#1a3358,#13243f)}
 .summary{background:#0f2140;border:1px solid #2c476e;border-radius:18px;padding:20px 26px;margin:24px 0}
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,19 +65,50 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/machine.webp" alt="夜の屋上と換気設備、街の夜景"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>室外機やエコキュートの音は、機種や運転状態、設置場所によって大きく変わります。あくまで目安として、低い唸り音のような低音域が中心になることが多く、ファンの音などはそれより広い帯域に広がります。単一のHzで決めつけることはできません。気になる音の感じ方に近い、一定の低い音から試してみてください。</p><div class="hzbar" role="img" aria-label="40から1000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 24%,#2c476e 32%)"></div><p class="hzlabels"><span>20Hz</span><span>40～1000Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>エアコンの室外機や、エコキュートの低い唸り音が、夜になると気になるときはありませんか？</li><li>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。</li><li>ずっと続く音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合います。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>室外機やエコキュートの音は、機種や運転状態、設置場所によって大きく変わります。あくまで目安として、低い唸り音のような低音域が中心になることが多く、ファンの音などはそれより広い帯域に広がります。単一のHzで決めつけることはできません。気になる音の感じ方に近い、一定の低い音から試してみてください。</p><div class="hzbar" role="img" aria-label="40から1000ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 24%,#2c476e 32%)"></div><p class="hzlabels"><span>20Hz</span><span>40～1000Hz</span><span>5000Hz</span></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。</li><li>ずっと続く音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合います。機械音は、このサイトの扱う音の中ではマスキングと相性の良いほうです。</li><li>自分の家の機械か、隣の家の機械かで、取れる対策が変わります。</li><li>低い音は壁や窓を通り抜けやすく、再生機器によっては肝心の帯域が出ません。効かないときは機器の見直しから。</li><li>普段と違う大きな音や異音は、故障の可能性があります。音で紛らす前に点検の相談を。</li></ul><p><a class="btn" href="https://www.youtube.com/watch?v=tMno8-D18hE" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（40～1000Hz）</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://www.youtube.com/watch?v=tMno8-D18hE" target="_blank" rel="noopener noreferrer">まず、この音を流してみる（40～1000Hz）</a></li><li><a href="#howto">効かないときは、音より先に再生機器</a></li><li><a href="#caution">普段と違う異音は、紛らす前に点検</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 機械音の正体</a></li><li><a href="#why">なぜ気になるのか</a></li><li><a href="#idea">🎧 マスキング音の考え方</a></li><li><a href="#types">🏠 音の出どころごとの目安</a></li><li><a href="#videos">🎧 8時間のマスキング音</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効きにくいと感じたら</a></li><li><a href="#measure">📏 自分の部屋の音を測ってみる</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。運転の状態や、設置場所、建物の構造によって、聞こえ方は変わります。</p></section>
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>ずっと続く音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合います。音量を上げすぎないこと、近い帯域の音を選ぶことがコツです。機械の音そのものを消すものではありません。</p></section>
-<section class="card"><h2>🏠 音の出どころごとの目安</h2><p><strong>冷蔵庫</strong>：コンプレッサーの低い唸り音（「ブーン」という音）が中心で、静かな夜ほど気になります。帯域の目安はこの記事の機械音と近く、同じマスキング音で試せます。冷えが悪い、普段と違う大きな音がする場合は、故障の可能性があるためメーカーや管理会社に相談してください。賃貸の備え付け家電は、勝手に交換できないことがあります。</p><p><strong>給湯器</strong>：お湯を使うときに出る、燃焼や運転の低い音です。鳴るタイミングがお湯の使用と重なるのが特徴で、ずっと続く音ではないため、マスキングで合わせるより先に「いつ鳴るか」を把握すると落ち着くことがあります。異音や異常を感じたら、ガス機器なので無理に使い続けず、管理会社やメーカーに相談してください。</p><p><strong>浴室の給排水の音</strong>：水が流れる音が中心の場合は、機械音よりも水の音に近いです。<a href="water.html">水の音の記事</a>もあわせてご覧ください。</p></section>
-<section class="card"><h2>🎧 8時間のマスキング音</h2><p>室外機・機械音が気になるときに合わせた、8時間のマスキング音です。音量は控えめにしてお使いください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=tMno8-D18hE" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ブラウンノイズ 40～1000Hz）</a></p></section>
-<section class="card"><h2>⚠️ 注意</h2><p>機械の故障や異常な音が疑われる場合は、メーカーや管理会社への相談をご検討ください。このサイトは、機械の修理や点検のアドバイスをするものではありません。</p></section>
+<section class="card" id="about"><h2>🔊 機械音の正体</h2><p>室外機やエコキュートの音は、ひとつの音ではなく、いくつかの音の重なりです。</p>
+<table class="tbl"><tr><th>音の種類</th><th>正体</th><th>特徴</th></tr>
+<tr><th>唸り音</th><td>圧縮機（コンプレッサー）やモーターの回転音</td><td>低く一定。機械音の中心。運転の強さで音程や大きさが変わる</td></tr>
+<tr><th>風の音</th><td>ファンが空気を送る音</td><td>「ゴー」という広い帯域の音。風量で変わる</td></tr>
+<tr><th>振動・共鳴音</th><td>本体の振動が、置き台・壁・床に伝わって鳴る音</td><td>「ブーン」と部屋側で大きくなることがある。設置の状態に左右される</td></tr>
+<tr><th>切り替わり音</th><td>運転の開始・停止、除霜運転などへの切り替わり</td><td>短い変化音。一定の唸りの中で、ここだけ耳に付く</td></tr></table>
+<p>低い音ほど、壁や窓を通り抜けたり、回り込んだりしやすい性質があります。だから機械音は「窓を閉めても聞こえる」「部屋のどこにいても同じように聞こえる」と感じやすいのです。また、唸りがゆっくり強くなったり弱くなったりする「うなり」のような変化があると、耳はその変化を追い続けてしまいます。</p></section>
+
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。運転の状態や、設置場所、建物の構造によって、聞こえ方は変わります。</p><p>低い唸り音には、耳で聞くというより<strong>体に響くように感じる</strong>面があります。壁や床、窓を伝わって届くため、部屋のどこにいても逃げ場がないように感じやすい音です。また、完全に一定ではなく、運転の強さが変わるたびに唸りが強くなったり弱くなったりする「変化」も、耳が離れない理由のひとつです。</p><p>とくにエコキュートは、電気代の安い深夜に沸き上げる設定のことが多く、<strong>いちばん静かな時間帯にいちばん鳴る</strong>という困った重なり方をします。昼間は周りの音に紛れて気にならない機械音が、夜だけ問題になるのは、背景の音（暗騒音）が下がって落差が広がるためです。機械そのものが夜にうるさくなるわけではありません。</p></section>
+
+<section class="card" id="idea"><h2>🎧 マスキング音の考え方</h2><p>ずっと続く音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合います。音量を上げすぎないこと、近い帯域の音を選ぶことがコツです。機械の音そのものを消すものではありません。</p><p>機械音はこのサイトの扱う音の中では、マスキングと相性の良いほうです。対象の音も、隠す音も、どちらも一定だからです。足音や話し声のように「始まりと終わりの落差」に悩まされることが少なく、背景の音を少し持ち上げれば、そのまま目立ちにくくなります。まずは控えめな音量で一晩試してみてください。</p></section>
+
+<section class="card" id="types"><h2>🏠 音の出どころごとの目安</h2><p><strong>エアコンの室外機</strong>：まず「自分の家の室外機か、隣の家の室外機か」で対策が分かれます。自分の家なら、設置面との共振を防ぐ防振ゴムの確認や、置き台のぐらつきの見直しなど、本体側の工夫ができます。振動が伝わって鳴っている場合は、音源そのものより「伝わり方」を断つほうが効きます。隣の家・隣室のものなら、自分では触れないので、マスキングでしのぎながら、必要なら管理会社を通じた相談になります。</p><p><strong>エコキュート・給湯器</strong>：深夜の沸き上げ音は、タンクの設置場所（ベランダ・共用廊下側など）で響き方が変わります。自分の家のエコキュートなら、沸き上げの時間帯設定を変更できる機種もあります（取扱説明書やメーカー確認のうえで）。給湯器はお湯を使うときに出る、燃焼や運転の低い音です。鳴るタイミングがお湯の使用と重なるのが特徴で、ずっと続く音ではないため、マスキングで合わせるより先に「いつ鳴るか」を把握すると落ち着くことがあります。異音や異常を感じたら、ガス機器なので無理に使い続けず、管理会社やメーカーに相談してください。</p><p><strong>冷蔵庫</strong>：コンプレッサーの低い唸り音（「ブーン」という音）が中心で、静かな夜ほど気になります。帯域の目安はこの記事の機械音と近く、同じマスキング音で試せます。本体が壁や床に接していると振動が伝わりやすいため、自分の冷蔵庫なら設置位置の見直しも選択肢です。冷えが悪い、普段と違う大きな音がする場合は、故障の可能性があるためメーカーや管理会社に相談してください。賃貸の備え付け家電は、勝手に交換できないことがあります。</p><p><strong>浴室の給排水の音</strong>：水が流れる音が中心の場合は、機械音よりも水の音に近いです。<a href="water.html">水の音の記事</a>もあわせてご覧ください。</p></section>
+
+<section class="card" id="videos"><h2>🎧 8時間のマスキング音</h2><p>室外機・機械音が気になるときに合わせた、8時間のマスキング音です。音量は控えめにしてお使いください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=tMno8-D18hE" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ブラウンノイズ 40～1000Hz）</a></p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><h3>再生機器がいちばんの分かれ目</h3><p>機械音の中心は低い帯域です。スマートフォン本体のスピーカーは構造上、低音を出すのが苦手なため、「動画を流しているのに効かない」という場合は、音源ではなく機器の限界であることが多いです。小さくても低音の出る外部スピーカーか、イヤホンで試してみてください。ここを変えるだけで結果が変わることが、機械音では特に多いです。</p><h3>置き場所</h3><p>音の入り口側、つまり室外機に面した窓際にスピーカーを置くと、入ってくる音と混ざりやすく、少ない音量で効きやすい場合があります。逆に、枕元で大きく流すより、入口側で小さく流すほうが自然に聞こえます。</p><h3>自分の家の機械なら、本体側が先</h3><p>音源が自分の室外機や冷蔵庫なら、防振ゴムの劣化確認、置き台の水平、壁との接触の見直しといった「発生と伝わりを減らす」対策が、マスキングより先に効きます。マスキングは、隣の機械など「自分では触れない音」のための方法だと考えてください。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効きにくいと感じたら</h2><ol><li><strong>再生機器を見直す</strong> ― スマートフォンのスピーカーは低い音を出すのが苦手です。唸り音が非常に低い場合、スマホ本体の再生では肝心の帯域が出ていないことがあります。小さくても低音の出るスピーカーやイヤホンで試してみてください</li><li><strong>置き場所を変える</strong> ― 音源（窓際など）に近い側にスピーカーを置くと、入り口で紛れさせる形になって効きやすい場合があります</li><li><strong>耳栓と併用する</strong> ― 低い唸りは耳栓でも完全には止まりませんが、輪郭が少し弱まります（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>異常な音は対策より先に点検</strong> ― 「最近急に大きくなった」「金属音が混ざる」といった変化は、故障のサインのことがあります。音で紛らす前に、メーカーや管理会社へ</li></ol></section>
+
+<section class="card" id="measure"><h2>📏 自分の部屋の音を測ってみる</h2><p>「何時ごろに鳴り始めて、どのくらい続くか」を記録しておくと、自分の家の機械の設定見直しにも、隣の機械についての相談にも役立ちます。Web版の測定器でレベルの目安も残せます。</p><p><a class="btn" href="app.html" target="_blank" rel="noopener">Web版「騒音測定器（自動録音）」を開く</a></p><p class="note">スマートフォンのマイクは低い音を拾いにくいため、機械音のような低音は実際より小さく表示される傾向があります。数値は目安として、時刻と頻度の記録と合わせてお使いください（<a href="noise-measurement.html">騒音測定アプリの使い方と限界</a>）。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>隣の室外機を勝手に触る・動かす</strong> ― 他人の設備に手を入れることはできません。気になる場合は、管理会社を通じて伝えるのが順番です</li><li><strong>異常っぽい音を、マスキングで誤魔化し続ける</strong> ― 急に大きくなった音や金属音は、故障が進んでいるサインのことがあります。とくにガス機器は、無理に使い続けないでください</li><li><strong>自分の室外機の音を、確認せずに放置する</strong> ― 自分の機械の音が、隣の家にとっての「機械音」になっていることもあります。深夜の静かな時間に一度、外で聞こえ方を確認しておくと安心です（自分の音が気になる場合は<a href="own-sound.html">自分の音の対策</a>へ）</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. エコキュートは、なぜ深夜にだけうるさいのですか？</dt><dd>A. 多くの機種は、電気料金の安い深夜の時間帯にお湯を沸き上げる設定になっているためです。機械が夜にだけ本気で動くうえ、周りがいちばん静かになる時間と重なるので、余計に目立ちます。自分の家の機種なら、沸き上げ時間帯の変更ができる場合があります。</dd>
+<dt>Q. 窓を閉めても聞こえるのはなぜですか？</dt><dd>A. 低い音は、ガラスや壁を通り抜けたり、建物の構造を伝わったりしやすいためです。窓の開閉で大きく変わるのは、むしろ中～高音域の音です。だから機械音の対策は「塞ぐ」より「紛らせる」が現実的になります。</dd>
+<dt>Q. 低い唸り音は、体に悪いのではないかと心配です</dt><dd>A. 低周波の音と健康の関係については、さまざまな報告がありますが、このサイトで判断できることではありません。音の大きさや感じ方には個人差も大きいため、心配な場合は、自治体の相談窓口や専門機関にご相談ください。このサイトでは、音への対処法の範囲で情報を提供しています。</dd>
+<dt>Q. 自分の家の室外機がうるさい場合は、どうすればいいですか？</dt><dd>A. 防振ゴムの劣化、置き台のぐらつき、本体と壁の接触など、「振動の伝わり方」に原因があることが多いです。自分で確認できる範囲で見直し、改善しなければメーカーや設置業者への相談を。異常音をマスキングで隠すのは、この場合は順番が逆です。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>機械の故障や異常な音が疑われる場合は、メーカーや管理会社への相談をご検討ください。このサイトは、機械の修理や点検のアドバイスをするものではありません。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="footsteps.html">上階の足音</a> ／ <a href="water.html">上の階の水の音</a> ／ <a href="laundry.html">洗濯機・乾燥機の運転音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a></p></section>
 
 </main>
 <footer>
-<p>生活音マスキング研究所 ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
-<p class="note">このサイトでは、今後、アフィリエイトリンクを掲載する場合があります。その場合は、広告であることを明記します。</p>
+<p>生活音マスキング研究所 ｜ <a href="about.html">このサイトについて</a> ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
+<p class="note">このサイトの一部のページでは、広告であることを明記したうえで、アフィリエイトリンクを掲載しています。</p>
 </footer>
 </body>
 </html>

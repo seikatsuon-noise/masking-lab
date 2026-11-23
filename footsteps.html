@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>上階の足音がうるさいときに｜マスキング音と40～1000Hzの目安</title>
-<meta name="description" content="上階の足音がドスンと響いて眠れないとき。足音は一般的に40～1000Hz程度の中低音域が中心とされています。その帯域に合わせたマスキング音の考え方と、音量のコツをお伝えします。">
+<meta name="description" content="上階の足音がドスンと響いて眠れないとき。足音は一般的に40～1000Hz程度の中低音域が中心とされています。重量衝撃音の仕組み、建物の構造による響き方の違い、マスキング音の選び方と使い方、効かないときの次の一手までをまとめました。">
 <style>
 :root{--navy:#0b1526;--navy2:#13243f;--card:#162c4d;--line:#2c476e;--ink:#eef2f7;--soft:#c3d0e2;--amber:#ffb347;--amber2:#ffd08a;--teal:#7fd4c1}
 *{box-sizing:border-box}
@@ -21,16 +21,11 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
@@ -43,6 +38,21 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -55,17 +65,56 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/footsteps.webp" alt="月明かりの夜のリビングルーム"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>住環境によって異なりますが、足音（重量衝撃音）は、一般的に<strong>40～1000Hz程度</strong>の中低音域が中心とされています。裸足やスリッパ、床の材質、建物の構造によって、聞こえる帯域は変わります。上の階の足音の動画は、この帯域に合わせたブラウンノイズです。</p><div class="hzbar" role="img" aria-label="40から1000ヘルツの範囲を示すバー"></div><p class="hzlabels"><span>20Hz</span><span>40～1000Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>足音は、40～1000Hzくらいの低い音が中心の目安です。</li><li>マスキング音は、音量を控えめにして、足音が少し紛れるくらいから試します。</li><li>音を消すものではありません。トラブルは、管理会社への相談が無難です。</li></ul><p><a class="btn" href="https://youtu.be/NpHzsBqDEic" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く</a></p></section>
 
-<section class="card"><h2>👣 なぜ気になるのか</h2><p>上の階の足音は、ドスンとした中低音で、静かな夜ほど目立ちます。住んでいる建物の床や構造、生活の時間帯によって、聞こえ方は変わります。感じ方は人によって違います。</p></section>
-<section class="card"><h2>🎧 マスキング音の選び方</h2><p>このサイトでは、足音の帯域に合わせた、低音域～中音域のブラウンノイズを用意しています。音量は控えめにして、足音が少し紛れるくらいから試してみてください。大きすぎる音は、かえって気になってしまいます。</p><p><a class="btn" href="https://youtu.be/NpHzsBqDEic" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く</a></p><p>雨音と重ねたミックス版もあります。自然音が混ざる分、帯域の純度はノイズだけの版より下がりますが、ノイズだけの音が苦手な方には聴きやすい場合があります。</p><p><a class="btn" href="https://youtu.be/5wTMIQlCOJA" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（雨音ミックス 40～1000Hz）</a></p></section>
-<section class="card"><h2>⚠️ 注意</h2><p>この動画は、足音への対策を保証するものではありません。音そのものを消すものではなく、目立たなくするための音です。近隣とのトラブルについては、法律の判断が必要な場合があります。このサイトの内容は、法律の判断ではありません。</p></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>住環境によって異なりますが、足音（重量衝撃音）は、一般的に<strong>40～1000Hz程度</strong>の中低音域が中心とされています。裸足やスリッパ、床の材質、建物の構造によって、聞こえる帯域は変わります。上の階の足音の動画は、この帯域に合わせたブラウンノイズです。</p><div class="hzbar" role="img" aria-label="40から1000ヘルツの範囲を示すバー"></div><p class="hzlabels"><span>20Hz</span><span>40～1000Hz</span><span>5000Hz</span></p><p>下限が40Hzあたりと低いのは、ドスンという衝撃の成分が低い音に多いためです。ただし、スマートフォンのスピーカーのような小さな再生機器では、この低い帯域そのものが出にくいという制約があります（詳しくは「効かせるための使い方」）。</p></section>
+
+<section class="summary"><h2>この記事の要点</h2><ul><li>「ドスン」という足音は重量衝撃音と呼ばれ、床や柱を伝わって届くため、耳栓や壁の防音だけでは防ぎにくい音です。</li><li>足音は、40～1000Hzくらいの低い音が中心の目安です。</li><li>マスキング音は、音量を控えめにして、足音が少し紛れるくらいから試します。</li><li>建物の構造によって響き方は変わります。木造・軽量鉄骨では特に伝わりやすく、RC造でも重量衝撃音は伝わります。</li><li>効きにくいと感じたら、音量・置き場所・再生機器・帯域の見直しと、耳栓の併用を順に試します。</li><li>音を消すものではありません。トラブルは、管理会社への相談が無難です。</li></ul><p><a class="btn" href="https://youtu.be/NpHzsBqDEic" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://youtu.be/NpHzsBqDEic" target="_blank" rel="noopener noreferrer">まず、この音を流してみる（ブラウンノイズ 40～1000Hz）</a></li><li><a href="#howto">効かせる置き方・音量の決め方</a></li><li><a href="#trouble">効かなかったら、次の一手</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 足音の正体 ― 2種類の衝撃音</a></li><li><a href="#why">👣 なぜ気になるのか</a></li><li><a href="#structure">🏢 建物の構造で変わる聞こえ方</a></li><li><a href="#choose">🎧 マスキング音の選び方</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効きにくいと感じたら</a></li><li><a href="#measure">📏 自分の部屋の音を測ってみる</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
+
+<section class="card" id="about"><h2>🔊 足音の正体 ― 2種類の衝撃音</h2><p>床に物が当たる音は、大きく2種類に分けられます。自分の気になっている音がどちらかで、対策の効き方が変わります。</p>
+<table class="tbl"><tr><th></th><th>重量衝撃音</th><th>軽量衝撃音</th></tr>
+<tr><th>どんな音か</th><td>ドスン、ドタドタという、重くて低い音</td><td>コツン、カランという、軽くて高い音</td></tr>
+<tr><th>例</th><td>歩く・走る足音、飛び跳ね、重い物の落下</td><td>椅子を引く音、物を落とす音、スリッパのパタパタ</td></tr>
+<tr><th>伝わり方</th><td>床や柱などの躯体を振動として伝わる</td><td>おもに空気と床表面を伝わる</td></tr>
+<tr><th>防ぎにくさ</th><td>耳栓・壁材では防ぎにくい。振動として体にも感じる</td><td>カーペットやフェルトなど、発生側の工夫が効きやすい</td></tr></table>
+<p>この記事で扱う「上階の足音」は、おもに重量衝撃音のほうです。躯体を伝わる振動なので、発生源から離れた部屋にも届き、耳栓をしても骨や体を伝わって感じ取ってしまうことがあります。「音を遮る」発想だけでは限界があるため、別の音に紛れさせるマスキングが現実的な選択肢になります。</p></section>
+
+<section class="card" id="why"><h2>👣 なぜ気になるのか</h2><p>上の階の足音は、ドスンとした中低音で、静かな夜ほど目立ちます。住んでいる建物の床や構造、生活の時間帯によって、聞こえ方は変わります。感じ方は人によって違います。</p><p>気になり方を強くする要素は、主に3つあります。</p><ul><li><strong>周りが静かすぎること</strong> ― 夜間は部屋の中の暗騒音（もともとある小さな音）が下がるため、同じ足音でも落差が大きくなり、際立って聞こえます。昼間は気にならない音が、夜だけ気になるのはこのためです</li><li><strong>予測できないこと</strong> ― 一定のリズムで続く音より、「次にいつ鳴るか分からない」音に、耳は注意を向け続けます。鳴るたびに身構える状態が続くと、実際の音量以上に疲れます</li><li><strong>振動として感じること</strong> ― 重量衝撃音は、耳だけでなく体でも感じます。「聞こえる」というより「響く」と表現する人が多いのはそのためで、音だけを塞ぐ耳栓では消しきれません</li></ul></section>
+
+<section class="card" id="structure"><h2>🏢 建物の構造で変わる聞こえ方</h2><p>同じ足音でも、建物の構造によって響き方は大きく変わります。一般的な傾向として：</p><ul><li><strong>木造・軽量鉄骨造</strong> ― 床や壁が軽い分、足音が伝わりやすく、響きやすい傾向があります。アパートに多い構造です</li><li><strong>鉄筋コンクリート造（RC造）</strong> ― 話し声などの空気音は伝わりにくい一方、ドスンという重量衝撃音はコンクリートを伝わって届くため、RC造でも足音が気になることは珍しくありません。「マンションなのに響く」のは、構造の欠陥とは限りません</li><li><strong>床の仕上げ</strong> ― フローリング直貼りか、二重床か、カーペットの有無でも変わります。上の階の床材までは分からないことが多いので、「構造で傾向を知り、帯域は目安として試す」のが現実的です</li></ul>
+<h3>床の遮音性能の目安（L等級）</h3><p>床衝撃音の遮音性能は「L等級」という数字で表されることがあり、<strong>数字が小さいほど遮音性能が高い</strong>ことを示します。重量衝撃音についてはLHという区分が使われます。一般的な目安として、LH-50程度では「上階の生活音が聞こえる」レベル、LH-40程度では「ほとんど気にならない」レベルと説明されることが多いです。ただし、これは測定条件のもとでの目安で、実際の聞こえ方は家具の配置や生活の仕方でも変わります。物件選びの参考にはなりますが、今の住まいの悩みをこの数字だけで判断することはできません。</p><p class="note">以上は一般的な傾向の説明です。個別の建物の性能を保証したり、劣っていると判断したりするものではありません。</p></section>
+
+<section class="card" id="choose"><h2>🎧 マスキング音の選び方</h2><p>このサイトでは、足音の帯域に合わせた、低音域～中音域のブラウンノイズを用意しています。音量は控えめにして、足音が少し紛れるくらいから試してみてください。大きすぎる音は、かえって気になってしまいます。</p><p><a class="btn" href="https://youtu.be/NpHzsBqDEic" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く</a></p>
+<h3>ブラウンノイズとピンクノイズの違い</h3><p>ノイズには「色」の呼び名があります。ブラウンノイズは低い音ほど強い、こもった音で、足音のような中低音のマスキングに向きます。ピンクノイズはブラウンより高めの帯域まで含む、雨音に近いさらさらした音で、話し声などのマスキングによく使われます。どちらが正解ということはなく、気になる音の帯域に近いほうを選ぶのが基本です。詳しくは<a href="masking.html">マスキング音の仕組み</a>にまとめています。</p>
+<h3>雨音ミックス版について</h3><p>雨音と重ねたミックス版もあります。自然音が混ざる分、帯域の純度はノイズだけの版より下がりますが、ノイズだけの音が苦手な方には聴きやすい場合があります。「効き目の強さ」より「一晩流し続けられる心地よさ」で選ぶのも大切な基準です。</p><p><a class="btn" href="https://youtu.be/5wTMIQlCOJA" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（雨音ミックス 40～1000Hz）</a></p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><p>同じ音源でも、使い方で効き方は変わります。ポイントは「音量を上げる」より前に試せることばかりです。</p>
+<h3>スピーカーの置き場所</h3><p>基本は<strong>枕元など、耳に近い場所</strong>です。耳の近くで小さな音を流すほうが、部屋の遠くから大きな音を流すより、少ない音量で足音を紛らせることができます。壁際や部屋の隅に置くと低音が強調されて響くことがあるので、こもって感じる場合は少し離してみてください。</p>
+<h3>音量の決め方</h3><ol><li>まず、足音が「聞こえるけれど、少し紛れてきた」と感じる最小の音量を探します</li><li>その音量から、ほんの少しだけ下げます。「完全に消す」音量まで上げると、マスキング音そのものが気になって眠れなくなります</li><li>夜中に目覚めたときに気になる場合は、スリープタイマーで切るのではなく、朝まで流しっぱなしのほうが再入眠しやすいことがあります</li></ol>
+<h3>再生機器の注意</h3><p>スマートフォン本体のスピーカーは、構造上、低い音を出すのが苦手です。40～1000Hzのうち肝心の低い部分が出ていないと、「効かない」という結果になりがちです。うまくいかないときは、小さくても低音の出る外部スピーカーや、イヤホンで試してみてください。就寝中のイヤホンは、コードの巻き付きや耳への負担に注意し、耳栓型でない開放型や、就寝用をうたう製品を選ぶなど、安全面を優先してください。骨伝導タイプは耳を塞がないため、マスキング音と足音の両方が聞こえる形になり、用途によっては相性が分かれます。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効きにくいと感じたら</h2><p>マスキングは相性のある方法です。「効かない」と感じたら、諦める前に次の順で見直してみてください。</p><ol><li><strong>スピーカーの位置と再生機器</strong> ― 枕元に寄せる、低音の出る機器に変える。この2つで変わることが一番多いです</li><li><strong>別の帯域・別の音を試す</strong> ― 雨音ミックス版など、音の種類を変えると合うことがあります。帯域の数字は目安なので、合うかどうかは試して決まります</li><li><strong>耳栓と併用する</strong> ― 耳栓で足音の輪郭を少し弱めてから、マスキング音で紛れさせる組み合わせです。重量衝撃音の振動成分までは消えませんが、音の成分が減るだけでも変わります（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>それでも生活に支障があるとき</strong> ― 我慢を続けるより、記録を付けて管理会社に相談する段階です。感情ではなく記録が相談を前に進めます（<a href="noise-record.html">騒音の記録シート</a>／<a href="noise-flow.html">対処のフローチャート</a>）</li></ol></section>
+
+<section class="card" id="measure"><h2>📏 自分の部屋の音を測ってみる</h2><p>「どのくらい響いているか」を目安として知りたいときは、ブラウザで使えるWeb版の測定器があります。足音が鳴った瞬間のレベルを見ると、時間帯による違いもつかみやすくなります。相談の際は、数値そのものより「いつ、どのくらいの頻度で」という記録のほうが効きます。</p><p><a class="btn" href="app.html" target="_blank" rel="noopener">Web版「騒音測定器（自動録音）」を開く</a></p><p class="note">スマートフォンのマイクは低い音を拾いにくいため、足音のような中低音は実際より小さく表示される傾向があります。数値は目安として使い、相談の記録には日時や頻度と合わせて残すのがおすすめです（<a href="noise-measurement.html">騒音測定アプリの使い方と限界</a>）。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>天井や壁を叩いて知らせる</strong> ― 相手には「騒音で抗議された」ではなく「叩かれた」という事実だけが残り、関係が悪化します。伝えたいことがある場合は、管理会社を通じてが原則です</li><li><strong>仕返しに音を出す</strong> ― 自分が加害側になるだけです。記録や相談の場面でも不利になります</li><li><strong>マスキング音を大音量で流す</strong> ― 今度は自分の音が隣に漏れている可能性があります。マスキングは控えめな音量で使うものです（自分の音が気になる場合は<a href="own-sound.html">自分の音の対策</a>へ）</li><li><strong>直接怒鳴り込む</strong> ― 感情的な対面はトラブルの元です。順番は「記録 → 管理会社 → 外部の相談窓口」が安全です（<a href="noise-flow.html">フローチャート</a>）</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. RC造のマンションなのに、なぜ足音が響くのですか？</dt><dd>A. RC造が遮りやすいのは、おもに話し声のような空気音です。ドスンという重量衝撃音は、コンクリートの躯体そのものを伝わって届くため、RC造でも聞こえます。建物の欠陥とは限りません。</dd>
+<dt>Q. 耳栓だけでは駄目なのですか？</dt><dd>A. 耳栓は空気を伝わる音には効きますが、重量衝撃音は振動として体にも届くため、耳栓だけでは消しきれないことが多いです。マスキング音との併用で、音の成分を弱めてから紛れさせる方法があります。</dd>
+<dt>Q. マスキング音を一晩中流しても大丈夫ですか？</dt><dd>A. 控えめな音量で使う分には、一般に問題は少ないとされますが、耳の健康についての判断はこのサイトではできません。目安として「翌朝、耳が疲れている・こもって感じる」ようなら音量を下げてください。心配な場合は耳鼻科への相談をご検討ください。</dd>
+<dt>Q. 上の階に子どもがいて、走る音がひどいです</dt><dd>A. 子どもの走る音は、通常の歩行より強く、予測しにくい音です。マスキングで和らぐ場合もありますが、難しい音でもあります。詳しくは<a href="children-running-baby.html">上階の子どもの走る音・赤ちゃんの泣き声</a>をご覧ください。生活に支障が続く場合は、直接ではなく管理会社を通じた相談をおすすめします。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>この動画は、足音への対策を保証するものではありません。音そのものを消すものではなく、目立たなくするための音です。近隣とのトラブルについては、法律の判断が必要な場合があります。このサイトの内容は、法律の判断ではありません。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="children-running-baby.html">上階の子どもの走る音・赤ちゃんの泣き声</a> ／ <a href="machine.html">室外機・エコキュートなどの機械音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="listening-guide.html">マスキング音の聴き方</a> ／ <a href="earplugs.html">耳栓・イヤーマフの選び方</a></p></section>
 
 </main>
 <footer>
-<p>生活音マスキング研究所 ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
-<p class="note">このサイトでは、今後、アフィリエイトリンクを掲載する場合があります。その場合は、広告であることを明記します。</p>
+<p>生活音マスキング研究所 ｜ <a href="about.html">このサイトについて</a> ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
+<p class="note">このサイトの一部のページでは、広告であることを明記したうえで、アフィリエイトリンクを掲載しています。</p>
 </footer>
 </body>
 </html>

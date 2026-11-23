@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <title>同居人のいびきがうるさくて眠れないときに｜聞く側のためのマスキング音</title>
-<meta name="description" content="同居人や家族のいびきがうるさくて眠れないとき。マスキング音は、いびきを治す音ではなく、聞く側のための音です。いびきの帯域の目安と、音量のコツをお伝えします。">
+<meta name="description" content="同居人や家族のいびきがうるさくて眠れないとき。いびきが鳴る仕組み、不規則さが眠りを妨げる理由、帯域の違う3種類のマスキング音の選び方、先に寝る・耳元で流すといった使い方のコツ、効かないときの次の一手までをまとめました。">
 <style>
 :root{--navy:#0b1526;--navy2:#13243f;--card:#162c4d;--line:#2c476e;--ink:#eef2f7;--soft:#c3d0e2;--amber:#ffb347;--amber2:#ffd08a;--teal:#7fd4c1}
 *{box-sizing:border-box}
@@ -21,23 +21,17 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
 .hero{margin:24px 0 0;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
 .hero img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
 .hero figcaption{padding:10px 16px;font-size:14px;color:var(--soft);background:#0f2140}
-.hero-css{margin:24px 0 0;border-radius:18px;border:1px solid var(--line);padding:36px 20px;text-align:center;font-size:52px;background:linear-gradient(135deg,#1a3358,#13243f)}
 .summary{background:#0f2140;border:1px solid #2c476e;border-radius:18px;padding:20px 26px;margin:24px 0}
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
@@ -46,6 +40,21 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
 .affbox{background:#0f2140;border:1px solid #5b86b8;border-radius:18px;padding:20px 26px;margin:24px 0}
 .affbox h2{margin:0 0 10px;font-size:20px}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -58,17 +67,49 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/snoring.webp" alt="暖炉のある山小屋の夜"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>いびきの音は、一般的に低めの帯域が中心とされています。あくまで目安で、人の体格や寝方、いびきの種類によって変わります。低い音中心のマスキング音から、控えめな音量で試してみてください。</p><div class="hzbar" role="img" aria-label="50から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 9%,#ffb347 22%,#2c476e 31%)"></div><p class="hzlabels"><span>20Hz</span><span>50～800Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>同居人や家族のいびきで、眠れない夜はありませんか？</li><li>いびきが気になるとき、マスキング音は、聞く側が眠りに入りやすくするための音です。</li><li>いびきの音は、一般的に低めの帯域が中心とされています。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>いびきの音は、一般的に低めの帯域が中心とされています。あくまで目安で、人の体格や寝方、いびきの種類によって変わります。低い音中心のマスキング音から、控えめな音量で試してみてください。</p><p>いびきは、眠っている間に空気の通り道（気道）が狭くなり、そこを空気が通るときにまわりの組織が振動して鳴る音です。振動の中心は低い帯域にありますが、「ガーッ」という強い音には、それより高い成分も混ざります。だからこのサイトでは、帯域の違う3種類を用意しています。どの帯域が合うかは、その人のいびきの音の高さによって変わります。</p><div class="hzbar" role="img" aria-label="50から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 9%,#ffb347 22%,#2c476e 31%)"></div><p class="hzlabels"><span>20Hz</span><span>50～800Hz</span><span>5000Hz</span></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>マスキング音は、いびきを治す音ではなく、聞く側が眠りに入りやすくするための音です。</li><li>いびきの音は、一般的に低めの帯域が中心です。帯域を寄せた3種類の音を用意しています。</li><li>先に寝てしまう、耳に近い場所で流す、といった使い方の工夫も効きます。</li><li>いびきの厄介さは大きさより「不規則さ」です。鳴ったり止んだりする音は、眠りに入る直前ほど邪魔になります。</li><li>いびきで呼吸が止まるような場合は、医療機関への相談をご検討ください。</li></ul><p><a class="btn" href="https://www.youtube.com/watch?v=DJ9sSwd09YA" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（50～800Hz）</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://www.youtube.com/watch?v=DJ9sSwd09YA" target="_blank" rel="noopener noreferrer">まず通常版（50～800Hz）を流してみる</a></li><li><a href="#idea">先に寝る・耳元で流すのがコツ</a></li><li><a href="#videos">帯域の選び方（3種類の使い分け）</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 いびきの正体</a></li><li><a href="#why">なぜ気になるのか</a></li><li><a href="#idea">🎧 マスキング音の考え方</a></li><li><a href="#videos">🎧 8時間のマスキング音</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効きにくいと感じたら</a></li><li><a href="#measure">📏 記録を付けておくと役立つ場合</a></li><li><a href="#caution">気をつけたいこと</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>いびきが気になるとき、マスキング音は、聞く側が眠りに入りやすくするための音です。いびきをしている人の治療になるものではありません。</p></section>
-<section class="card"><h2>🎧 8時間のマスキング音</h2><p>いびきが気になるときに合わせた、8時間のマスキング音です。音量は控えめにしてお使いください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=DJ9sSwd09YA" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ブラウンノイズ 50～800Hz）</a></p><p>帯域を寄せた版もあります。低い音が中心の場合は低音特化版、比較的高めの音には高め対応版を試してみてください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=2Gs1GOeFHNw" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（低音特化 ブラウンノイズ 30～500Hz）</a></p><p><a class="btn" href="https://www.youtube.com/watch?v=0XYGPEeMxco" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（高めの音向け ピンクノイズ 100～2500Hz）</a></p></section>
+<section class="card" id="about"><h2>🔊 いびきの正体</h2><p>いびきは、眠って筋肉がゆるむことで空気の通り道が狭くなり、呼吸のたびにその部分が振動して出る音です。起きているときは通路が開いているため、同じ人でも起きている間は鳴りません。</p>
+<table class="tbl"><tr><th>要素</th><th>いびきの特徴</th></tr>
+<tr><th>リズム</th><td>呼吸に合わせて数秒おきに鳴る。眠りの深さで強弱が変わり、止む時間もある</td></tr>
+<tr><th>音の高さ</th><td>低い振動音が中心。強い音には高い成分も混ざる</td></tr>
+<tr><th>変わりやすさ</th><td>体位（仰向けで強くなりやすい）、疲れ具合、その日の体調で変わることが多い</td></tr>
+<tr><th>距離</th><td>同じ部屋・同じベッドから届くことが多く、壁越しの音より近い</td></tr></table>
+<p>「昨夜はうるさかったのに、今夜は静か」ということが普通に起こるのは、この変わりやすさのためです。対策も「昨夜効いた音量」がそのまま正解とは限らないので、帯域の選択肢を持っておくことが大切になります。</p></section>
+
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>いびきが厄介なのは、音の大きさだけではありません。<strong>鳴ったり止んだりする不規則さ</strong>が、眠りを妨げます。静かになったと思って眠りかけると、また始まる。その予測できなさに、耳が張り詰めてしまいます。人間の耳は、一定の音には慣れていけますが、始まったり止んだりする音には慣れにくい、という性質があります。</p><p>また、いびきは隣の部屋からではなく、<strong>同じ部屋のすぐ近く</strong>から届くことが多い音です。距離が近い分だけ大きく、壁越しの音とは違った対策（耳との距離の取り方）が効いてきます。感じ方や眠りの浅さには個人差も大きく、同じいびきでも平気な人と眠れない人がいます。どちらが我慢すべき、という話ではありません。</p><p>もうひとつ、聞く側の事情として、「相手は身内だから、文句を言いにくい」という心理的な負担もあります。隣人なら管理会社に相談できますが、家族のいびきはそうはいきません。だからこそ、この記事では「相手を変える」ではなく「聞く側の工夫」に絞って書いています。</p></section>
+
+<section class="card" id="idea"><h2>🎧 マスキング音の考え方</h2><p>いびきが気になるとき、マスキング音は、聞く側が眠りに入りやすくするための音です。いびきをしている人の治療になるものではありません。</p><p>狙いは、いびきの「鳴り始め」で目が覚めてしまう回数を減らすことです。部屋に一定の音が流れていると、いびきが始まったときの落差が小さくなり、眠りの浅いところで引き戻されにくくなります。</p><p>使い方のコツは2つです。1つは、<strong>いびきが始まる前に、自分が先に眠りに入ること</strong>。マスキング音を流しながら先に寝てしまえば、途中で始まったいびきで目覚めにくくなります。もう1つは、<strong>スピーカーを耳に近い場所に置くこと</strong>。枕元の小さな音量でも、部屋の遠くから大きな音を流すより効きやすい場合があります。</p></section>
+
+<section class="card" id="videos"><h2>🎧 8時間のマスキング音</h2><p>いびきが気になるときに合わせた、8時間のマスキング音です。音量は控えめにしてお使いください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=DJ9sSwd09YA" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ブラウンノイズ 50～800Hz）</a></p><p>帯域を寄せた版もあります。低い音が中心の場合は低音特化版、比較的高めの音には高め対応版を試してみてください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=2Gs1GOeFHNw" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（低音特化 ブラウンノイズ 30～500Hz）</a></p><p><a class="btn" href="https://www.youtube.com/watch?v=0XYGPEeMxco" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（高めの音向け ピンクノイズ 100～2500Hz）</a></p><h3>帯域の選び方</h3><ul><li>「グーグー」という低い音が中心 → まず通常版（50～800Hz）、物足りなければ低音特化版（30～500Hz）</li><li>「ガーッ」という強くて少し高い音が混ざる → 高め対応版（100～2500Hz）</li><li>日によって違う → その夜の音に合わせて変えてよい。固定する必要はありません</li></ul></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><h3>音量の決め方</h3><p>いびきが鳴っているときに、「いびきの輪郭が少しぼやける」と感じる最小の音量が目安です。完全に聞こえなくなるまで上げると、マスキング音自体が気になって眠れなくなります。いびきが止んでいる時間帯に「少し流れているな」と感じる程度で十分です。</p><h3>タイマーか、流しっぱなしか</h3><p>入眠だけが課題なら、眠りに入るまでの30分～1時間のタイマーでも足ります。ただし夜中にいびきで目覚めるタイプの場合は、タイマーで切れた後の無音との落差で余計に目立ちます。その場合は、朝まで流しっぱなしのほうが合います。</p><h3>イヤホンで聴く場合の注意</h3><p>枕元のスピーカーで足りない場合、イヤホンという選択肢もあります。ただし就寝中のイヤホンは、コードの巻き付きや耳への負担に注意が必要です。また、同居人の呼びかけや目覚まし、非常時の音も聞こえにくくなります。使う場合は片耳だけにするなど、家庭の状況に合わせた安全側の使い方をしてください。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効きにくいと感じたら</h2><ol><li><strong>3つの帯域を聴き比べる</strong> ― いびきの音の高さは人によって違います。通常版・低音特化版・高め対応版を、その夜のいびきに近いものから順に試してください</li><li><strong>寝る順番を変える</strong> ― 可能なら、自分が先に寝る。マスキング音は「眠りに入るまで」の橋渡しとして使うと効きやすいです</li><li><strong>耳栓と併用する</strong> ― 耳栓でいびきを弱め、マスキング音で紛れさせる方法です。ただし、同居人の呼びかけや目覚ましも聞こえにくくなるため、家庭の状況に合わせて使ってください（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>環境側の工夫</strong> ― 寝室を分ける、寝る時間をずらす、といった物理的な距離も立派な対策です。音だけで解決しようとしなくて大丈夫です</li></ol></section>
+
 <section class="affbox"><h2>参考：商品の例（広告）</h2><p>動画を流し続けたくない場合は、ホワイトノイズマシンのような専用機を使う選択肢もあります。考え方はマスキング音と同じで、いびきを消すものではありません。</p><p><a href="https://hb.afl.rakuten.co.jp/ichiba/58f3d0da.27fd089a.58f3d0db.12f2386e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdreamegg%2Frt-d3pro%2F&amp;link_type=text&amp;ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJ0ZXh0Iiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9" rel="nofollow">ホワイトノイズマシン Dreamegg D3pro を楽天市場で見る（広告）</a></p><p class="note">価格：4,980円（2026年10月30日確認時点の表示価格。価格や在庫は変わる場合があります。）</p></section>
-<section class="card"><h2>気をつけたいこと</h2><p>いびきで呼吸が止まるような場合や、睡眠の悩みが続く場合は、医療機関への相談もご検討ください。このサイトの内容は、医療的なアドバイスではありません。</p></section>
+
+<section class="card" id="measure"><h2>📏 記録を付けておくと役立つ場合</h2><p>「どのくらいの頻度で、どのくらい続くか」を簡単にメモしておくと、後で振り返るときに役立ちます。いびきの状態を医療機関に相談する際にも、感覚だけより記録があったほうが話が伝わりやすいでしょう。Web版の測定器で、音のレベルの目安を残すこともできます。</p><p><a class="btn" href="app.html" target="_blank" rel="noopener">Web版「騒音測定器（自動録音）」を開く</a></p><p class="note">スマートフォンのマイクは低い音を拾いにくいため、いびきのような低音は実際より小さく表示される傾向があります。数値は目安としてお使いください。</p></section>
+
+<section class="card" id="caution"><h2>気をつけたいこと</h2><p>いびきで呼吸が止まるような場合や、日中の強い眠気が続く場合、睡眠の悩みが続く場合は、医療機関への相談もご検討ください。このサイトの内容は、医療的なアドバイスではありません。また、いびきは本人の意思で止められるものではありません。聞く側が眠れないのは本当につらいことですが、相手を責める形の解決は、家庭内の別の問題を生みます。まず「聞く側の工夫」と「環境の工夫」から試してみてください。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>寝ている人を繰り返し起こして抗議する</strong> ― 本人も意図して鳴らしているわけではありません。両方の睡眠が壊れるだけです</li><li><strong>いびきの録音を、ネットなどに公開する</strong> ― 家族のものであっても、公開は別のトラブルになります。医療機関への相談で使う記録とは別物です</li><li><strong>マスキング音を大音量で流す</strong> ― 自分の睡眠も浅くなりますし、集合住宅では隣への音漏れにもつながります。控えめな音量が前提です</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. いびきは、なぜ日によって違うのですか？</dt><dd>A. 体位や疲れ具合、体調で、気道の狭くなり方が変わるためです。「昨夜は静かだった」は珍しいことではありません。対策の音も、その夜に合わせて変えて大丈夫です。</dd>
+<dt>Q. 耳栓だけで寝るのはどうですか？</dt><dd>A. いびきの輪郭は弱まりますが、低い振動の成分は体にも伝わるため、完全に消えるとは限りません。目覚ましや非常時の音も聞こえにくくなる点には注意してください。マスキング音との併用という選択肢もあります。</dd>
+<dt>Q. ホワイトノイズマシンと、動画のマスキング音はどう違いますか？</dt><dd>A. 考え方は同じで、一定の音を流して落差を小さくするものです。違いは運用面で、専用機はタイマーや音の種類の切り替えが手元ででき、スマホを一晩占有しません。動画は無料で始められます。どちらが優れているというより、生活に合うほうを選ぶ話です。</dd>
+<dt>Q. 自分のいびきで相手が眠れない側なのですが</dt><dd>A. この記事は聞く側のための内容ですが、寝室を分ける・寝る時間をずらすといった環境の工夫は、どちらの側からでも提案できます。いびき自体が気になる場合は、医療機関への相談も選択肢です。</dd>
+</dl></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="family.html">家族の物音・シェアハウス</a> ／ <a href="earplugs.html">耳栓・イヤーマフの選び方</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="listening-guide.html">マスキング音の聴き方</a></p></section>
 
 </main>
 <footer>
-<p>生活音マスキング研究所 ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
+<p>生活音マスキング研究所 ｜ <a href="about.html">このサイトについて</a> ｜ <a href="https://www.youtube.com/channel/UCKU01zWV-dRVQAz9hM3GKBg" target="_blank" rel="noopener noreferrer">YouTubeチャンネル</a> ｜ <a href="privacy.html">プライバシーポリシー</a> ｜ <a href="disclaimer.html">免責事項</a></p>
 <p class="note">このページにはアフィリエイトリンク（広告）が含まれています。</p>
 </footer>
 </body>
