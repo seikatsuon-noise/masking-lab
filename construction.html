@@ -21,6 +21,9 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
 .worry:hover{transform:translateY(-3px);border-color:#5b86b8}
@@ -44,6 +47,20 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,12 +73,42 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/construction.webp" alt="昼間、窓から見える工事現場と街並み"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>工事や交通の音は、工事の種類や車の種類、距離、建物の構造によって大きく変わります。あくまで目安として、重機や車の低い振動音のような低音域は、マスキングしやすい場合があります。一方、ドリルのような高い・急な音は、紛れさせることが難しい場合があります。単一のHzで決めつけることはできません。</p><div class="hzbar" role="img" aria-label="30から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 6%,#ffb347 18%,#2c476e 30%)"></div><p class="hzlabels"><span>20Hz</span><span>30～800Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>工事や車の音が、昼間も気になって作業に集中できないときはありませんか？</li><li>工事の音や交通の音は、低い振動音がずっと続くものと、ドリルやクラクションのような急な音が混ざることがあります。</li><li>工事や交通の音は、工事の種類や車の種類、距離、建物の構造によって大きく変わります。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>工事や交通の音は、種類や距離、建物の構造によって大きく変わります。目安として、重機や車の低い振動音のような低音域はマスキングしやすい場合がありますが、ドリルのような高い・急な音は難しい場合があります。単一のHzで決めつけることはできません。</p><div class="hzbar" role="img" aria-label="30から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 6%,#ffb347 18%,#2c476e 30%)"></div><p class="hzlabels"><span>20Hz</span><span>30～800Hz</span><span>5000Hz</span></p><p>このページのマスキング音は、低音域を中心にしたブラウンノイズ（30～800Hz）です。「続く低い音」に合わせた目安で、クラクションのような「急に鳴る音」まで同じように紛れるわけではありません。合うかどうかは、実際に試して確かめてください。</p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>工事の音や交通の音は、低い振動音がずっと続くものと、ドリルやクラクションのような急な音が混ざることがあります。</li><li>音の聞こえ方は、工事や車の種類、距離、建物の構造によって大きく変わります。</li><li>続く低い音は紛れやすく、急な音・高い音は紛れにくいという違いが、対策選びの目安になります。</li><li>工事には終わりがあります。工期や作業時間帯の確認だけでも、不安は和らぐ場合があります。</li><li>音そのものを消すものではありません。困りごとが続く場合は、記録を付けて相談する段階も考えます。</li></ul></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今日やること3つ</h2><ol><li><a href="https://youtu.be/x87GpB0Klyg" target="_blank" rel="noopener noreferrer">まず、この音を流してみる（ブラウンノイズ 30～800Hz）</a></li><li><a href="#howto">効かせる置き方・音量の決め方</a></li><li><a href="#approach">工事なら、工期と作業時間帯を確認する</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 工事音・交通音の正体</a></li><li><a href="#why">😣 なぜ気になるのか</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#approach">🗓 工事の場合は音以外のアプローチも</a></li><li><a href="#trouble">🔁 効かないときの次の一手</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>工事の音や交通の音は、低い振動音がずっと続くものと、ドリルやクラクションのような急な音が混ざることがあります。作業中は、音の変化が気になりやすく、集中しにくいと感じることもあります。</p></section>
-<section class="card"><h2>作業用の使い方</h2><p>昼間の作業用として使う場合は、控えめな音量で、一定の音を流してみてください。音量を上げすぎると、かえって疲れることもあります。適度に休憩を入れることも大切です。音そのものを消すものではありません。工事・車の音用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=x87GpB0Klyg" target="_blank" rel="noopener noreferrer">▶ 工事・車の音用 8時間（ブラウンノイズ 30～800Hz）</a></p></section>
-<section class="card"><h2>⚠️ 注意</h2><p>工事の時間帯や、普段と違う大きな音、振動が気になる場合は、管理会社や自治体への相談をご検討ください。このサイトは、工事の判断や法的なアドバイスをするものではありません。</p></section>
+<section class="card" id="about"><h2>🔊 工事音・交通音の正体</h2><p>ひと口に「工事の音」「車の音」と言っても、中身は性質の違う音の集まりです。</p>
+<table class="tbl"><tr><th></th><th>工事音</th><th>交通音</th></tr>
+<tr><th>続く低い音</th><td>重機のエンジン音、発電機の唸りなど。振動として体にも伝わる</td><td>車の走行音（タイヤと路面の音、エンジン音）。大型車ほど低く響く</td></tr>
+<tr><th>打つ・削る音</th><td>杭打ち、コンクリートを砕く音、ドリルや切断の音</td><td>段差を越えるときの荷台の音など</td></tr>
+<tr><th>急に鳴る音</th><td>重機のバック警報音、合図の笛や声</td><td>クラクション、急ブレーキの音、バイクの吹かし音</td></tr></table>
+<p>マスキングとの相性は、この区分で大きく変わります。「続く低い音」は帯域の近いノイズで紛れやすいタイプです。反対に「急に鳴る音」は、鳴った瞬間の落差が大きく控えめな音量では紛れにくいタイプです。気になる音がどちらのタイプかで、効果の目安が変わります。</p></section>
+
+<section class="card" id="why"><h2>😣 なぜ気になるのか</h2><p>気になり方を強くする要素として、次のようなものが挙げられます。</p><ul><li><strong>音量が波のように変わること</strong> ― 一定の音には耳が慣れていきますが、大きくなったり止まったりする音は、そのたびに注意が引かれます。在宅ワーク中ほど集中が切れやすいようです</li><li><strong>終わりが見えないこと</strong> ― 工事は「いつまで続くのか」が分からないこと自体がストレスになりやすいものです。見通しがない音は、実際の音量以上に大きく感じられることがあります</li><li><strong>昼間の生活リズムとぶつかること</strong> ― 夜勤明けの睡眠、子どもの昼寝、オンライン会議など、昼間でも静けさが必要な場面はあります。生活の都合と音の時間帯が重なると、困りごとは大きくなります</li></ul><p>感じ方には個人差があります。まずは環境の側でできる工夫から試すのが現実的です。</p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><p>昼間の作業用として使う場合は、控えめな音量で、一定の音を流してみてください。音量を上げすぎると、かえって疲れることもあります。適度に休憩を入れることも大切です。工事・車の音用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=x87GpB0Klyg" target="_blank" rel="noopener noreferrer">▶ 工事・車の音用 8時間（ブラウンノイズ 30～800Hz）</a></p>
+<h3>スピーカーの置き場所 ― 窓側が基本</h3><p>工事・交通の音は、多くが窓の方向から入ってきます。スピーカーを<strong>音の来る側（窓側）</strong>に置くと、気になる音とマスキング音が同じ方向から聞こえ、紛れやすくなる場合があります。窓側と耳の近く、両方を試して比べてください。</p>
+<h3>音量の決め方</h3><ol><li>工事・交通の音が「聞こえるけれど、少し紛れてきた」と感じる最小の音量を探します</li><li>急な音まで消そうとして音量を上げ続けないこと。クラクションのような瞬間の音は、音量勝負では紛れにくいタイプです</li><li>作業に使う場合は、適度に止めて耳を休ませると疲れにくくなります</li></ol>
+<h3>再生機器の注意</h3><p>スマートフォンやノートパソコン本体の小さなスピーカーは、低い音を出すのが苦手です。「効かない」と感じたら、低音の出る外部スピーカーやイヤホンで試してみてください。</p></section>
+
+<section class="card" id="approach"><h2>🗓 工事の場合は音以外のアプローチも</h2><p>工事音は交通音と違い、現場ごとに工期と作業時間帯が決まっているのが普通です。音への対策と並行して、「情報を得る」ことも有効な一手です。</p><ul><li><strong>工期の掲示を確認する</strong> ― 現場周辺や建物の掲示板に、工事期間や作業時間、問い合わせ先が掲示されていることがあります。見通しが分かるだけでも、受け止め方が変わる場合があります</li><li><strong>作業時間帯を知る</strong> ― 早朝や夜間の作業があるのか、日中だけなのかで生活の組み立て方が変わります。騒音に関するルールは自治体によって異なるため、自治体の公式情報で確認してください</li><li><strong>問い合わせは掲示の連絡先へ</strong> ― 普段と違う大きな音や振動、掲示と違う時間帯の作業が気になる場合は、施工業者や発注者の連絡先、管理会社、自治体の窓口へご相談ください</li></ul><p class="note">ここでは一般的な確認の流れを紹介しています。個別の工事の適法性や対応を、このサイトが判断することはできません。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効かないときの次の一手</h2><p>マスキングは相性のある方法です。合わないと感じたら、次の順で見直してみてください。</p><ol><li><strong>置き場所と再生機器</strong> ― 窓側に寄せる、低音の出るスピーカーに変える。ここが一番変わりやすいところです</li><li><strong>耳栓やイヤーマフと併用する</strong> ― 耳栓で急な音の輪郭を弱め、マスキング音で続く音を紛れさせる組み合わせです（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>記録を付ける</strong> ― 「いつ、どんな音が、どのくらい続いたか」を残すと、相談のときに伝えやすくなります（<a href="noise-record.html">騒音の記録シート</a>／<a href="app.html">Web版「騒音測定器（自動録音）」</a>）</li><li><strong>相談する</strong> ― 支障が続く場合は、記録を持って管理会社や自治体の窓口に相談する段階です（<a href="noise-flow.html">対処のフローチャート</a>）</li></ol></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>マスキング音を大音量で流し続ける</strong> ― 耳が疲れるうえ、自分の音が隣や外に漏れている可能性も出てきます。マスキングは控えめな音量で使うものです</li><li><strong>工事現場へ直接怒鳴り込む・無断で立ち入る</strong> ― 危険ですし、話し合いにもなりません。連絡は掲示の問い合わせ先や管理会社を通すのが原則です</li><li><strong>窓を開けて仕返しの音を出す</strong> ― 自分が加害側になるだけです。記録や相談の場面でも不利になります</li><li><strong>作業員個人を撮影してネットに晒す</strong> ― 解決にはつながらず、別の問題を生むことがあります。記録は相談先に伝えるために手元に残すのが基本です</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. クラクションのような急な音にも効きますか？</dt><dd>A. 急に鳴る音は、控えめな音量のマスキングでは紛れにくいタイプです。続く走行音は紛れても、クラクションだけが目立って聞こえることは起こります。耳栓との併用で輪郭を弱める方法はありますが、「消える」ものではありません。</dd>
+
+<dt>Q. 在宅ワークのオンライン会議中にも使えますか？</dt><dd>A. スピーカーで流すと、会議のマイクにマスキング音が入ることがあります。会議中はイヤホンで小さく流す、その時間帯だけ止めるなどの使い分けが必要です。</dd>
+<dt>Q. 工事はいつまで続くのか分からず、不安です</dt><dd>A. 現場周辺や建物の掲示で工期が案内されていることが多いので、まず確認してみてください。見当たらない場合は、管理会社や掲示の問い合わせ先に聞く方法があります。</dd>
+<dt>Q. 夜間や早朝の工事がうるさいときは、どうすればいいですか？</dt><dd>A. 日時と状況を記録に残し、掲示の連絡先や管理会社、自治体の相談窓口に伝えるのが一般的な順番です。ルールは自治体によって異なるため、このサイトでは適法性の判断はできません。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>工事の時間帯や、普段と違う大きな音、振動が気になる場合は、管理会社や自治体への相談をご検討ください。このサイトは、工事の判断や法的なアドバイスをするものではありません。</p><p>マスキング音は、対策を保証するものではなく、音そのものを消すものでもありません。効果には個人差があり、住環境によっても変わります。耳の不調が続く場合は、医療機関への相談をご検討ください。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="machine.html">室外機・エコキュートなどの機械音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="earplugs.html">耳栓・イヤーマフの選び方</a> ／ <a href="noise-record.html">騒音の記録シート</a> ／ <a href="noise-flow.html">騒音に悩んだときの対処フローチャート</a></p></section>
 
 </main>
 <footer>

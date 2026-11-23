@@ -21,6 +21,9 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
 .worry:hover{transform:translateY(-3px);border-color:#5b86b8}
@@ -44,6 +47,20 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,12 +73,40 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/laundry.webp" alt="夜の洗濯コーナー"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>洗濯機の音は、機種や運転状態、設置場所によって大きく変わります。あくまで目安として、振動のような低い音が中心になることが多く、回転音や水の音はそれより広い帯域に広がります。単一のHzで決めつけることはできません。気になる音の感じ方に近い、一定の低い音から試してみてください。</p><div class="hzbar" role="img" aria-label="40から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 20%,#2c476e 30%)"></div><p class="hzlabels"><span>20Hz</span><span>40～800Hz</span><span>5000Hz</span></p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>洗濯機や乾燥機の運転音が、壁や床越しに聞こえて気になるときはありませんか？</li><li>洗濯機の音は、低い振動音と、回転する音、脱水時の大きな音が混ざったものです。</li><li>洗濯機の音は、機種や運転状態、設置場所によって大きく変わります。</li></ul></section>
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>洗濯機の音は、行程が進むにつれて姿を変えます。あくまで目安として、振動まわりの低い音が中心になることが多く、この記事では40～800Hzあたりを目安にしています。ただし、回転音や水の音はもっと広い帯域に広がり、機種や設置場所、建物の構造で聞こえ方は大きく変わります。単一のHzで決めつけることはできません。</p><div class="hzbar" role="img" aria-label="40から800ヘルツの範囲を示すバー" style="background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 20%,#2c476e 30%)"></div><p class="hzlabels"><span>20Hz</span><span>40～800Hz</span><span>5000Hz</span></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>洗濯機の音は「ずっと同じ音」ではなく、洗い・すすぎ・脱水と、行程ごとに性質が変わります。</li><li>いちばん目立つのは脱水のピーク。振動が床や壁を伝う「固体伝搬」で、離れた部屋にも届きます。</li><li>マスキングは、一定した運転音には合わせやすい一方、脱水の急なピークは紛らわせにくい面があります。</li><li>自分の家の洗濯機なら防振・設置・時間帯の見直しが先。隣の家の音なら、マスキングと記録・相談が軸です。</li></ul><p><a class="btn" href="https://www.youtube.com/watch?v=lRdkYCFl8PE" target="_blank" rel="noopener noreferrer">▶ 洗濯機の音用 8時間（ブラウンノイズ 40～800Hz）</a></p></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://www.youtube.com/watch?v=lRdkYCFl8PE" target="_blank" rel="noopener noreferrer">まず洗濯機の音用の8時間動画を、控えめな音量で流してみる</a></li><li><a href="#trouble">脱水のピークだけが気になる場合は「次の一手」へ</a></li><li><a href="#own">自分の家の洗濯機の響きが心配な場合は、防振と設置の見直しへ</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 洗濯機の音の正体</a></li><li><a href="#why">なぜ気になるのか</a></li><li><a href="#idea">🎧 マスキング音の考え方</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#own">🏠 自分の家の洗濯機が響いている場合</a></li><li><a href="#trouble">🔁 効かないときの次の一手</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>洗濯機の音は、低い振動音と、回転する音、脱水時の大きな音が混ざったものです。運転の段階によって音が変わるため、気になりやすいと言われます。設置場所や床の構造、機種によって、聞こえ方は大きく変わります。</p></section>
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>ずっと続く運転音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合う場合があります。音量を上げすぎないこと、近い帯域の音を選ぶことがコツです。機械の音そのものを消すものではありません。脱水時のような急に大きくなる音は、紛れさせることが難しい場合があります。洗濯機の音用の8時間動画が公開中です。</p><p><a class="btn" href="https://www.youtube.com/watch?v=lRdkYCFl8PE" target="_blank" rel="noopener noreferrer">▶ 洗濯機の音用 8時間（ブラウンノイズ 40～800Hz）</a></p></section>
-<section class="card"><h2>💡 時間帯と工夫</h2><p>洗濯機の音が気になる場合は、運転する時間帯を日中にずらす、防振マットなどの工夫を検討する、といった方法もあります。賃貸住宅での工事や大きな変更は、管理会社への相談をご検討ください。自分の洗濯機の音が隣に気になっていないか心配な場合も、同じ工夫が役立つことがあります。</p></section>
+<section class="card" id="about"><h2>🔊 洗濯機の音の正体</h2><p>洗濯機の音は、ひとつの音が鳴り続けるのではなく、行程ごとに入れ替わります。</p>
+<table class="tbl"><tr><th>行程</th><th>音の正体</th><th>特徴</th></tr>
+<tr><th>洗い</th><td>モーターの回転音と、水をかき混ぜる音</td><td>低い回転音に水音が重なる。比較的おだやか</td></tr>
+<tr><th>すすぎ</th><td>給水・排水の音、ポンプの音、回転音</td><td>水の流れる音が加わる</td></tr>
+<tr><th>脱水</th><td>高速回転による唸りと、本体の振動</td><td>全行程で最大。洗濯物の偏りで大きさが大きく変わる</td></tr>
+<tr><th>乾燥</th><td>温風ファンの送風音とドラムの回転音</td><td>一定の送風音が長く続く</td></tr></table>
+<p>厄介なのは、空気を伝わる音だけではありません。脱水時の振動は、本体の脚から床へ、壁や配管へと伝わる<strong>固体伝搬</strong>で広がり、ドアを閉めても弱まりにくく、「音というより響き」として感じられることがあります。</p><p>帯域の目安は、低い音を中心に40～800Hzあたり。あくまで目安で、実際は機種・設置・建物で大きく変わります。</p></section>
+
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>理由のひとつは、<strong>音が途中で変わる</strong>ことです。洗いの穏やかな音に慣れたころ、脱水が始まって急に大きな振動が来る。この落差があると、耳は変化を追い続けてしまいます。「静か→大きい」を繰り返す音は、一定の音より意識から離れにくいのです。</p><p>もうひとつは時間帯です。洗濯は、帰宅後の夜や出かける前の早朝に回されがちな家事で、<strong>周りがいちばん静かになる時間帯に、脱水のピークが重なりやすい</strong>のです。昼間なら埋もれる運転音も、背景の音（暗騒音）が下がる深夜には大きく感じられます。機械が夜だけうるさくなるわけではありません。</p></section>
+
+<section class="card" id="idea"><h2>🎧 マスキング音の考え方</h2><p>洗い〜すすぎの区間は、比較的一定した運転音が続きます。この区間には、似た帯域の一定した音を控えめに重ねて背景になじませる方法が合う場合があります。</p><p>一方、脱水のピークは話が別です。急に大きくなる振動に合わせてマスキング音を上げると、普段の区間ではうるさすぎる音になります。脱水は数分間の「山」と割り切り、一定した区間をなじませることを優先するのが現実的です。なお、マスキングは機械の音そのものを消すものではありません。</p></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><h3>音の選び方</h3><p>中心が低い帯域なので、マスキング音も低音中心で変化の少ない一定音が向いています。メロディのある音楽より、ノイズ系の音のほうが背景になじみやすい傾向があります。</p><h3>再生機器と置き方</h3><p>スマートフォン本体のスピーカーは、構造上、低い音を出すのが苦手です。「流しているのに効かない」という場合は、機器の側で肝心の帯域が出ていないことがあります。低音の出る外部スピーカーや、イヤホンで試してみてください。置き場所は、音の入り口側――洗濯機のある方向の壁やドアの近く――がおすすめです。</p><h3>音量の目安</h3><p>目安は、気になる音が「背景に溶けた」と感じる最小限の音量です。上げすぎると、今度はマスキング音自体が負担になります。</p></section>
+
+<section class="card" id="own"><h2>🏠 自分の家の洗濯機が響いている場合</h2><p>「自分の洗濯機の音が、隣や下の階に響いていないか」と心配な場合は、マスキングではなく音源側の工夫が本筋です。自分の部屋でマスキング音を流しても、隣への音漏れは減らないからです。</p><h3>防振の見直し</h3><p>脱水の振動は、本体の脚から床へ伝わります。脚の下の防振ゴムや防振マットが劣化していないか、かさ上げ台がぐらついていないかを確認してみてください。</p><h3>設置の見直し</h3><p>本体が傾いていないか、壁や周りの物に接していないかも響きに影響します。接している部分があると、そこから振動が建物側へ伝わりやすくなります。洗濯物の偏りも大きな振動の原因になるため、詰め込みすぎを避けることも大切です。</p><h3>時間帯の工夫</h3><p>タイマー予約は、「始まる時間」ではなく「脱水が終わる時間」を基準に考えると、ピークが深夜に重なるのを避けやすくなります。自分の音全般は<a href="own-sound.html">自分の音の対策</a>へ。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効かないときの次の一手</h2><ol><li><strong>記録をつける</strong> ― 「何時ごろに始まって、どの行程が気になるか」を数日分メモしておくと、生活側の調整にも相談にも役立ちます。付け方は<a href="noise-record.html">騒音の記録シート</a>を参考にしてください</li><li><strong>管理会社への相談を検討する</strong> ― 隣の家の音で生活に支障が出ている場合は、直接の交渉ではなく管理会社を通すのが一般的な順番です。進め方は<a href="noise-flow.html">騒音に悩んだときの相談の流れ</a>へ</li><li><strong>耳栓と併用する</strong> ― 振動の成分は耳栓では止まりにくいものの、回転音などの輪郭は和らぐ場合があります（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>自分の家の機械の異音なら点検を</strong> ― 以前より急に振動が大きくなった、金属音が混ざるといった変化は、故障の可能性もあります。紛らす前に、メーカーや管理会社への相談をご検討ください</li></ol></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>マスキング音を大音量で流す</strong> ― 音量を上げ続けると、今度は自分の音が周囲への騒音になりかねません。控えめな音量で効かない場合は、音量ではなく機器や置き場所の見直しが先です</li><li><strong>隣の家の洗濯機や設置場所に勝手に触る</strong> ― 他人の設備には手を入れられません。気になる場合は、管理会社を通じて伝えるのが順番です</li><li><strong>賃貸住宅で、床や壁に大きな変更を加える</strong> ― 防音・防振の工事や大きな変更は、契約上の問題になることがあります。先に管理会社へ相談してください</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. 脱水のときだけ、急にうるさくなるのはなぜですか？</dt><dd>A. 脱水は洗濯槽を高速で回す行程で、振動がいちばん大きくなるためです。とくに回転が上がり始める時間帯は洗濯物の偏りの影響を受けやすく、大きな音が出やすいと言われます。</dd>
+<dt>Q. 深夜に洗濯を回す側です。何に気をつければいいですか？</dt><dd>A. いちばん効くのは時間帯の調整です。脱水のピークが深夜に重ならないよう、開始時刻やタイマー予約を見直してみてください。防振ゴムの状態や本体の傾きなど、設置まわりの確認もおすすめです（詳しくは<a href="#own">自分の家の洗濯機が響いている場合</a>へ）。</dd>
+<dt>Q. 自分の部屋でマスキング音を流せば、隣への音漏れも減りますか？</dt><dd>A. 減りません。マスキングは聞く側の聞こえ方を変える方法で、音源の音や振動を弱めるものではないからです。自分の音が心配な場合は、防振や設置、時間帯の工夫をご検討ください。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>異常な振動や異音が疑われる場合は、メーカーや管理会社への相談をご検討ください。このサイトは、家電の修理や点検のアドバイスをするものではありません。帯域や対策は目安であり、効果の感じ方には個人差・環境差があります。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="machine.html">室外機・エコキュートなどの機械音</a> ／ <a href="water.html">上の階の水の音</a> ／ <a href="footsteps.html">上階の足音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a></p></section>
 
 </main>
 <footer>

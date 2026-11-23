@@ -21,6 +21,9 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
 .worry:hover{transform:translateY(-3px);border-color:#5b86b8}
@@ -42,6 +45,22 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
 .summary li{margin:6px 0}
+.hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
+.hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -54,13 +73,47 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/consultation.webp" alt="相談する人のイラスト"></figure>
-<section class="summary"><h2>この記事の要点</h2><ul><li>上階の子どもの走る音や、赤ちゃんの泣き声が気になって、眠れないことはありませんか？</li><li>子どもの走る音は、足音と同じように、床を通って伝わる衝撃音です。</li><li>走る音は、足音の衝撃音と同じ考え方です。</li></ul></section>
 
-<section class="card"><h2>💡 まず知っておきたいこと：走る音と泣き声は、性質が違います</h2><p>子どもの走る音は、足音と同じように、床を通って伝わる衝撃音です。ドスンという低い音が、建物の構造を通って、下の階に伝わる場合があります。赤ちゃんの泣き声は、声そのものが、壁や隙間を通って伝わる場合があります。泣き声は、音の高さが変わりやすく、意味のある音として聞こえやすいため、気になりやすい傾向があります。どちらも、マスキング音だけで、完全に隠すのは難しい場合があります。</p></section>
-<section class="card"><h2>走る音について</h2><p>走る音は、足音の衝撃音と同じ考え方です。低い音が中心で、床を通って伝わりやすい傾向があります。マスキング音では、低い音中心の音が、目安として考えられます。ただし、走る音は、突然で、リズムが不規則な場合があります。一定の音で流すマスキング音では、突然の音を、完全になくすことは難しい場合があります。音の種類別のマスキング音については、足音の記事も、ご覧ください。</p></section>
-<section class="card"><h2>🗣️ 泣き声について</h2><p>赤ちゃんの泣き声は、音の高さが変わりやすく、意味のある音として聞こえやすいため、マスキングが難しい場合があります。泣き声の音域は、比較的高い音が中心で、急に大きくなったり、小さくなったりする場合があります。マスキング音では、泣き声の音域に近い音が、目安として考えられますが、泣き声そのものを消すことはできません。泣き声が気になるときは、マスキング音だけでなく、耳栓との併用や、部屋の使い方、時間帯の工夫も、考えてみてください。</p></section>
-<section class="card"><h2>付き合い方の考え方</h2><p>子どもの音や、赤ちゃんの泣き声は、意図的に出されている音ではない場合がほとんどです。まずは、音の理由を考えることが大切です。気になる場合は、直接のやり取りではなく、管理会社を通して、相談するのが無難です。仕返しのように、大きな音を出すことは、トラブルを大きくするだけです。避けてください。</p></section>
-<section class="card"><h2>⚠️ 注意</h2><p>このページの内容は、法律の判断や、医療的なアドバイスではありません。泣き声が、虐待を疑わせるような場合は、専門の相談窓口への相談をご検討ください。マスキング音は、気になる音を目立たなくするための音で、音を消すものではありません。</p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>子どもの走る音は、足音と同じ「重量衝撃音」です。床や柱を伝わって届く低い音で、耳栓だけでは防ぎにくい音です。</li><li>赤ちゃんの泣き声は、高い音で、大きさが急に変わる音です。声は「意味のある音」として耳が拾いやすく、気になりやすい傾向があります。</li><li>正直にお伝えすると、この2つはマスキングが難しい音です。紛らわせる工夫と、効かないときの「次の一手」の両方をまとめました。</li><li>子どもの音や泣き声は、意図的に出されている音ではない場合がほとんどです。記録と、管理会社を通した相談が近道です。</li></ul></section>
+
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li>「耳栓＋小さめのマスキング音」の併用から試す（<a href="#masking">マスキングでできること・できないこと</a>）</li><li>音が気になった時刻を、スマホのメモでいいので残し始める（<a href="#next">次の一手</a>）</li><li>直接言いに行くのは、今夜はやめておく。相談するなら管理会社を通して（<a href="#next">次の一手</a>）</li></ol></section>
+
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#about">🔊 音の正体 ― 走る音と泣き声は、別の音</a></li><li><a href="#why">👂 なぜ気になるのか</a></li><li><a href="#masking">🎧 マスキングでできること・できないこと</a></li><li><a href="#next">🔁 効かないときの次の一手</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
+
+<section class="card" id="about"><h2>🔊 音の正体 ― 走る音と泣き声は、別の音</h2><p>このページで扱う音は、性質の違う2種類です。対策の考え方が変わるので、分けて説明します。</p>
+
+<table class="tbl"><tr><th></th><th>子どもの走る音</th><th>赤ちゃんの泣き声</th></tr>
+<tr><th>伝わり方</th><td>床や柱などの躯体を、振動として伝わる</td><td>空気を伝わり、壁やドアの隙間からも入る</td></tr>
+<tr><th>音の高さの目安</th><td>40～1000Hz程度の低い音が中心</td><td>数百Hz～数kHzの高い音が中心</td></tr>
+<tr><th>防ぎにくさ</th><td>振動として体にも感じるため、耳栓だけでは防ぎにくい</td><td>耳栓は比較的効きやすいが、揺れる音なので紛らわせにくい</td></tr></table>
+<h3>走る音は「足音の強い版」</h3><p>子どもの走る音は、歩行の足音と同じ重量衝撃音です。体重は大人より軽くても、かかとから着地したり跳ねたりするため、衝撃が歩行より強くなることがあります。帯域の目安は足音と同じ40～1000Hz程度です。</p><div class="hzbar" role="img" aria-label="走る音の中心とされる40から1000ヘルツの範囲を示すバー"></div><p class="hzlabels"><span>20Hz</span><span>40～1000Hz（走る音の目安）</span><span>5000Hz</span></p>
+<h3>泣き声は「高くて、揺れる声」</h3><p>赤ちゃんの泣き声は、空気を伝わる声の音です。音の高さが変わりやすく、急に大きくなったり小さくなったりします。声は「意味のある音」として処理されやすく、機械音より注意を引きやすい傾向があります。帯域の目安は、数百Hzから数kHzにかけての高い成分が多いとされています。</p></section>
+
+<section class="card" id="why"><h2>👂 なぜ気になるのか</h2><p>この2つの音がつらいのは、音量だけが理由ではありません。気になり方を強くする要素は、主に3つあります。</p><ul><li><strong>突然始まること</strong> ― 静かな部屋で急にドスン、急に泣き声が始まると、体が反射的に反応します。眠りかけでは、落ちかけた眠気が戻ってしまいます</li><li><strong>予測できないこと</strong> ― 「次にいつ鳴るか分からない」音に、耳は注意を向け続けます。鳴っていない間も身構えるため実際以上に疲れますし、いつ終わるか分からないことも負担になります。夜間は周りの暗騒音（もともとある小さな音）が下がり、昼間より落差が大きく際立ちます</li></ul><p>「我慢が足りない」のではなく、仕組みとして注意が向かいやすい音です。</p></section>
+
+<section class="card" id="masking"><h2>🎧 マスキングでできること・できないこと</h2><p>先に正直にお伝えします。この2つは、このサイトで扱う音の中でも<strong>マスキングが難しい音</strong>です。できない音はできないと書くのがこのサイトの方針です。</p>
+<h3>できること</h3><ul><li><strong>走る音</strong> ― 低い音中心のマスキング音（足音向けのブラウンノイズなど）で、衝撃の「輪郭」を少し紛らわせることができます。詳しくは<a href="footsteps.html">上階の足音の記事</a>へ</li><li><strong>泣き声</strong> ― 耳栓で声の成分を弱めてから、小さめのマスキング音で紛れさせる併用が現実的です（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li></ul>
+<h3>できないこと</h3><ul><li>突然の大きな衝撃や、大きく響く泣き声を、一定のマスキング音で<strong>完全になくすことは難しい</strong>です。特に泣き声は高さも大きさも揺れるため、紛らわせきれない場面があります</li><li>マスキングは「音を消す」方法ではなく、「目立たなくする」方法です。過度な期待を持たず、次の一手と組み合わせて考えてください</li></ul></section>
+
+<section class="card" id="next"><h2>🔁 効かないときの次の一手</h2><p>マスキングで足りないと感じたら、我慢を重ねるより、順番に手を打つほうが近道です。</p>
+<h3>1. 発生パターンを把握する</h3><p>まず「いつ、どのくらい」を見える形にします。時刻、曜日、続いた時間の目安をメモするだけでも、「なんとなく毎日うるさい」が「平日の夕方と休日の午前中に集中している」という事実に変わります。パターンが見えると、対策も相談も具体的になります。</p>
+<h3>2. 記録シートに残す</h3><p>このサイトには<a href="noise-record.html">騒音の記録シート</a>があります。日時・音の種類・続いた時間・生活への影響を残しておくと、相談のときにそのまま資料になります。音の大きさの目安には、ブラウザで使える<a href="app.html">Web版の測定器</a>も併用できます（スマートフォンのマイクは低い音を拾いにくいため、数値は目安として扱ってください）。</p>
+<h3>3. 管理会社への相談は、この順番で</h3><p>直接のやり取りではなく、管理会社を通すのが無難です。流れは<a href="noise-flow.html">対処フローチャート</a>にまとめています。伝える内容は感情ではなく記録です。「いつ・どのくらいの頻度で・睡眠など生活にどう影響しているか」を、記録シートをもとに伝えます。管理会社では、事実確認と、相手方への一般的な注意喚起から進む場合があります。</p>
+<h3>4. 自分側の環境の工夫</h3><ul><li><strong>寝る場所の見直し</strong> ― ベッドの位置を音源から遠い壁側へ移す、寝室にする部屋を替える、といった配置の工夫で変わることがあります</li><li><strong>耳栓などの使い分け</strong> ― 泣き声には耳栓、走る音にはマスキング音、両方気になる夜は併用、と音の種類で使い分けます</li><li><strong>生活リズムの調整</strong> ― パターンが分かってきたら、うるさい時間帯を避けて就寝を前倒しするのも一つの方法です</li></ul>
+<p>子どもの音や泣き声は、意図的に出されている音ではない場合がほとんどです。相手を責める形ではなく、「事実の記録」と「管理会社を通した相談」が、双方にとって負担の少ない進め方になります。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>感情的に直接抗議に行く</strong> ― 相手を悪者にするような言い方は、関係を悪化させるだけです。伝える場合は管理会社を通じてが原則です</li><li><strong>天井や壁を叩いて知らせる</strong> ― 相手には「叩かれた」という事実だけが残り、かえって緊張を生みます</li><li><strong>仕返しに大きな音を出す</strong> ― 自分が加害側になるだけです。記録や相談の場面でも不利になります</li><li><strong>マスキング音を大音量で流す</strong> ― 今度は自分の音が周りに漏れている可能性があります。控えめな音量で使うものです</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. 子どもの走る音は、普通の足音と何が違うのですか？</dt><dd>A. 同じ重量衝撃音ですが、走る・跳ねる動作は歩行より衝撃が強く、タイミングも不規則です。「強い」と「予測できない」が重なり、気になりやすい傾向があります。</dd>
+<dt>Q. 泣き声にマスキング音は効かないのですか？</dt><dd>A. 完全になくすのは難しい音ですが、耳栓との併用で和らぐ場合があります。泣き声は空気音なので耳栓が効きやすく、小さめのマスキング音を重ねるのが現実的な組み合わせです。</dd>
+<dt>Q. 上の階の家族に、直接お願いしに行ってもいいですか？</dt><dd>A. 管理会社を通した相談をおすすめしています。直接の対面は、悪意がなくても感情的な行き違いになりやすいためです。管理会社からの連絡なら、相手の家庭も受け止めやすくなります。</dd>
+<dt>Q. 泣き声が長時間続いていて、心配なときは？</dt><dd>A. 泣き声が続く理由はさまざまで、このサイトでは判断できません。虐待を疑わせるような場合は、専門の相談窓口への相談をご検討ください。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>このページの内容は、法律の判断や、医療的なアドバイスではありません。泣き声が、虐待を疑わせるような場合は、専門の相談窓口への相談をご検討ください。マスキング音は、気になる音を目立たなくするための音で、音を消すものではありません。帯域や効果は目安であり、建物や個人によって感じ方は変わります。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="footsteps.html">上階の足音</a> ／ <a href="voices.html">隣の話し声</a> ／ <a href="earplugs.html">耳栓とマスキング音の併用</a> ／ <a href="noise-record.html">騒音の記録シート</a> ／ <a href="noise-flow.html">騒音に悩んだときの対処フローチャート</a> ／ <a href="masking.html">マスキング音の仕組み</a></p></section>
 
 </main>
 <footer>

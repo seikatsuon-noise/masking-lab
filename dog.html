@@ -21,27 +21,37 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
-.worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
-.worry:hover{transform:translateY(-3px);border-color:#5b86b8}
-.worry.icon{font-size:30px;line-height:1}
-.worry strong{display:block;font-size:18px;margin:8px 0 6px}
-.worry p{margin:0;color:var(--soft);font-size:15px}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .btn{display:inline-block;background:var(--amber);color:#1a1a1a;font-weight:800;text-decoration:none;padding:12px 22px;border-radius:999px;margin-top:14px;box-shadow:0 6px 18px rgba(255,179,71,.35)}
 .btn:hover{background:var(--amber2)}
-.video{border-left:4px solid var(--amber);padding-left:16px}
-.pill{display:inline-block;background:#1e3d66;color:#cfe3ff;border-radius:999px;padding:2px 10px;font-size:13px;margin:0 6px 6px 0}
 .note{font-size:14px;color:var(--soft)}
 footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font-size:14px;color:var(--soft)}
 @media(max-width:560px){header h1{font-size:30px}header:before{right:2%;width:44px;height:44px;box-shadow:14px 7px 0 0 #ffe9b8}}
 .hero{margin:24px 0 0;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
 .hero img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
 .hero figcaption{padding:10px 16px;font-size:14px;color:var(--soft);background:#0f2140}
-.hero-css{margin:24px 0 0;border-radius:18px;border:1px solid var(--line);padding:36px 20px;text-align:center;font-size:52px;background:linear-gradient(135deg,#1a3358,#13243f)}
 .summary{background:#0f2140;border:1px solid #2c476e;border-radius:18px;padding:20px 26px;margin:24px 0}
 .summary h2{margin:0 0 10px;font-size:20px}
 .summary ul{margin:0;padding-left:20px}
 .summary li{margin:6px 0}
+.hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e 30%,#7fd4c1 42%,#ffb347 68%,#2c476e 88%);margin:12px 0 6px}
+.hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -54,12 +64,39 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/dog.webp" alt="夜、窓辺にいる犬のイラスト"></figure>
-<section class="summary"><h2>この記事の要点</h2><ul><li>隣の犬の吠え声が、急に聞こえてきて気になるときはありませんか？</li><li>犬の吠え声は、急に始まって、高い音で、何度も繰り返されることが多い音です。</li><li>吠え声のような、急で高い音は、ずっと一定のマスキング音だけでは、完全に紛れさせることが難しい場合があります。</li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>犬の吠え声は、急に始まって、高い音で、何度も繰り返されることが多い音です。人の注意を引く音でもあるため、気になりやすいと言われます。吠える時間帯や頻度、建物の構造によって、感じ方は変わります。</p></section>
-<section class="card"><h2>🎧 マスキング音の限界</h2><p>吠え声のような、急で高い音は、ずっと一定のマスキング音だけでは、完全に紛れさせることが難しい場合があります。音量を上げれば解決する、というものでもありません。マスキング音で少し目立たなくなる場合もありますが、吠え声については、過度な期待をしないほうがいいでしょう。</p></section>
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>試す場合は、控えめな音量で、一定の音を流してみてください。長時間、大きな音量で流し続けることは、耳や睡眠の負担になることもあります。音そのものを消すものではありません。合う音は、聴き比べて探すのが確実です。</p></section>
-<section class="card"><h2>対処法</h2><p>吠え声が続いて困っている場合は、いつ、どれくらい続いたかを簡単に記録しておくと、相談するときに役立つことがあります。管理会社への相談をご検討ください。直接の苦情は、関係がこじれることもあるため、慎重に考えるのがよいでしょう。このサイトは、法的な判断をするものではありません。</p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>犬の吠え声は、急に始まって、やや高めの音で、何度も繰り返されることが多い音です。</li><li>吠え声のような突発的な音は、一定のマスキング音だけでは完全に紛れさせることが難しい場合があります。その限界を正直にお伝えします。</li><li>マスキングでできるのは、短い吠え声の目立ち方を少し和らげることまで。過度な期待はしないほうがいい音です。</li><li>効きにくい場合は、吠える時刻と引き金の記録、耳栓との併用、管理会社への相談が次の一手になります。</li><li>犬にも飼い主にも事情があります。直接の苦情ではなく、記録と第三者経由の相談が基本です。</li></ul></section>
+
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="#masking">マスキングでできる範囲を確認して、控えめな音量で試す</a></li><li><a href="#next">吠えた時刻をメモする（記録が後で効きます）</a></li><li><a href="#next">耳栓との併用も試してみる</a></li></ol></section>
+
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#about">🔊 吠え声の正体</a></li><li><a href="#why">🐕 なぜ気になるのか</a></li><li><a href="#masking">🎧 マスキングでできること・できないこと</a></li><li><a href="#next">🔁 効かないときの次の一手</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
+
+<section class="card" id="about"><h2>🔊 吠え声の正体</h2><p>犬の吠え声は、短く鋭い音が、不規則な間隔で繰り返される音です。声の主な成分は、一般に<strong>数百Hzから2,000Hz程度</strong>の中音域〜やや高めの帯域が中心とされ、鋭さのもとになる高い倍音はそれ以上の帯域まで伸びます。小型犬ほど高く、大型犬ほど低めになる傾向がありますが、あくまで目安で、個体や吠え方によって大きく変わります。</p><div class="hzbar" role="img" aria-label="吠え声の主な帯域の目安を示すバー"></div><p class="hzlabels"><span>20Hz</span><span>数百～2,000Hz程度（目安）</span><span>5000Hz</span></p><p>吠え声のもう一つの特徴は<strong>突発性</strong>です。静かな状態から一瞬で大きな音が立ち上がり、数回〜数十回続いて、ぱたりと止む。この性質が、マスキングを難しくし、気になり方を強くします。</p><h3>吠えるきっかけ（引き金）のパターン</h3><p>吠え声には、きっかけがあることが多いです。代表的なパターンを知っておくと、自分の聞いている吠え声の傾向がつかめます。</p>
+<table class="tbl"><tr><th>きっかけ</th><th>吠え方の傾向</th></tr>
+<tr><td>玄関チャイム・インターホン、来客や配達</td><td>短時間に集中して吠える。終われば止むことが多い</td></tr>
+<tr><td>窓の外の人影・通行人、他の犬の声</td><td>外の刺激がある間だけ続く。散歩の時間帯に重なりやすい</td></tr>
+<tr><td>飼い主の帰宅・外出の気配</td><td>朝と夕方など、決まった時間帯に寄りやすい</td></tr>
+<tr><td>留守番中の不安や退屈</td><td>日中や深夜に、長く断続的に続くことがある</td></tr></table>
+<p>「チャイムのたびに数分」なのか「留守中に何時間も」なのかで、困りごとの形も、相談の進め方も変わってきます。</p></section>
+
+<section class="card" id="why"><h2>🐕 なぜ気になるのか</h2><p>吠え声は、人の注意を引くようにできている音でもあります。もともと吠え声は、仲間や飼い主に何かを知らせるための合図です。聞く側が「何かあったのか」と注意を向けてしまうのは、自然な反応だと言われます。</p><p>気になり方を強くする要素は、主に3つあります。</p><ul><li><strong>予測できないこと</strong> ― いつ始まるか分からず、始まってもいつ止むか分かりません。一定のリズムで続く音より、耳は注意を張り続けます。静かになったと思った瞬間にまた鳴る、という間隔の不規則さも疲れのもとです</li><li><strong>音の立ち上がりが急なこと</strong> ― 静かな部屋との落差が大きいため、音量そのもの以上に大きく感じます。夜間は部屋の暗騒音（もともとある小さな音）が下がるので、同じ吠え声でも際立ちます</li><li><strong>意味のある音として聞こえること</strong> ― 無意味なノイズと違い、吠え声は「誰かが何かに反応している音」として耳に入ります。意味を読み取ろうとする分、意識から外しにくいとされます</li></ul><p>感じ方には個人差があり、時間帯や建物の構造（木造かRC造か、窓の向きなど）によっても変わります。</p></section>
+
+<section class="card" id="masking"><h2>🎧 マスキングでできること・できないこと</h2><p>先に正直にお伝えすると、<strong>吠え声はマスキングが難しい音の代表</strong>です。足音や話し声のように「帯域の近い音で包む」方法が、そのままでは効きにくい相手です。</p><h3>できること（目安）</h3><ul><li>部屋の背景音を少し上げることで、短く小さな吠え声の<strong>輪郭を和らげる</strong>。気づく回数が減る場合があります</li><li>「静寂→突然の吠え声」という落差を小さくして、驚きにくくする</li><li>耳栓と併用したときに、残って聞こえる成分を紛れさせやすくする</li></ul><h3>できないこと</h3><ul><li>大きく鋭い吠え声を消すこと。吠え声のピークは背景音よりずっと大きく、音量をそこまで上げれば、今度はマスキング音自体が負担になります</li><li>吠えること自体を止めること。マスキングは聞く側の工夫でしかありません</li></ul><h3>試す場合のやり方</h3><p>試す場合は、控えめな音量で、一定の音（雨音などの環境音やノイズ）を流してみてください。音量を上げれば解決する、というものではありません。長時間、大きな音量で流し続けることは、耳や睡眠の負担になることもあります。合う音は、聴き比べて探すのが確実です。仕組みの基本は<a href="masking.html">マスキング音の仕組み</a>にまとめています。</p></section>
+
+<section class="card" id="next"><h2>🔁 効かないときの次の一手</h2><p>マスキングで追いつかない場合は、「音を紛らせる」以外の手に移ります。順番に進めるのがおすすめです。</p><ol><li><strong>記録を付ける</strong> ― いつ、何分くらい、どのくらいの頻度で吠えたかを簡単にメモします。きっかけ（チャイム、来客など）も分かれば一緒に。記録があると、パターンが見えるだけでなく、相談のときに感情ではなく事実で話せます（<a href="noise-record.html">騒音の記録シート</a>）</li><li><strong>発生パターンを把握する</strong> ― 数日〜1週間記録すると、「夕方の配達の時間だけ」「留守中の日中ずっと」など傾向が見えてきます。時間帯が限られるなら、その時間だけ耳栓や別の部屋で過ごす、といった現実的な逃げ方も選べます</li><li><strong>耳栓などと併用する</strong> ― 耳栓で吠え声の鋭い成分を少し弱める方法です。完全に消えはしませんが、「気づいて身構える」回数が減るだけでも楽になることがあります（<a href="earplugs.html">耳栓とマスキング音の併用</a>）</li><li><strong>管理会社へ相談する</strong> ― 生活に支障が続く場合は、記録を持って管理会社への相談をご検討ください。一般的な流れは「記録 → 管理会社 → 必要に応じて外部の相談窓口」です（<a href="noise-flow.html">対処のフローチャート</a>）。相談の際は「いつ・どれくらい・どう困っているか」を伝えるのが基本で、飼い主への直接の苦情は、関係がこじれることもあるため慎重に考えるのがよいでしょう</li></ol><p class="note">このサイトは、法的な判断をするものではありません。具体的な対応に迷う場合は、自治体の相談窓口なども選択肢になります。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>壁や床を叩いて知らせる</strong> ― 相手には「叩かれた」という事実だけが残り、関係が悪化します。犬が驚いて余計に吠えることもあります</li><li><strong>仕返しに音を出す・大きな音で吠え声に対抗する</strong> ― 自分が加害側になるだけです。マスキング音も、近所に漏れるほどの大音量は避けてください</li><li><strong>直接怒鳴り込む</strong> ― 感情的な対面はトラブルの元です。伝えることがある場合は、管理会社を通じてが原則です</li><li><strong>犬や飼い主を一方的に悪者と決めつける</strong> ― 留守番や体調など、側からは見えない事情があることもあります。記録と相談の場面でも、事実ベースの伝え方のほうが前に進みます</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. 吠え声に効くマスキング音はありますか？</dt><dd>A. 「これで消える」という音はありません。吠え声は突発的で帯域も広いため、マスキングとの相性は良くない音です。できるのは、控えめな背景音で短い吠え声の目立ち方を少し和らげることまでで、効果には個人差・環境差があります。過度な期待はしないほうがいい、というのが正直なところです。</dd>
+<dt>Q. 夜や早朝だけ吠えるのはなぜですか？</dt><dd>A. 理由は家庭ごとに違いますが、外の物音や通行人への反応、飼い主の生活リズム（帰宅・外出・散歩の時間）に重なっていることが多いとされます。記録を付けると、自分のケースのパターンが見えてきます。</dd>
+<dt>Q. 記録はどのくらい付ければいいですか？</dt><dd>A. まず数日〜1週間、「日付・時刻・続いた時間・気づいたきっかけ」をメモする程度で十分です。完璧な記録より、続けることと、相談のときに渡せる形であることが大事です（<a href="noise-record.html">記録シートの使い方</a>）。</dd>
+<dt>Q. 飼い主に直接お願いしてもいいですか？</dt><dd>A. 関係性によっては穏やかに伝わる場合もありますが、対面の苦情はこじれることもあります。一般には、管理会社を通すほうが安全とされます。このサイトではどちらが正しいといった判断はしません。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>このページの内容は、吠え声への対策を保証するものではありません。帯域や効果の説明はすべて目安で、個人差・環境差があります。近隣とのトラブルについては、法律の判断が必要な場合があります。このサイトの内容は、法律の判断ではありません。また、音への過敏さや眠れない状態が長く続く場合は、医療機関への相談もご検討ください（このサイトは医療の判断もしません）。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="listening-guide.html">マスキング音の聴き方</a> ／ <a href="earplugs.html">耳栓・イヤーマフの選び方</a> ／ <a href="noise-record.html">騒音の記録シート</a> ／ <a href="noise-flow.html">騒音に悩んだときの対処フローチャート</a></p></section>
 
 </main>
 <footer>

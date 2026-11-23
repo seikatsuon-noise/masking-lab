@@ -21,6 +21,9 @@ main{max-width:860px;margin:0 auto;padding:8px 20px 56px}
 .card{background:linear-gradient(180deg,#182f52,#142846);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0;box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .card h2{margin:0 0 14px;font-size:23px}
 .card h2 span{color:var(--teal)}
+.card h3{margin:22px 0 6px;font-size:18px;color:var(--amber2)}
+.card ol,.card ul{margin:8px 0;padding-left:22px}
+.card li{margin:8px 0}
 .worries{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .worry{background:#0f2140;border:1px solid #2c476e;border-radius:14px;padding:18px;transition:transform.15s}
 .worry:hover{transform:translateY(-3px);border-color:#5b86b8}
@@ -44,6 +47,20 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 .summary li{margin:6px 0}
 .hzbar{height:14px;border-radius:999px;background:linear-gradient(90deg,#2c476e,#7fd4c1 8%,#ffb347 22%,#2c476e 24%);margin:12px 0 6px}
 .hzlabels{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+.tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.tbl th{background:#0f2140;color:var(--amber2)}
+.faq dt{font-weight:700;color:var(--amber2);margin:18px 0 4px}
+.faq dt:first-child{margin-top:0}
+.faq dd{margin:0 0 6px}
+.quick{background:#0f2140;border:1px solid var(--amber);border-radius:18px;padding:20px 26px;margin:24px 0}
+.quick h2{margin:0 0 10px;font-size:20px}
+.quick ol{margin:0;padding-left:22px}
+.quick li{margin:6px 0}
+.toc ul{margin:0;padding-left:20px;columns:2;column-gap:32px}
+.toc li{margin:5px 0}
+section[id]{scroll-margin-top:14px}
+@media(max-width:560px){.toc ul{columns:1}}
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8420931320409991" crossorigin="anonymous"></script>
 </head>
@@ -56,12 +73,43 @@ footer{border-top:1px solid var(--line);padding:24px 20px;text-align:center;font
 </header>
 <main>
 <figure class="hero"><img src="images/family.webp" alt="夜のシェアハウスのダイニング"></figure>
-<section class="card"><h2>📊 Hzの目安</h2><p>家族の物音やシェアハウスの生活音は、一つの音ではありません。足音は40～1000Hz程度の中低音域、話し声は中～高音域、食器や水の音はさらに高音域まで広がります。どの音が一番気になるかによって、合わせる帯域も変わります。まずは、一番気になる音から考えてみてください。</p></section>
-<section class="summary"><h2>この記事の要点</h2><ul><li>シェアハウスの同居人や、家族の物音が気になって、眠れないときはありませんか？</li><li>同じ家やシェアハウスでは、生活の時間帯が違うと、物音が気になりやすくなります。</li><li>家族の物音やシェアハウスの生活音は、一つの音ではありません。</li></ul></section>
 
-<section class="card"><h2>なぜ気になるのか</h2><p>同じ家やシェアハウスでは、生活の時間帯が違うと、物音が気になりやすくなります。感じ方は人によって違います。普通に生活しているだけなのに、うるさいと言われた、という逆の悩みもあります。</p></section>
-<section class="card"><h2>🎧 マスキング音の考え方</h2><p>気になる物音の帯域に近い、一定の音を控えめに流すことで、物音を目立たなくすることができます。まずは、音量を控えめにして試してみてください。</p></section>
-<section class="card"><h2>🎧 8時間のマスキング音</h2><p>家族の物音・シェアハウスが気になるときに合わせた、8時間のマスキング音です。音量は控えめにしてお使いください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=Vz9EMyYTPdk" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ピンクノイズ 80～4000Hz）</a></p></section>
+<section class="summary"><h2>この記事の要点</h2><ul><li>家族や同居人の生活音は「一つの音」ではなく、話し声・物音・水音などが重なったものです。</li><li>同じ家では、生活の時間帯が違うと、物音が気になりやすくなります。相手が悪いわけではなく、暮らしのリズムの違いであることが多いです。</li><li>気になる音の帯域に近い音を控えめに流すマスキングで、物音を目立たなくできる場合があります（帯域は目安、個人差・環境差あり）。</li><li>マスキングで足りないときは、我慢を続ける前に、記録を付けて落ち着いて話し合うのが次の一手です。</li></ul></section>
+<section class="quick"><h2>⏱ 急いでいる人へ ― 今夜やること3つ</h2><ol><li><a href="https://www.youtube.com/watch?v=Vz9EMyYTPdk" target="_blank" rel="noopener noreferrer">まず、この音を控えめな音量で流してみる（ピンクノイズ 80～4000Hz）</a></li><li><a href="#howto">効かせる置き方・音量の決め方</a></li><li><a href="#trouble">効かなかったら、次の一手（記録と話し合い）</a></li></ol></section>
+<section class="card toc"><h2>📖 目次</h2><ul><li><a href="#hz">📊 Hzの目安</a></li><li><a href="#about">🔊 家族の生活音の正体</a></li><li><a href="#why">🤔 なぜ気になるのか</a></li><li><a href="#howto">🎛 効かせるための使い方</a></li><li><a href="#trouble">🔁 効かないときの次の一手</a></li><li><a href="#ng">🚫 やってはいけないこと</a></li><li><a href="#faq">❓ よくある質問</a></li><li><a href="#caution">⚠️ 注意</a></li><li><a href="#related">🔗 関連ページ</a></li></ul></section>
+
+<section class="card" id="hz"><h2>📊 Hzの目安</h2><p>家族の物音やシェアハウスの生活音は、一つの音ではありません。足音は40～1000Hz程度の中低音域、話し声は中～高音域、食器や水の音はさらに高音域まで広がります。どの音が一番気になるかによって、合わせる帯域も変わります。まずは、一番気になる音から考えてみてください。</p><div class="hzbar" role="img" aria-label="80から4000ヘルツの範囲を示すバー"></div><p class="hzlabels"><span>20Hz</span><span>80～4000Hz</span><span>5000Hz</span></p><p>このページで紹介する8時間のマスキング音は、家族の生活音全体を想定したピンクノイズ（80～4000Hz）です。ただし、これはあくまで目安の帯域で、家の構造や部屋の位置関係によって聞こえ方は変わります。</p></section>
+
+<section class="card" id="about"><h2>🔊 家族の生活音の正体 ― 一つの音ではない</h2><p>「家族の物音」とひとくくりに言っても、中身はさまざまです。種類ごとに伝わり方も、気になり方も違います。</p>
+<table class="tbl"><tr><th>音の種類</th><th>例</th><th>帯域の目安と特徴</th></tr>
+<tr><th>話し声・テレビの音</th><td>会話、笑い声、テレビや動画の音声</td><td>中～高音域が中心。内容が聞き取れるほど注意が向きやすく、音量が小さくても気になることがあります</td></tr>
+<tr><th>足音・歩く音</th><td>廊下を歩く音、階段の上り下り</td><td>40～1000Hz程度の中低音域が中心の目安。床や柱を伝わるため、ドアを閉めても届くことがあります</td></tr>
+<tr><th>物音</th><td>ドアの開閉、引き出し、食器、荷物の置く音</td><td>短く鋭い音が多く、帯域は広め。静かな時間帯ほど、ひとつひとつが際立ちます</td></tr>
+<tr><th>水まわりの音</th><td>入浴、トイレの流水、キッチンの水音</td><td>給排水の音は配管を伝わり、高めの音まで広がります。就寝時間と重なると気になりやすい音です</td></tr>
+<tr><th>家電の音</th><td>洗濯機、掃除機、電子レンジ</td><td>動作音と振動が中心。時間帯を選べる家電も多く、話し合いで調整しやすい部類です</td></tr></table>
+<p>対策は、「全部の音」ではなく「一番眠りを妨げている音」を先に特定するのが近道です。</p></section>
+
+<section class="card" id="why"><h2>🤔 なぜ気になるのか</h2><p>同じ家やシェアハウスでは、生活の時間帯が違うと、物音が気になりやすくなります。感じ方は人によって違います。普通に生活しているだけなのに、うるさいと言われた、という逆の悩みもあります。</p><p>家族や同居人の音が気になりやすい理由には、次のようなものがあります。</p><ul><li><strong>生活リズムのズレ</strong> ― 早く寝たい人の「静かにしてほしい時間」と、夜遅くまで起きている人の「普通に生活している時間」が重なるためです。どちらが悪いという話ではありません</li><li><strong>予測できないこと</strong> ― ドアの音や話し声は、いつ鳴るか分かりません。「次はいつか」と耳が待機する状態が続くと、実際の音量以上に疲れます</li><li><strong>身内だからこその難しさ</strong> ― 相手に悪気がないと分かっている分、「自分が我慢すればいい」と抱え込みやすく、言い出せないまま不満がたまることがあります</li><li><strong>夜の静けさ</strong> ― 夜間は家の中の音が減るため、昼間なら気にならない物音でも落差が大きくなり、際立って聞こえます</li></ul></section>
+
+<section class="card" id="howto"><h2>🎛 効かせるための使い方</h2><p>気になる物音の帯域に近い、一定の音を控えめに流すことで、物音を目立たなくすることができます。まずは、音量を控えめにして試してみてください。</p><p><a class="btn" href="https://www.youtube.com/watch?v=Vz9EMyYTPdk" target="_blank" rel="noopener noreferrer">▶ 8時間のマスキング音を聴く（ピンクノイズ 80～4000Hz）</a></p>
+<h3>音量の決め方</h3><ol><li>気になる物音が「聞こえるけれど、少し紛れてきた」と感じる最小の音量を探します</li><li>そこから、ほんの少しだけ下げます。完全に消そうとして音量を上げると、マスキング音そのものが気になって眠れなくなります</li><li>置き場所は枕元など耳に近い場所がおすすめで、小さい音量で足ります。自分の音が同居人の迷惑にならないよう、ドアの外側での聞こえ方も確認しておくと安心です</li></ol>
+<h3>音の選び方</h3><p>話し声や物音が中心なら、このページのピンクノイズ（80～4000Hz）が目安です。足音の低い響きが中心なら低音寄りの音（<a href="footsteps.html">上階の足音</a>）、水音が中心なら<a href="water.html">水の音</a>のページも参考にしてください。どれが合うかは環境で変わるので、数日ずつ試して比べるのが現実的です。仕組みは<a href="masking.html">マスキング音の仕組み</a>にまとめています。</p>
+<p class="note">なお、自分の部屋でマスキング音を流しても、同居人や隣の部屋への自分の音漏れが減るわけではありません。自分の音が気になる場合は、音量を控えめにすること自体が配慮になります。</p></section>
+
+<section class="card" id="trouble"><h2>🔁 効かないときの次の一手</h2><p>マスキングは相性のある方法です。合わないと感じたら、「我慢する」か「文句を言う」かの二択にせず、次の順で進めてみてください。</p><ol><li><strong>まず記録する</strong> ― 「いつ、どんな音が、どのくらい続いたか」を数日分メモします。記録があると、「うるさい」ではなく「この時間帯のこの音で眠れない」と具体的に伝えられます（<a href="noise-record.html">騒音の記録シート</a>）。大きさの目安には<a href="app.html">Web版の測定器</a>も使えます</li><li><strong>伝えるタイミングを選ぶ</strong> ― イライラしている深夜に言うと喧嘩になりがちです。翌日の落ち着いた時間に、「お願い」の形で切り出すほうが伝わります</li><li><strong>相手を責めず、困りごととして伝える</strong> ― 「うるさい」ではなく「眠りが浅くて、夜の水音で目が覚めてしまう」のように、自分の状態を主語にします。具体的なお願い（例：23時以降はドアをゆっくり閉める、洗濯は朝に回す）までセットにすると、相手も応じやすくなります</li><li><strong>お互いの妥協点を決める</strong> ― 時間帯のルール、ドアへのクッション材、スリッパの着用など、小さな工夫の積み重ねで変わることがあります。一方だけが我慢する形になっていないかも確認してください</li></ol><p>進め方に迷ったら、<a href="noise-flow.html">対処のフローチャート</a>も参考になります。シェアハウスなら、管理者や大家を通す選択肢もあります。</p></section>
+
+<section class="card" id="ng"><h2>🚫 やってはいけないこと</h2><ul><li><strong>壁やドアを叩いて知らせる</strong> ― 相手には「叩かれた」という印象だけが残り、関係が悪化します</li><li><strong>仕返しに音を出す</strong> ― 問題が大きくなるだけです。関係は音の問題が終わった後も続きます</li><li><strong>限界まで我慢して、一度に爆発させる</strong> ― 小さいうちに落ち着いて伝えるほうが、結果的にうまくいきます</li><li><strong>マスキング音を大音量で流す</strong> ― 今度は自分の音が同居人の迷惑になります。マスキングは控えめな音量で使うものです（自分の音が気になる場合は<a href="own-sound.html">自分の音の対策</a>へ）</li></ul></section>
+
+<section class="card" id="faq"><h2>❓ よくある質問</h2><dl class="faq">
+<dt>Q. 一つのマスキング音で、家族の生活音すべてに対応できますか？</dt><dd>A. 音の種類によって帯域が違うため、一つの音源で全部をまかなえるとは限りません。まずは一番気になる音に合わせて選ぶのが現実的です。効果には個人差・環境差があります。</dd>
+<dt>Q. 同居人に直接言ってもいいのでしょうか？</dt><dd>A. 家族や同居人の場合は、第三者を通す前に、落ち着いたタイミングで直接お願いするほうが早いことが多いです。感情的になっているときは避け、記録をもとに具体的に伝えるのがコツです。こじれそうな場合は、シェアハウスなら管理者への相談も選択肢です。</dd>
+<dt>Q. イヤホンや耳栓で寝るのはどうですか？</dt><dd>A. 耳栓で物音の輪郭を弱めてから、マスキング音で紛れさせる併用もあります。就寝中のイヤホンは、コードの巻き付きや耳への負担に注意が必要です。耳の健康についての判断はこのサイトではできないので、心配な場合は耳鼻科への相談をご検討ください。</dd>
+<dt>Q. 自分の出す音も、家族にうるさいと言われます</dt><dd>A. 逆の悩みもよくあります。ドアの閉め方や足音など、時間帯と工夫で変えられる部分は意外とあります。<a href="own-sound.html">自分の音の対策</a>のページにまとめています。お互いに少しずつ配慮し合う形が長続きします。</dd>
+</dl></section>
+
+<section class="card" id="caution"><h2>⚠️ 注意</h2><p>このページのマスキング音は、対策を保証するものではありません。音そのものを消すものではなく、目立たなくするための音です。帯域や効果は目安であり、感じ方には個人差・環境差があります。同居人との間で解決が難しい場合は、このサイトの内容だけで判断せず、管理者や専門家への相談もご検討ください。</p></section>
+
+<section class="card" id="related"><h2>🔗 関連ページ</h2><p><a href="voices.html">話し声が気になるとき</a> ／ <a href="footsteps.html">上階の足音</a> ／ <a href="water.html">水の音</a> ／ <a href="masking.html">マスキング音の仕組みについて、詳しく読む</a> ／ <a href="noise-record.html">騒音の記録シート</a> ／ <a href="own-sound.html">自分の音の対策</a></p></section>
 
 </main>
 <footer>
