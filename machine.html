@@ -121,7 +121,44 @@ section[id]{scroll-margin-top:20px}
 <tr><th>切り替わり音</th><td>運転の開始・停止、除霜運転などへの切り替わり</td><td>短い変化音。一定の唸りの中で、ここだけ耳に付く</td></tr></table>
 <p>低い音ほど、壁や窓を通り抜けたり、回り込んだりしやすい性質があります。だから機械音は「窓を閉めても聞こえる」「部屋のどこにいても同じように聞こえる」と感じやすいのです。また、唸りがゆっくり強くなったり弱くなったりする「うなり」のような変化があると、耳はその変化を追い続けてしまいます。</p></section>
 
-<section class="card" id="why"><h2>なぜ気になるのか</h2><p>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。運転の状態や、設置場所、建物の構造によって、聞こえ方は変わります。</p><p>低い唸り音には、耳で聞くというより<strong>体に響くように感じる</strong>面があります。壁や床、窓を伝わって届くため、部屋のどこにいても逃げ場がないように感じやすい音です。また、完全に一定ではなく、運転の強さが変わるたびに唸りが強くなったり弱くなったりする「変化」も、耳が離れない理由のひとつです。</p><p>とくにエコキュートは、電気代の安い深夜に沸き上げる設定のことが多く、<strong>いちばん静かな時間帯にいちばん鳴る</strong>という困った重なり方をします。昼間は周りの音に紛れて気にならない機械音が、夜だけ問題になるのは、背景の音（暗騒音）が下がって落差が広がるためです。機械そのものが夜にうるさくなるわけではありません。</p></section>
+<section class="card" id="why"><h2>なぜ気になるのか</h2><p>機械の音は、ずっと続く低い音であることが多く、静かな夜ほど気になります。運転の状態や、設置場所、建物の構造によって、聞こえ方は変わります。</p><p>低い唸り音には、耳で聞くというより<strong>体に響くように感じる</strong>面があります。壁や床、窓を伝わって届くため、部屋のどこにいても逃げ場がないように感じやすい音です。また、完全に一定ではなく、運転の強さが変わるたびに唸りが強くなったり弱くなったりする「変化」も、耳が離れない理由のひとつです。</p><p>とくにエコキュートは、電気代の安い深夜に沸き上げる設定のことが多く、<strong>いちばん静かな時間帯にいちばん鳴る</strong>という困った重なり方をします。昼間は周りの音に紛れて気にならない機械音が、夜だけ問題になるのは、背景の音（暗騒音）が下がって落差が広がるためです。機械そのものが夜にうるさくなるわけではありません。</p>
+<figure style="background:#10233f;border:1px solid #3a5a86;border-radius:14px;padding:18px;margin:20px 0">
+<svg viewBox="0 0 800 470" width="100%" role="img" aria-label="音の伝わり方の図。空気を伝わる音と、床を伝わる振動の違いを示す" style="display:block">
+<text x="60" y="40" fill="#ffd9a0" font-size="21" font-weight="700">上の階</text>
+<text x="60" y="300" fill="#ffd9a0" font-size="21" font-weight="700">下の階</text>
+<!-- upper room: PC on floor -->
+<rect x="105" y="138" width="96" height="72" rx="6" fill="#3a5a86" stroke="#7fa8d8" stroke-width="2"/>
+<circle cx="153" cy="174" r="17" fill="none" stroke="#9fe3d4" stroke-width="3"/>
+<circle cx="153" cy="174" r="4" fill="#9fe3d4"/>
+<text x="105" y="128" fill="#eef2f7" font-size="17">パソコン（床に直置き）</text>
+<!-- upper room: speaker -->
+<rect x="612" y="146" width="52" height="64" rx="6" fill="#3a5a86" stroke="#7fa8d8" stroke-width="2"/>
+<circle cx="638" cy="166" r="9" fill="#ffd08a"/>
+<circle cx="638" cy="192" r="13" fill="#ffd08a"/>
+<path d="M 585 155 q -18 23 0 46" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round"/>
+<path d="M 560 142 q -30 36 0 72" fill="none" stroke="#ffb347" stroke-width="4" stroke-linecap="round" opacity=".65"/>
+<text x="540" y="128" fill="#eef2f7" font-size="17">スピーカーの音</text>
+<!-- slab -->
+<rect x="60" y="210" width="680" height="28" fill="#2c476e" stroke="#3a5a86"/>
+<text x="660" y="200" fill="#c3d0e2" font-size="15">床</text>
+<!-- vibration path (solid-borne) -->
+<path d="M 153 238 l -12 16 l 24 0 l -24 16 l 24 0 l -24 16 l 24 0 l -12 14" fill="none" stroke="#7fd4c1" stroke-width="5" stroke-linejoin="round"/>
+<path d="M 141 318 q 60 26 130 10 q 80 -18 150 0 q 80 20 150 2" fill="none" stroke="#7fd4c1" stroke-width="4" opacity=".55" stroke-linecap="round"/>
+<text x="196" y="290" fill="#9fe3d4" font-size="19" font-weight="700">床を伝わる振動</text>
+<text x="196" y="316" fill="#c3d0e2" font-size="15">下の階では低い唸りのように響くことがある</text>
+<!-- airborne path fading at slab -->
+<path d="M 520 178 q 26 22 8 44" fill="none" stroke="#ffb347" stroke-width="4" stroke-dasharray="7 7" opacity=".8" stroke-linecap="round"/>
+<text x="420" y="290" fill="#ffd08a" font-size="19" font-weight="700">空気を伝わる音</text>
+<text x="420" y="316" fill="#c3d0e2" font-size="15">床や壁で弱まるが、隙間からは漏れる</text>
+<!-- lower room person -->
+<circle cx="660" cy="356" r="15" fill="#7fa8d8"/>
+<path d="M 660 371 v 42 M 660 384 l -24 14 M 660 384 l 24 14 M 660 413 l -18 34 M 660 413 l 18 34" stroke="#7fa8d8" stroke-width="6" stroke-linecap="round" fill="none"/>
+<text x="60" y="440" fill="#c3d0e2" font-size="15">※ 伝わり方は建物の構造で大きく変わります。これは仕組みのイメージです。</text>
+</svg>
+<figcaption style="color:#c3d0e2;font-size:14px;margin-top:10px">音の伝わり方のイメージ ― 空気を伝わる音と、床や壁を伝わる振動（固体伝搬）では、届き方も対策も変わります。</figcaption>
+</figure>
+
+</section>
 
 <section class="card" id="idea"><h2>🎧 マスキング音の考え方</h2><p>ずっと続く音に対しては、同じようにずっと続く、一定の音を控えめに流す方法が合います。音量を上げすぎないこと、近い帯域の音を選ぶことがコツです。機械の音そのものを消すものではありません。</p><p>機械音はこのサイトの扱う音の中では、マスキングと相性の良いほうです。対象の音も、隠す音も、どちらも一定だからです。足音や話し声のように「始まりと終わりの落差」に悩まされることが少なく、背景の音を少し持ち上げれば、そのまま目立ちにくくなります。まずは控えめな音量で一晩試してみてください。</p></section>
 
