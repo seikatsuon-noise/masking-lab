@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://seikatsuon-noise.github.io/masking-lab/sitemap.xml
